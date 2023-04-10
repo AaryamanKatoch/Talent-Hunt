@@ -1,0 +1,30 @@
+{
+  "name": "cs554server",
+  "version": "1.0.0",
+  "description": "Final Project Backend code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AaryamanKatoch/CS554WEB2.git"
+  },
+  "author": "Aaryaman Tej Pratap Katoch - 20011367, Dhavan Kanakia - 20011563, Parth Rajeshkumar Patel - 20010839, Ridham Patel - 20010932, Ujas Mahesh Italia - 20012646",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AaryamanKatoch/CS554WEB2/issues"
+  },
+  "homepage": "https://github.com/AaryamanKatoch/CS554WEB2#readme",
+  "dependencies": {
+    "axios": "^1.3.5",
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "http": "^0.0.1-security",
+    "mongodb": "^5.2.0",
+    "socket.io": "^4.6.1",
+    "xss": "^1.0.14"
+  }
+}

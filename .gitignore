@@ -1,0 +1,7 @@
+/backend/node_modules
+/company/node_modules
+/jobseeker/node_modules
+
+/company/package-lock.json
+/jobseeker/package-lock.json
+/backend/package-lock.json
