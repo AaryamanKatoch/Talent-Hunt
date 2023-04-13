@@ -30,9 +30,16 @@ const isBoolean = (val) => {
   return val
 }
 
+const isValidPassword = (passowrd) => {
+    if(!passowrd.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,12}$/))
+        throw {status: '400', error : 'Invalid Password'}
+    return passowrd
+}
+
 module .exports = {
     isValidString,
     isValidId,
     isValidEmail,
-    isBoolean
+    isBoolean,
+    isValidPassword
 }
