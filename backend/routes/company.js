@@ -3,6 +3,7 @@ const router = express.Router();
 const xss = require("xss");
 const data = require("../data");
 const companyData = data.company;
+const jobseekerData = data.jobSeeker;
 const helper = require("../helper");
 const { ObjectId } = require("mongodb");
 
@@ -41,8 +42,8 @@ router
         }
       }
 
-      // let id = req.session.company._id; 
-      let id = "643485c32aa19be61c88787b" //temp id. In the future it'll be taken from the session/token/redis whatever we decide.
+      // let id = req.session.company._id;
+      let id = "643485c32aa19be61c88787b"; //temp id. In the future it'll be taken from the session/token/redis whatever we decide.
       id = helper.common.isValidId(id);
       data = helper.company.isValidCompanyData(data);
 
@@ -57,5 +58,24 @@ router
       }
     }
   });
+
+router.route("/jobseeker/:jobseekerId").get(async (req, res) => {
+  try {
+    const jobseekerId = helper.common.isValidId(req.params.jobseekerId);
+    const jobseeker = await jobseekerData.getJobSeekerByID(jobseekerId);
+    let resume;
+    if (jobseeker.resumeId) {
+      resume = await jobseekerData.getResumeByID(jobseeker.resumeId);
+    }
+    res.json(resume);
+  } catch (e) {
+    if (typeof e !== "object" || !("status" in e)) {
+      console.log(e);
+      res.status(500).json("Internal server error");
+    } else {
+      res.status(parseInt(e.status)).json(e.error);
+    }
+  }
+});
 
 module.exports = router;
