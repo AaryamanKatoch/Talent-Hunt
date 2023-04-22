@@ -4,6 +4,7 @@ const xss = require("xss");
 const data = require("../data");
 const jobSeekerData = data.jobSeeker;
 const helper = require("../helper");
+const common_helper= require("../helper/common");
 
 router
   .route("/dashboard")
@@ -67,5 +68,24 @@ router
 //       }
 //     }
 //   });
+
+
+router
+  .route("/HistoryOfApplications")
+  .get(async(req, res) => {
+    try {
+      let jobSeekerId=req.body.jobSeekerId;
+      jobSeekerId=common_helper.isValidId(jobSeekerId);
+      const data = await jobSeekerData.get_history_of_applications(jobSeekerId);
+      res.json(data);
+    } catch (e) {
+      if (typeof e !== "object" || !("status" in e)) {
+        console.log(e);
+        res.status(500).json("Internal server error");
+      } else {
+        res.status(parseInt(e.status)).json(e.error);
+      }
+    }
+  })
 
 module.exports = router;
