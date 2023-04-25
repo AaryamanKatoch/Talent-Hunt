@@ -9,7 +9,6 @@ function App() {
     <div className="App">
       <CssBaseline />
       <Router>
-        <components.AppNavbar />
         <Routes>
           <Route path="/login" element={<pages.Login/>} />
           <Route path="/signup" element={<pages.SignUp/>} />

@@ -1,7 +1,5 @@
-import AppNavbar from './AppNavbar';
-
 const components = {
-    AppNavbar
+    //add components here
 }
 
 export {components}

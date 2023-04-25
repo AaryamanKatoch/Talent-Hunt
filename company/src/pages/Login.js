@@ -52,7 +52,7 @@ function Login() {
           display: "block",
           marginLeft: "auto",
           marginRight: "auto",
-          marginTop: "10rem",
+          marginTop: "4rem",
         }}
       >
         {error ? <h5 className="card-header error">{error}</h5> : ""}
