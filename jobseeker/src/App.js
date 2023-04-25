@@ -1,5 +1,6 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import "./assets/css/App.css";
+import { AuthProvider } from './firebase/Auth';
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,6 +12,7 @@ import { components } from "./components";
 
 function App() {
   return (
+  <AuthProvider>
     <div className="App">
       <CssBaseline />
       <Router>
@@ -23,6 +25,7 @@ function App() {
         </Routes>
       </Router>
     </div>
+    </AuthProvider>
   );
 }
 
