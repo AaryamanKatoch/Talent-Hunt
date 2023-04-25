@@ -1,6 +1,6 @@
 import * as common from "./common";
 
 const helper = {
-    common 
+    common,
   }
 export { helper }
