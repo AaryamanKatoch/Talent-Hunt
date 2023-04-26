@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useContext} from "react";
 import {
   TextField,
   Button,
@@ -9,19 +9,25 @@ import {
   FormControl,
 } from "@mui/material/";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { helper } from "../helper";
+import Alert from '@mui/material/Alert';
 import { api } from "../api";
+import { doCreateUserWithEmailAndPassword } from "../firebase/functions";
+import { AuthContext } from "../firebase/Auth";
+import { components } from "../components";
 
 function SignUp() {
+  const {currentUser} = useContext(AuthContext);
   const [data, setData] = useState({
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
-    profilePicture: "",
-    skills: [],
-    experience: "",
-    field: "",
+    // profilePicture: "",
+    // skills: [],
+    // experience: "",
+    // field: "",
   });
   const [error, setError] = useState();
   const navigate = useNavigate();
@@ -32,36 +38,45 @@ function SignUp() {
     }
   }, []);
 
-  const validateRegister = (e) => {
+  const validateRegister = async (e) => {
     e.preventDefault();
     try {
-      console.log(data);
       helper.common.isValidEmail(data.email);
       helper.common.isValidPassword(data.password);
       helper.common.isPasswordSame(data.confirmPassword, data.password);
-      helper.common.isValidURL(data.profilePicture);
-      data.skills.map(s => {
-        helper.common.isValidString(s, "skills");
-      });      
-      helper.common.isValidString(data.experience, "Experience");
-      helper.common.isValidString(data.field, "Field");
+      // helper.common.isValidURL(data.profilePicture);
+      // data.skills.map(s => {
+      //   helper.common.isValidString(s, "skills");
+      // });      
+      // helper.common.isValidString(data.experience, "Experience");
+      helper.common.isValidString(data.name, "Full Name");
+      console.log('after checking stuff!!')
 
     } catch (e) {
-      setError(e.message);
+      setError(e);
       return;
     }
 
     try {
       // const response = await api.routes.signup(data);
-      // console.log(response.data);
+      await doCreateUserWithEmailAndPassword(
+        data.email,
+        data.password,
+        data.name
+      );
+      console.log('in second trycatch');
       // localStorage.setItem("token_data", JSON.stringify(response.data.token));
       // localStorage.setItem("id", JSON.stringify(response.data._id));
-      navigate("/dashboard");
+      // navigate("/dashboard");
     } catch (e) {
-      setError(e.response.data);
+      setError(e);
       return;
     }
   };
+
+  if (currentUser) {
+    return <Navigate to='/' />;
+  }
 
   return (
     <>
@@ -75,11 +90,22 @@ function SignUp() {
           marginTop: "10rem",
         }}
       >
-        {error ? <h5 className="card-header error">{error}</h5> : ""}
+        {error ? <Alert severity="error" onClose={() => {console.log('here'); setError(null);}}><h5>{error.message}</h5></Alert> : ""}
         <div className="card-body">
           <h5 className="card-title">Sign Up</h5>
           <br />
           <form onSubmit={validateRegister} id="register-form">
+            <TextField
+                label="Full Name"
+                onChange={(e) =>setData({ ...data, name: e.target.value })}
+                required
+                variant="outlined"
+                color="secondary"
+                type="text"
+                value={data.name}
+                fullWidth
+                sx={{ mb: 3 }}
+              />
             <TextField
               label="Email"
               onChange={(e) => setData({ ...data, email: e.target.value })}
@@ -115,19 +141,7 @@ function SignUp() {
               fullWidth
               sx={{ mb: 3 }}
             />
-            <TextField
-              label="Profile Picture URL"
-              onChange={(e) =>
-                setData({ ...data, profilePicture: e.target.value })
-              }
-              variant="outlined"
-              color="secondary"
-              type="url"
-              value={data.profilePicture}
-              fullWidth
-              sx={{ mb: 3 }}
-            />
-            <Autocomplete
+            {/* <Autocomplete
               multiple
               required
               id="combo-box-demo"
@@ -144,8 +158,8 @@ function SignUp() {
               renderInput={(params) => (
                 <TextField {...params} label="Skills" color="secondary" />
               )}
-            />
-            <FormControl
+            /> */}
+            {/* <FormControl
               sx={{ m: 1, minWidth: 300 }}
               style={{ position: "absolute", left: "8px", marginTop: "23px" }}
             >
@@ -201,20 +215,19 @@ function SignUp() {
                 <MenuItem value={"Automobile"}>Automobile</MenuItem>
                 <MenuItem value={"Civil"}>Civil</MenuItem>
               </Select>
-            </FormControl>
-
+            </FormControl> */}
             <Button
               variant="outlined"
               color="secondary"
               type="submit"
-              style={{ marginTop: "14em" }}
+              style={{ marginTop: "1em" }}
             >
               Sign Up
             </Button>
             <br />
             <br />
             <small>
-              Already have an account? <Link to="/login ">Login</Link>
+              Already have an account? <Link to="/login">Login</Link>
             </small>
           </form>
         </div>
