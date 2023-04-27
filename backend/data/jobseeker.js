@@ -3,7 +3,7 @@ const jobSeekers = mongoCollections.jobSeekers;
 const jobs = mongoCollections.jobs;
 const resumes = mongoCollections.resumes;
 const helper = require("../helper");
-const applications=mongoCollections.applications;
+const applications = mongoCollections.applications;
 const { ObjectId } = require("mongodb");
 
 const getAllJobs = async () => {
@@ -129,35 +129,51 @@ async function removeJobSeeker(jobSeekerId) {
   return statement;
 }
 
-
-
-const get_history_of_applications = async(jobSeekerId) => {
-  jobSeekerId= helper.common.isValidId(jobSeekerId);
+const get_history_of_applications = async (jobSeekerId) => {
+  jobSeekerId = helper.common.isValidId(jobSeekerId);
   const jobSeekersCollection = await jobSeekers();
   const applicationsCollection = await applications();
-  const jobseeker = await jobSeekersCollection.findOne({_id: ObjectId(jobSeekerId)});
+  const jobseeker = await jobSeekersCollection.findOne({
+    _id: ObjectId(jobSeekerId),
+  });
 
-  if(jobseeker==null){
+  if (jobseeker == null) {
     throw { status: "400", error: "Could not get Jobseeker" };
   }
 
-  const applications_IDs= jobseeker.Jobs_applied;
-  applications_IDs.forEach(element => {
-    element=ObjectId(element);
+  const applications_IDs = jobseeker.Jobs_applied;
+  applications_IDs.forEach((element) => {
+    element = ObjectId(element);
   });
 
-  const all_applications= await applicationsCollection.find({_id : { $in: applications_IDs} }).toArray();
+  const all_applications = await applicationsCollection
+    .find({ _id: { $in: applications_IDs } })
+    .toArray();
 
-  if(!all_applications){
+  if (!all_applications) {
     throw { status: "400", error: "Could not get applications" };
   }
 
-  all_applications.forEach(element => {
-    element._id=element._id.toString();
+  all_applications.forEach((element) => {
+    element._id = element._id.toString();
   });
-  
+
   return all_applications;
-}
+};
+
+const getAllJobSeekers = async () => {
+  const jobSeekerCollection = await jobSeekers();
+  let allJobSeekers = await jobSeekerCollection.find({}).toArray();
+  if (allJobSeekers === null) {
+    throw { status: "404", error: `No jobseekers found` };
+  }
+  allJobSeekers.map((jobSeeker) => {
+    jobSeeker._id = jobSeeker._id.toString();
+    jobSeeker.resumeId = jobSeeker.resumeId.toString();
+    return jobSeeker;
+  });
+  return allJobSeekers;
+};
 
 module.exports = {
   getAllJobs,
@@ -166,5 +182,6 @@ module.exports = {
   createJobSeeker,
   updateJobSeeker,
   removeJobSeeker,
-  get_history_of_applications
-  }
+  get_history_of_applications,
+  getAllJobSeekers,
+};
