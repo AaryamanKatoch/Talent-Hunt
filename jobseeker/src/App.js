@@ -11,11 +11,11 @@ import {Container} from '@mui/material';
 import {Switch} from '@mui/material';
 import {Typography} from '@mui/material';
 import "./assets/css/App.css";
+//import { AuthProvider } from './firebase/Auth';
 import HomeIcon from '@mui/icons-material/Home';
 import LoginIcon from '@mui/icons-material/Login';
 import { AuthProvider } from './firebase/Auth';
 import PrivateRoute from './components/PrivateRoute';
-
 import {
   BrowserRouter as Router,
   Routes,
@@ -25,6 +25,7 @@ import {
 } from "react-router-dom";
 import { pages } from "./pages";
 import { components } from "./components";
+import JobDetailsPage from './components/JobDetailsPage';
 import React, { useState, useEffect , useContext} from "react";
 
 // function App() {
@@ -103,6 +104,7 @@ import React, { useState, useEffect , useContext} from "react";
 //   );
 // }
 function App() {
+  /*
   return (
     <AuthProvider>
       <Router>
@@ -159,6 +161,12 @@ function App() {
       </Router>
     </AuthProvider>
   );
+  */
+ return (
+  <div className="App">
+    <JobDetailsPage/>
+  </div> );
+ 
 }
 
 export default App;
