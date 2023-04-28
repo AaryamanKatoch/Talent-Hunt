@@ -15,7 +15,6 @@ import HomeIcon from "@mui/icons-material/Home";
 import LoginIcon from "@mui/icons-material/Login";
 import { AuthProvider } from "./firebase/Auth";
 import PrivateRoute from "./components/PrivateRoute";
-
 import {
   BrowserRouter as Router,
   Routes,
@@ -25,6 +24,7 @@ import {
 } from "react-router-dom";
 import { pages } from "./pages";
 import { components } from "./components";
+import JobDetailsPage from "./components/JobDetailsPage";
 import React, { useState, useEffect, useContext } from "react";
 
 // function App() {
@@ -150,6 +150,10 @@ function App() {
           <Routes>
             <Route path="/" element={<PrivateRoute />}>
               <Route path="/page/:page" element={<pages.Home />} />
+              <Route
+                path="/jobDetails/:id"
+                element={<components.JobDetailsPage />}
+              />
             </Route>
             <Route path="/login" element={<pages.Login />} />
             <Route path="/signup" element={<pages.SignUp />} />
