@@ -1,6 +1,6 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import "./assets/css/App.css";
-import { AuthProvider } from './firebase/Auth';
+//import { AuthProvider } from './firebase/Auth';
 import {
   BrowserRouter as Router,
   Routes,
@@ -9,8 +9,10 @@ import {
 } from "react-router-dom";
 import { pages } from "./pages";
 import { components } from "./components";
+import JobDetailsPage from './components/JobDetailsPage';
 
 function App() {
+  /*
   return (
   <AuthProvider>
     <div className="App">
@@ -27,6 +29,12 @@ function App() {
     </div>
     </AuthProvider>
   );
+  */
+ return (
+  <div className="App">
+    <JobDetailsPage/>
+  </div> );
+ 
 }
 
 export default App;
