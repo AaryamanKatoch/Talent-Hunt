@@ -45,7 +45,8 @@ router
   .route("/jobs") //GET all jobs
   .get(async (req, res) => {
     try {
-      const data = await jobSeekerData.getAllJobs();
+      const pageNumber = parseInt(req.query.page) || 1;
+      const data = await jobSeekerData.getAllJobs(pageNumber);
       res.json(data);
     } catch (e) {
       if (typeof e !== "object" || !("status" in e)) {

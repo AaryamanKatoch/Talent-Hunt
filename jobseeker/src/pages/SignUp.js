@@ -75,7 +75,7 @@ function SignUp() {
   };
 
   if (currentUser) {
-    return <Navigate to='/' />;
+    return <Navigate to={`/page/${1}`} />;
   }
 
   return (
