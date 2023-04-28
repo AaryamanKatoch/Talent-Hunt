@@ -74,16 +74,28 @@ function checkIsProperString(string, variableName) {
 
 function checkIsProperArrayOfStrings(array, variableName) {
   if (typeof array === "undefined") {
-    throw `${variableName} is undefined`;
+    throw {
+      status: "400",
+      error: `${variableName} is undefined`,
+    };
   }
   if (typeof array !== "object") {
-    throw `${variableName} is not an array, it must be an array`;
+    throw {
+      status: "400",
+      error: `${variableName} is not an array, it must be an array`,
+    };
   }
   if (!Array.isArray(array)) {
-    throw `${variableName} is not an array, it must be an array`;
+    throw {
+      status: "400",
+      error: `${variableName} is not an array, it must be an array`,
+    };
   }
   if (array.length === 0) {
-    throw `${variableName} is an empty array`;
+    throw {
+      status: "400",
+      error: `${variableName} is an empty array`,
+    };
   }
   for (let i = 0; i < array.length; i++) {
     checkIsProperString(array[i], "Array element");
@@ -95,7 +107,7 @@ function checkIsProperId(id) {
   id = checkIsProperString(id, "ID");
   id = id.trim();
   if (!ObjectId.isValid(id)) {
-    throw `Invalid Object ID`;
+    throw { status: "400", error: `Invalid Object ID` };
   }
   return id;
 }

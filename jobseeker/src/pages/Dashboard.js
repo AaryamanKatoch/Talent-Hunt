@@ -17,7 +17,7 @@ function Dashboard() {
   const checkuser = async () => {
     // Send formData to server to create profile
     await axios
-      .get("http://localhost:3000/company/dashboard", {
+      .get("http://localhost:3000/jobseeker/dashboard", {
         params: {
           email: "dkanakia1234@gmail.com",
         },
@@ -55,7 +55,7 @@ function Dashboard() {
     formData.email = "dkanakia1234@gmail.com";
     console.log(formData);
     await axios
-      .post("http://localhost:3000/company/dashboard", formData)
+      .post("http://localhost:3000/jobseeker/dashboard", formData)
       .then((response) => {
         // handle success
         setHasProfile(true);
@@ -73,7 +73,7 @@ function Dashboard() {
     formData.email = "dkanakia1234@gmail.com";
     console.log(formData);
     await axios
-      .patch("http://localhost:3000/company/dashboard", formData)
+      .patch("http://localhost:3000/jobseeker/dashboard", formData)
       .then((response) => {
         // handle success
         setHasProfile(true);
@@ -93,7 +93,7 @@ function Dashboard() {
 
   return (
     <div>
-      <h1>Company Dashboard</h1>
+      <h1>User Dashboard</h1>
       {hasProfile ? (
         <EditProfile data={profileData} onSubmit={handleEditProfile} />
       ) : (

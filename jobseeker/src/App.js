@@ -1,31 +1,31 @@
-import CssBaseline from '@mui/material/CssBaseline';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import { styled } from "@mui/material/styles"
-import ListItem from '@mui/material/ListItem';
-import {Drawer}  from '@mui/material';
-import {ListItemIcon} from '@mui/material';
-import {ListItemText} from '@mui/material';
-import ListItemButton from '@mui/material/ListItemButton';
-import {Container} from '@mui/material';
-import {Switch} from '@mui/material';
-import {Typography} from '@mui/material';
+import CssBaseline from "@mui/material/CssBaseline";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import { styled } from "@mui/material/styles";
+import ListItem from "@mui/material/ListItem";
+import { Drawer } from "@mui/material";
+import { ListItemIcon } from "@mui/material";
+import { ListItemText } from "@mui/material";
+import ListItemButton from "@mui/material/ListItemButton";
+import { Container } from "@mui/material";
+import { Switch } from "@mui/material";
+import { Typography } from "@mui/material";
 import "./assets/css/App.css";
-import HomeIcon from '@mui/icons-material/Home';
-import LoginIcon from '@mui/icons-material/Login';
-import { AuthProvider } from './firebase/Auth';
-import PrivateRoute from './components/PrivateRoute';
+import HomeIcon from "@mui/icons-material/Home";
+import LoginIcon from "@mui/icons-material/Login";
+import { AuthProvider } from "./firebase/Auth";
+import PrivateRoute from "./components/PrivateRoute";
 
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
-  Link
+  Link,
 } from "react-router-dom";
 import { pages } from "./pages";
 import { components } from "./components";
-import React, { useState, useEffect , useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 // function App() {
 //   return (
@@ -106,7 +106,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: "flex" }}>
           {/* <Drawer
             sx={{
               width: drawerWidth,
@@ -146,13 +146,14 @@ function App() {
               <Divider />
             </List>
           </Drawer> */}
-          <pages.MyDrawer/>
+          <pages.MyDrawer />
           <Routes>
-            <Route path='/' element={<PrivateRoute />}>
+            <Route path="/" element={<PrivateRoute />}>
               <Route path="/" element={<pages.Home />} />
             </Route>
             <Route path="/login" element={<pages.Login />} />
             <Route path="/signup" element={<pages.SignUp />} />
+            <Route path="/dashboard" element={<pages.Dashboard />} />
           </Routes>
         </div>
       </Router>

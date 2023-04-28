@@ -8,6 +8,88 @@ const helper = require("../helper");
 const { ObjectId } = require("mongodb");
 
 router
+  .route("/dashboard")
+  .get(async (req, res) => {
+    try {
+      // let id = "64406ecb4339df491dac4d4b";
+      // id = helper.common.checkIsProperId(id);
+      // const data = await jobSeekerData.getJobSeekerByID(id);
+      let email = req.query.email;
+      email = helper.common.isValidEmail(email);
+      const profileExists = await companyData.profileExists(email);
+      if (profileExists) {
+        const data = await companyData.getCompanyByEmail(email);
+        return res.json(data);
+      } else {
+        res.json({
+          noProfileExists: true,
+          message: "No profile is created for the user",
+        });
+      }
+    } catch (e) {
+      if (typeof e !== "object" || !("status" in e)) {
+        console.log(e);
+        return res.status(500).json("Internal server error");
+      } else {
+        return res.status(parseInt(e.status)).json(e.error);
+      }
+    }
+  })
+  .post(async (req, res) => {
+    try {
+      let data = req.body;
+      // let id = "64406ecb4339df491dac4d4b";
+      // id = helper.common.checkIsProperId(id);
+      // data = helper.jobseeker.isValidJobseekerData(data);
+      // const updatedJobSeeker = await jobSeekerData.updateJobSeeker(
+      //   id,
+      //   data
+      // );
+      console.log(data);
+      let email = data.email;
+      email = helper.common.isValidEmail(email);
+      data = helper.company.isValidCompanyData(data);
+      const newCompany = await companyData.createCompany(data, email);
+      return res.json(newCompany);
+    } catch (e) {
+      console.log(e);
+      if (typeof e !== "object" || !("status" in e)) {
+        console.log(e);
+        return res.status(500).json("Internal server error");
+      } else {
+        return res.status(parseInt(e.status)).json(e.error);
+      }
+    }
+  })
+  .patch(async (req, res) => {
+    try {
+      let data = req.body;
+      // let id = "64406ecb4339df491dac4d4b";
+      // id = helper.common.checkIsProperId(id);
+      // data = helper.jobseeker.isValidJobseekerData(data);
+      // const updatedJobSeeker = await jobSeekerData.updateJobSeeker(
+      //   id,
+      //   data
+      // );
+      let email = data.email;
+      email = helper.common.isValidEmail(email);
+      data = helper.company.isValidCompanyData(data);
+      const updatedCompany = await companyData.updateCompanyByEmail(
+        email,
+        data
+      );
+      return res.json(updatedCompany);
+    } catch (e) {
+      if (typeof e !== "object" || !("status" in e)) {
+        console.log(e);
+        return res.status(500).json("Internal server error");
+      } else {
+        return res.status(parseInt(e.status)).json(e.error);
+      }
+    }
+  });
+
+router
   .route("/")
   .get(async (req, res) => {
     try {

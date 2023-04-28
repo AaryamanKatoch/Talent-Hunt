@@ -1,11 +1,11 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const axiosNoAuth = axios.create({
-  baseURL: 'http://localhost:3000/jobseeker'
+  baseURL: "http://localhost:3000/jobseeker",
 });
 
 export const axiosAuth = axios.create({
-    baseURL: 'http://localhost:3000'
+  baseURL: "http://localhost:3000",
 });
 
 // axiosAuth.interceptors.request.use((config) => {

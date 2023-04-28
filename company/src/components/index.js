@@ -1,5 +1,10 @@
-const components = {
-    //add components here
-}
+import CreateProfile from "./CreateProfile";
+import EditProfile from "./EditProfile";
 
-export {components}
+const components = {
+  //add components here
+  CreateProfile,
+  EditProfile,
+};
+
+export { components };

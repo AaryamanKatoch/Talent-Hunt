@@ -3,7 +3,7 @@ const jobSeekers = mongoCollections.jobSeekers;
 const jobs = mongoCollections.jobs;
 const resumes = mongoCollections.resumes;
 const helper = require("../helper");
-const applications=mongoCollections.applications;
+const applications = mongoCollections.applications;
 const { ObjectId } = require("mongodb");
 
 const getAllJobs = async () => {
@@ -35,6 +35,32 @@ const getJobSeekerByID = async (jobSeekerId) => {
   return jobSeeker;
 };
 
+const profileExists = async (email) => {
+  email = helper.common.isValidEmail(email);
+  const jobSeekerCollection = await jobSeekers();
+  let jobSeeker = await jobSeekerCollection.findOne({
+    email: email,
+  });
+  if (jobSeeker === null) {
+    return false;
+  }
+  return true;
+};
+
+const getJobSeekerByEmail = async (email) => {
+  email = helper.common.isValidEmail(email);
+  const jobSeekerCollection = await jobSeekers();
+  let jobSeeker = await jobSeekerCollection.findOne({
+    email: email,
+  });
+  if (jobSeeker === null) {
+    throw { status: "404", error: `No jobseeker corresponds to the Email` };
+  }
+  jobSeeker._id = jobSeeker._id.toString();
+  jobSeeker.resumeId = jobSeeker.resumeId.toString();
+  return jobSeeker;
+};
+
 const getResumeByID = async (resumeId) => {
   resumeId = helper.common.checkIsProperId(resumeId);
   const resumeCollection = await resumes();
@@ -48,11 +74,19 @@ const getResumeByID = async (resumeId) => {
   return resume;
 };
 
-const createJobSeeker = async (hashedPassword, data) => {
+const createJobSeeker = async (data, email) => {
   data = helper.jobseeker.isValidJobseekerData(data);
+  email = helper.common.isValidEmail(email);
+  const jobSeekerCollection = await jobSeekers();
+  let jobSeekerExists = await jobSeekerCollection.findOne({
+    email: email,
+  });
+  if (jobSeekerExists) {
+    throw { status: "400", error: `Email already has a profile` };
+  }
   const newJobSeeker = {
-    email: data.email,
-    hashedPassword: hashedPassword,
+    name: data.name,
+    email: email,
     address: data.address,
     education: data.education,
     field_of_employment: data.field_of_employment,
@@ -62,8 +96,6 @@ const createJobSeeker = async (hashedPassword, data) => {
     resumeId: "",
     jobs_applied: [],
   };
-
-  const jobSeekerCollection = await jobSeekers();
   const insertInfo = await jobSeekerCollection.insertOne(newJobSeeker);
   if (!insertInfo.insertedId || !insertInfo.acknowledged) {
     throw {
@@ -85,9 +117,15 @@ const updateJobSeeker = async (jobSeekerId, data) => {
   data = helper.jobseeker.isValidJobseekerData(data);
   const jobSeekerCollection = await jobSeekers();
   const jobSeeker = await getJobSeekerByID(jobSeekerId);
+  if (!jobSeeker) {
+    throw {
+      status: "400",
+      error: `Could not find any jobseeker with ID: ${jobSeekerId}`,
+    };
+  }
   const updatedJobSeeker = {
-    email: data.email,
-    hashedPassword: jobSeeker.hashedPassowrd,
+    name: data.name,
+    email: jobSeeker.email,
     address: data.address,
     education: data.education,
     field_of_employment: data.field_of_employment,
@@ -111,16 +149,64 @@ const updateJobSeeker = async (jobSeekerId, data) => {
   return await getJobSeekerByID(jobSeekerId);
 };
 
+const updateJobSeekerByEmail = async (email, data) => {
+  email = helper.common.isValidEmail(email);
+  data = helper.jobseeker.isValidJobseekerData(data);
+  const jobSeekerCollection = await jobSeekers();
+  const jobSeeker = await getJobSeekerByEmail(email);
+  if (!jobSeeker) {
+    throw {
+      status: "400",
+      error: `Could not find any jobseeker with Email: ${email}`,
+    };
+  }
+  const updatedJobSeeker = {
+    name: data.name || jobSeeker.name,
+    email: jobSeeker.email,
+    address: data.address || jobSeeker.address,
+    education: data.education || jobSeeker.education,
+    field_of_employment:
+      data.field_of_employment || jobSeeker.field_of_employment,
+    profile_picture: data.profile_picture || jobSeeker.profile_picture,
+    skills: data.skills || jobSeeker.skills,
+    years_of_experience:
+      data.years_of_experience || jobSeeker.years_of_experience,
+    resumeId: jobSeeker.resumeId,
+    jobs_applied: jobSeeker.jobs_applied,
+  };
+
+  const updatedInfo = await jobSeekerCollection.updateOne(
+    { email: email },
+    { $set: updatedJobSeeker }
+  );
+  if (updatedInfo.modifiedCount === 0) {
+    throw {
+      status: "400",
+      error: "All new details exactly match the old details",
+    };
+  }
+  return await getJobSeekerByEmail(email);
+};
+
 async function removeJobSeeker(jobSeekerId) {
   jobSeekerId = helper.common.checkIsProperId(jobSeekerId);
   const jobSeekerCollection = await jobSeekers();
   const jobSeeker = await getJobSeekerByID(jobSeekerId);
+  if (!jobSeeker) {
+    throw {
+      status: "400",
+      error: `Could not find any jobseeker with ID: ${jobSeekerId}`,
+    };
+  }
   const deletionInfo = await jobSeekerCollection.deleteOne({
     _id: new ObjectId(jobSeekerId),
   });
 
   if (deletionInfo.deletedCount === 0) {
-    throw `Could not delete jobseeker with id: ${jobSeekerId}`;
+    throw {
+      status: 500,
+      error: `Could not delete jobseeker with id: ${jobSeekerId}`,
+    };
   }
   let statement = {
     jobSeekerId: jobSeekerId,
@@ -129,42 +215,47 @@ async function removeJobSeeker(jobSeekerId) {
   return statement;
 }
 
-
-
-const get_history_of_applications = async(jobSeekerId) => {
-  jobSeekerId= helper.common.isValidId(jobSeekerId);
+const get_history_of_applications = async (jobSeekerId) => {
+  jobSeekerId = helper.common.isValidId(jobSeekerId);
   const jobSeekersCollection = await jobSeekers();
   const applicationsCollection = await applications();
-  const jobseeker = await jobSeekersCollection.findOne({_id: ObjectId(jobSeekerId)});
+  const jobseeker = await jobSeekersCollection.findOne({
+    _id: ObjectId(jobSeekerId),
+  });
 
-  if(jobseeker==null){
+  if (jobseeker == null) {
     throw { status: "400", error: "Could not get Jobseeker" };
   }
 
-  const applications_IDs= jobseeker.Jobs_applied;
-  applications_IDs.forEach(element => {
-    element=ObjectId(element);
+  const applications_IDs = jobseeker.Jobs_applied;
+  applications_IDs.forEach((element) => {
+    element = ObjectId(element);
   });
 
-  const all_applications= await applicationsCollection.find({_id : { $in: applications_IDs} }).toArray();
+  const all_applications = await applicationsCollection
+    .find({ _id: { $in: applications_IDs } })
+    .toArray();
 
-  if(!all_applications){
+  if (!all_applications) {
     throw { status: "400", error: "Could not get applications" };
   }
 
-  all_applications.forEach(element => {
-    element._id=element._id.toString();
+  all_applications.forEach((element) => {
+    element._id = element._id.toString();
   });
-  
+
   return all_applications;
-}
+};
 
 module.exports = {
   getAllJobs,
   getJobSeekerByID,
+  getJobSeekerByEmail,
+  profileExists,
   getResumeByID,
   createJobSeeker,
   updateJobSeeker,
+  updateJobSeekerByEmail,
   removeJobSeeker,
-  get_history_of_applications
-  }
+  get_history_of_applications,
+};

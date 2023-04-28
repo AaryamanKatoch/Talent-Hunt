@@ -2,7 +2,7 @@ const mongoCollections = require("../config/mongoCollections");
 const companies = mongoCollections.companies;
 const { ObjectId } = require("mongodb");
 const helper = require("../helper");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 
 const getCompanyDataById = async (id) => {
@@ -18,6 +18,86 @@ const getCompanyDataById = async (id) => {
   }
   company._id = company._id.toString();
   return company;
+};
+
+const getCompanyByEmail = async (email) => {
+  email = helper.common.isValidEmail(email);
+  const companyCollection = await companies();
+  let company = await companyCollection.findOne({
+    email: email,
+  });
+  if (company === null) {
+    throw { status: "404", error: `No company corresponds to the Email` };
+  }
+  company._id = company._id.toString();
+  return company;
+};
+
+const createCompany = async (data, email) => {
+  data = helper.company.isValidCompanyData(data);
+  email = helper.common.isValidEmail(email);
+  const companyCollection = await companies();
+  let companyExists = await companyCollection.findOne({
+    email: email,
+  });
+  if (companyExists) {
+    throw { status: "400", error: `Email already has a profile` };
+  }
+  const newCompany = {
+    name: data.name,
+    email: email,
+    type: data.type,
+    description: data.description,
+    profile_picture: data.profile_picture,
+    jobs_posted: [],
+  };
+  const insertInfo = await companyCollection.insertOne(newCompany);
+  if (!insertInfo.insertedId || !insertInfo.acknowledged) {
+    throw {
+      status: "400",
+      error: "Could not add the company",
+    };
+  }
+  const newId = insertInfo.insertedId.toString();
+
+  const company = await companyCollection.findOne({
+    _id: new ObjectId(newId),
+  });
+  company._id = newId;
+  return company;
+};
+
+const updateCompanyByEmail = async (email, data) => {
+  email = helper.common.isValidEmail(email);
+  data = helper.company.isValidCompanyData(data);
+  const companyCollection = await companies();
+  const company = await getCompanyByEmail(email);
+  if (!company) {
+    throw {
+      status: "400",
+      error: `Could not find any company with Email: ${email}`,
+    };
+  }
+  const updatedCompany = {
+    name: data.name || company.name,
+    email: email,
+    type: data.type || company.type,
+    description: data.description || company.description,
+    profile_picture: data.profile_picture || company.profile_picture,
+    jobs_posted: company.jobs_posted,
+  };
+
+  const updatedInfo = await companyCollection.updateOne(
+    { email: email },
+    { $set: updatedCompany }
+  );
+  if (updatedInfo.modifiedCount === 0) {
+    throw {
+      status: "400",
+      error: "All new details exactly match the old details",
+    };
+  }
+  return await getCompanyByEmail(email);
 };
 
 const updateCompany = async (id, data) => {
@@ -36,7 +116,7 @@ const updateCompany = async (id, data) => {
     { _id: new ObjectId(id) },
     { $set: data }
   );
-  
+
   if (updatedInfo.modifiedCount === 0) {
     throw {
       status: "400",
@@ -48,7 +128,23 @@ const updateCompany = async (id, data) => {
   return company;
 };
 
+const profileExists = async (email) => {
+  email = helper.common.isValidEmail(email);
+  const companyCollection = await companies();
+  let company = await companyCollection.findOne({
+    email: email,
+  });
+  if (company === null) {
+    return false;
+  }
+  return true;
+};
+
 module.exports = {
   getCompanyDataById,
-  updateCompany
+  updateCompany,
+  getCompanyByEmail,
+  createCompany,
+  updateCompanyByEmail,
+  profileExists,
 };

@@ -1,4 +1,4 @@
-import isUrl from 'is-url';
+import isUrl from "is-url";
 
 export const isValidString = (string, parameter) => {
   if (!string) throw new Error(`You must provide a ${parameter}`);
@@ -61,9 +61,64 @@ export const isValidName = (inputName) => {
 };
 
 export const isValidURL = (url) => {
-  if(!url) return;
-  if(isUrl(url)){
+  if (!url) return;
+  if (isUrl(url)) {
     return true;
   }
   throw new Error("Invalid URL");
-}
+};
+
+export const checkIsProperString = (string, variableName) => {
+  if (typeof string === "undefined") {
+    throw new Error(`${variableName} is undefined`);
+  }
+  if (typeof string !== "string") {
+    throw new Error(`${variableName} is not a string, it must be a string`);
+  }
+  if (string.length === 0) {
+    throw new Error(`${variableName} is an empty string`);
+  }
+  if (string.trim().length === 0) {
+    throw new Error(`${variableName} is a string with only empty spaces`);
+  }
+  return string;
+};
+
+export const checkIsProperArrayOfStrings = (array, variableName) => {
+  if (typeof array === "undefined") {
+    throw new Error(`${variableName} is undefined`);
+  }
+  if (typeof array !== "object") {
+    throw new Error(`${variableName} is not an array, it must be an array`);
+  }
+  if (!Array.isArray(array)) {
+    throw new Error(`${variableName} is not an array, it must be an array`);
+  }
+  if (array.length === 0) {
+    throw new Error(`${variableName} is an empty array`);
+  }
+  for (let i = 0; i < array.length; i++) {
+    checkIsProperString(array[i], "Array element");
+  }
+  return array;
+};
+
+export const isValidInteger = (n) => {
+  if (!isNaN(parseInt(n)) && n >= 0) {
+    return parseInt(n);
+  } else {
+    throw new Error("Not a non negative integer");
+  }
+};
+
+export const isValidWebImage = (url) => {
+  if (isUrl(url)) {
+    if (/\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url)) {
+      return url;
+    } else {
+      throw new Error("Image is not in proper image format");
+    }
+  } else {
+    throw new Error("It is not a proper web image");
+  }
+};
