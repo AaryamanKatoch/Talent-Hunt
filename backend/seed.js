@@ -1,35 +1,31 @@
-const job = require('./data/jobs');
-const application = require('./data/application')
+const job = require("./data/jobs");
+const application = require("./data/application");
 
-const connection = require('./config/mongoConnection');
-const { jobs } = require('./config/mongoCollections');
-const { applications } = require('./config/mongoCollections');
-
+const connection = require("./config/mongoConnection");
+const { jobs } = require("./config/mongoCollections");
+const { applications } = require("./config/mongoCollections");
 
 // manual testing using comments
 
 async function main() {
-    const db = await connection.dbConnection();
-    let alljobs=undefined
-    
- 
-    
+  const db = await connection.dbConnection();
+  let alljobs = undefined;
 
   await db.dropDatabase();
 
-
-
-   try {
-
-    job1 = await job.createJob("Testyyy job","backend stuff","will sponsor","undersgrad in cs");
+  try {
+    job1 = await job.createJob(
+      "Testyyy job",
+      "backend stuff",
+      "will sponsor",
+      "undersgrad in cs"
+    );
     //console.log(fli1)
-    } catch (e) {
-        console.log(e);
-    }
+  } catch (e) {
+    console.log(e);
+  }
 
-
-
-/*
+  /*
 try {
 
     job2 = await job.createJob("Test job2 ","backend stuff 2","will sponsor2","undersgrad in ece");
@@ -96,11 +92,8 @@ try {
         console.log(e);
 }
 */
-    await connection.closeConnection();
-    console.log('Done!');
-
-
+  await connection.closeConnection();
+  console.log("Done!");
 }
-
 
 main();

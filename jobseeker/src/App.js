@@ -155,6 +155,7 @@ function App() {
             <Route path="/signup" element={<pages.SignUp />} />
           </Routes>
         </div>
+
       </Router>
     </AuthProvider>
   );
