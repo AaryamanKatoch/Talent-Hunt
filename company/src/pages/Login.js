@@ -52,12 +52,12 @@ function Login() {
           display: "block",
           marginLeft: "auto",
           marginRight: "auto",
-          marginTop: "10rem",
+          marginTop: "4rem",
         }}
       >
         {error ? <h5 className="card-header error">{error}</h5> : ""}
         <div className="card-body">
-          <h5 className="card-title">Login</h5>
+          <h1 className="card-title">Login</h1>
           <br />
           <form onSubmit={validateLogin} id="register-form">
             <TextField

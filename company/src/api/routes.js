@@ -7,3 +7,11 @@ export const signup = (data) => {
 export const login = (data) => {
     return axiosNoAuth.post(`/login`, data);
 }
+
+export const getAllPeople = () => {
+    return axiosAuth.get(`/jobseeker/allJobSeekers`);
+}
+
+export const getSingleJobSeeker = (id) => {
+    return axiosAuth.get(`/jobseeker/singleJobSeeker/${id}`);
+}

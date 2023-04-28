@@ -1,7 +1,8 @@
-import AppNavbar from './AppNavbar';
+import BuildCard from "./BuildCard"
 
 const components = {
-    AppNavbar
+    //add components here
+    BuildCard,
 }
 
 export {components}

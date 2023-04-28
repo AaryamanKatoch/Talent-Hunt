@@ -7,10 +7,10 @@ const helper = require("../helper");
 const common_helper= require("../helper/common");
 
 router
-  .route("/dashboard")
+  .route("/singleJobSeeker/:id")
   .get(async (req, res) => {
+    let id = req.params.id;
     try {
-      let id = "64406ecb4339df491dac4d4b";
       id = helper.common.checkIsProperId(id);
       const data = await jobSeekerData.getJobSeekerByID(id);
       res.json(data);
@@ -31,6 +31,7 @@ router
       data = helper.jobseeker.isValidJobseekerData(data);
       const updatedJobSeeker = await jobSeekerData.updateJobSeeker(id, data);
       res.json(updatedJobSeeker);
+      return;
     } catch (e) {
       if (typeof e !== "object" || !("status" in e)) {
         console.log(e);
@@ -45,8 +46,10 @@ router
   .route("/jobs") //GET all jobs
   .get(async (req, res) => {
     try {
-      const data = await jobSeekerData.getAllJobs();
+      const pageNumber = parseInt(req.query.page) || 1;
+      const data = await jobSeekerData.getAllJobs(pageNumber);
       res.json(data);
+      return;
     } catch (e) {
       if (typeof e !== "object" || !("status" in e)) {
         console.log(e);
@@ -78,6 +81,22 @@ router
       jobSeekerId=common_helper.isValidId(jobSeekerId);
       const data = await jobSeekerData.get_history_of_applications(jobSeekerId);
       res.json(data);
+      return;
+    } catch (e) {
+      if (typeof e !== "object" || !("status" in e)) {
+        console.log(e);
+        res.status(500).json("Internal server error");
+      } else {
+        res.status(parseInt(e.status)).json(e.error);
+      }
+    }
+  });
+
+  router.get('/allJobSeekers', async (req, res) => {
+    try {
+      const data = await jobSeekerData.getAllJobSeekers();
+      res.status(200).json(data);
+      return;
     } catch (e) {
       if (typeof e !== "object" || !("status" in e)) {
         console.log(e);
