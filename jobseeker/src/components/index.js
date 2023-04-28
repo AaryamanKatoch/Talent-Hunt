@@ -1,8 +1,8 @@
-import AppNavbar from './AppNavbar';
+// import AppNavbar from './AppNavbar';
 import SocialSignIn from './SocialSignIn';
 
 const components = {
-    AppNavbar,
+    // AppNavbar,
     SocialSignIn
 }
 
