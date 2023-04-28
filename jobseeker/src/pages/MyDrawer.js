@@ -1,6 +1,7 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
+import { doSignOut } from '../firebase/functions';
 import { styled } from "@mui/material/styles"
 import ListItem from '@mui/material/ListItem';
 import {Drawer}  from '@mui/material';
@@ -16,6 +17,9 @@ import LoginIcon from '@mui/icons-material/Login';
 import { AuthProvider } from '../firebase/Auth';
 import PrivateRoute from '../components/PrivateRoute';
 import { AuthContext } from '../firebase/Auth';
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+import { deepOrange, deepPurple } from '@mui/material/colors';
 import {
   BrowserRouter as Router,
   Routes,
@@ -45,8 +49,13 @@ function MyDrawer(){
             open={true}
           >
             <Divider/>
+            {currentUser? (<div><Stack direction="row" spacing={2} justifyContent="center" sx={{marginTop:'30px', marginBottom:'30px'}}>
+              <Avatar sx={{ width: 60, height: 60 }}>{currentUser ? currentUser.displayName[0] : ''}</Avatar>
+            </Stack>
+            <h6 className='makeCenter'>{currentUser ? currentUser.email : ''}</h6></div>) : null}
+            <Divider/>
             <List>
-            <Link to="/" className="navBarLink">
+            <Link to={`/page/${1}`} className="navBarLink">
                 <ListItem disablePadding>
                   <ListItemButton>
                     <ListItemIcon>
@@ -68,6 +77,16 @@ function MyDrawer(){
                 </ListItem>
               </Link>)}
               <Divider />
+              {currentUser ? (<Link onClick={doSignOut} className="navBarLink">
+                <ListItem disablePadding>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      <HomeIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={"LogOut"} />
+                  </ListItemButton>
+                </ListItem>
+              </Link>) : null}
             </List>
     </Drawer>);
 }

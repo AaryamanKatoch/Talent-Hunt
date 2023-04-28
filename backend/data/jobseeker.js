@@ -6,12 +6,20 @@ const helper = require("../helper");
 const applications = mongoCollections.applications;
 const { ObjectId } = require("mongodb");
 
-const getAllJobs = async () => {
+const getAllJobs = async (page) => {
+  if (!page) throw "please provide page number for the data function!";
+  if (isNaN(page)) throw "page number should be valid number";
+  if (page < 1) throw "page number should be greater than 1";
+
+  const each_page = 20;
+  const skip = (page - 1) * each_page;
+
   const jobsCollection = await jobs();
-  const allJobs = await jobsCollection.find(
-    {},
-    { projection: { applications: 0 } }
-  );
+  const allJobs = await jobsCollection
+    .find({})
+    .skip(skip)
+    .limit(each_page)
+    .toArray();
 
   if (!allJobs) throw { status: "400", error: "Could not get all Jobs" };
 
@@ -247,6 +255,20 @@ const get_history_of_applications = async (jobSeekerId) => {
   return all_applications;
 };
 
+const getAllJobSeekers = async () => {
+  const jobSeekerCollection = await jobSeekers();
+  let allJobSeekers = await jobSeekerCollection.find({}).toArray();
+  if (allJobSeekers === null) {
+    throw { status: "404", error: `No jobseekers found` };
+  }
+  allJobSeekers.map((jobSeeker) => {
+    jobSeeker._id = jobSeeker._id.toString();
+    jobSeeker.resumeId = jobSeeker.resumeId.toString();
+    return jobSeeker;
+  });
+  return allJobSeekers;
+};
+
 module.exports = {
   getAllJobs,
   getJobSeekerByID,
@@ -258,4 +280,5 @@ module.exports = {
   updateJobSeekerByEmail,
   removeJobSeeker,
   get_history_of_applications,
+  getAllJobSeekers,
 };

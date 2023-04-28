@@ -110,6 +110,13 @@ async function main() {
   try {
     const find = await jobseekerData.getJobSeekerByEmail("ak34@gmail.com");
     // console.log(find);
+    job1 = await job.createJob(
+      "Testyyy job",
+      "backend stuff",
+      "will sponsor",
+      "undersgrad in cs"
+    );
+    //console.log(fli1)
   } catch (e) {
     console.log(e);
   }
@@ -297,7 +304,7 @@ try {
         console.log(e);
 }
 */
-  await connection.closeConnection();
+  connection.closeConnection();
   console.log("Done!");
 }
 

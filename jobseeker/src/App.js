@@ -149,7 +149,7 @@ function App() {
           <pages.MyDrawer />
           <Routes>
             <Route path="/" element={<PrivateRoute />}>
-              <Route path="/" element={<pages.Home />} />
+              <Route path="/page/:page" element={<pages.Home />} />
             </Route>
             <Route path="/login" element={<pages.Login />} />
             <Route path="/signup" element={<pages.SignUp />} />

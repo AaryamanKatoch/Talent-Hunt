@@ -1,10 +1,10 @@
-import AppNavbar from "./AppNavbar";
+// import AppNavbar from "./AppNavbar";
 import SocialSignIn from "./SocialSignIn";
 import CreateProfile from "./CreateProfile";
 import EditProfile from "./EditProfile";
 
 const components = {
-  AppNavbar,
+  // AppNavbar,
   SocialSignIn,
   CreateProfile,
   EditProfile,
