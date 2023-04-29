@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-
+import { AuthContext } from "../firebase/Auth";
 import CreateProfile from "../components/CreateProfile";
 import EditProfile from "../components/EditProfile";
 
@@ -8,6 +8,7 @@ function Dashboard() {
   const [hasProfile, setHasProfile] = useState(false);
   const [profileData, setProfileData] = useState(undefined);
   const [error, setError] = useState(undefined);
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     console.log("on load");
@@ -16,10 +17,11 @@ function Dashboard() {
 
   const checkuser = async () => {
     // Send formData to server to create profile
+    console.log(currentUser.email);
     await axios
       .get("http://localhost:3000/jobseeker/dashboard", {
         params: {
-          email: "dkanakia1234@gmail.com",
+          email: currentUser.email,
         },
       })
       .then((response) => {
@@ -52,7 +54,7 @@ function Dashboard() {
 
   const handleCreateProfile = async (formData) => {
     // Send formData to server to create profile
-    formData.email = "dkanakia1234@gmail.com";
+    formData.email = currentUser.email;
     console.log(formData);
     await axios
       .post("http://localhost:3000/jobseeker/dashboard", formData)
@@ -70,7 +72,7 @@ function Dashboard() {
 
   const handleEditProfile = async (formData) => {
     // Send formData to server to update profile
-    formData.email = "dkanakia1234@gmail.com";
+    formData.email = currentUser.email;
     console.log(formData);
     await axios
       .patch("http://localhost:3000/jobseeker/dashboard", formData)

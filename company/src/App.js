@@ -1,7 +1,12 @@
-import CssBaseline from '@mui/material/CssBaseline';
-import './assets/css/App.css';
-import { BrowserRouter as Router, Routes, Route, Navigate  } from "react-router-dom";
-import {pages} from "./pages";
+import CssBaseline from "@mui/material/CssBaseline";
+import "./assets/css/App.css";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { pages } from "./pages";
 // import { components } from "./components";
 
 function App() {
@@ -10,12 +15,13 @@ function App() {
       <CssBaseline />
       <Router>
         <Routes>
-          <Route path="/login" element={<pages.Login/>} />
-          <Route path="/signup" element={<pages.SignUp/>} />
-          <Route path="/dashboard" element={<pages.Dashboard/>} />
+          <Route path="/login" element={<pages.Login />} />
+          <Route path="/signup" element={<pages.SignUp />} />
+          <Route path="/dashboard" element={<pages.Dashboard />} />
+          <Route path="/postJob" element={<pages.PostJob />} />
           <Route path="/findPeople" element={<pages.FindPeople />} />
           <Route path="/jobSeeker/:id" element={<pages.SinglePerson />} />
-          <Route path="*" element={<Navigate  to="/dashboard"/>}/>
+          <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>
       </Router>
     </div>
