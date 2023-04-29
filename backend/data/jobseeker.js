@@ -269,6 +269,60 @@ const getAllJobSeekers = async () => {
   return allJobSeekers;
 };
 
+
+const addApplicationToJobseeker = async (jobSeekerId,applicationId) => {
+  if (!jobSeekerId) throw { status: "400", error: "No job seeker id exists" };
+  if (typeof jobSeekerId !== "string")
+    throw { status: "400", error: "Type of job seeker id is not a string" };
+  if (jobSeekerId.trim().length === 0)
+    throw {
+      status: "400",
+      error: "Job seeker id cannot be empty or all white spaces",
+    };
+
+  jobSeekerId = jobSeekerId.trim();
+  if (!ObjectId.isValid(jobSeekerId))
+    throw { status: "400", error: "Job seeker id is not valid" };
+
+    if (!applicationId) throw { status: "400", error: "No application id exists" };
+    if (typeof applicationId !== "string")
+      throw { status: "400", error: "Type of application id is not a string" };
+    if (applicationId.trim().length === 0)
+      throw {
+        status: "400",
+        error: "application id cannot be empty or all white spaces",
+      };
+  
+    applicationId = applicationId.trim();
+    if (!ObjectId.isValid(applicationId))
+      throw { status: "400", error: "application id is not valid" };
+
+
+  const jobSeekersCollection = await jobSeekers()
+
+  const jobseekerbyid = await jobSeekersCollection.findOne({ _id: ObjectId(jobSeekerId) });
+  if (jobseekerbyid === null)
+    throw { status: "400", error: "No job seeker found with that id" };
+
+  jobseekerbyid._id = jobseekerbyid._id.toString();
+  
+
+  updatedJobsApplied=[]
+  for(i=0;i<jobseekerbyid.jobs_applied.length;i++){
+    updatedJobsApplied.push(jobseekerbyid.jobs_applied[i])
+  }
+updatedJobsApplied.push(applicationId)
+
+  let updated = await jobSeekersCollection.updateOne({_id : ObjectId(jobSeekerId)},{$set : {"jobs_applied" : updatedJobsApplied}});
+  // console.log(updateFlightClass);
+  if(updated.modifiedCount === 0) throw 'Cannot add application id to jobseeker collection';
+   
+  const jobseekerbyidd = await jobSeekersCollection.findOne({ _id: ObjectId(jobSeekerId) });
+return jobseekerbyidd
+};
+
+
+
 module.exports = {
   getAllJobs,
   getJobSeekerByID,
@@ -281,4 +335,5 @@ module.exports = {
   removeJobSeeker,
   get_history_of_applications,
   getAllJobSeekers,
+  addApplicationToJobseeker
 };

@@ -16,7 +16,10 @@ async function main() {
   let jobseeker1, jobseeker2, jobseeker3, jobseeker4;
   let company1, company2, company3, company4;
 
+
+
   await db.dropDatabase();
+  
   try {
     let data = {
       name: "Dhavan Kanakia",
@@ -36,6 +39,8 @@ async function main() {
   } catch (e) {
     console.log(e);
   }
+
+  
   try {
     let data = {
       name: "Ujas Italia",
@@ -224,20 +229,35 @@ async function main() {
   } catch (e) {
     console.log(e);
   }
+/*
+  
+ //////////////////
+let job1=undefined
+   try {
+   job1 = await job.createJob(
+     "Testyyy job",
+     "backend stuff",
+    "will sponsor",
+   "undersgrad in cs"
+     );
+     console.log(job1)
+   } catch (e) {
+     console.log(e);
+   }
 
-  // try {
-  //   job1 = await job.createJob(
-  //     "Testyyy job",
-  //     "backend stuff",
-  //     "will sponsor",
-  //     "undersgrad in cs"
-  //   );
-  //   //console.log(fli1)
-  // } catch (e) {
-  //   console.log(e);
-  // }
+  
+   try {
 
-  /*
+    app1 = await application.createApplication("644ca5c8f5adb13b130287b9","644ca5c8f5adb13b130287ba","Aaryaman","Katoch","email@test.com","64456e7c0b6aca78c6b3ee2c","male","F1 allowed");
+    //console.log(flight1)
+    } catch (e) {
+        console.log(e);
+    }
+
+
+  
+
+
 try {
 
     job2 = await job.createJob("Test job2 ","backend stuff 2","will sponsor2","undersgrad in ece");
@@ -303,6 +323,16 @@ try {
     } catch (e) {
         console.log(e);
 }
+
+
+  try {
+
+    s2 = await jobseekerData.addApplicationToJobseeker("644ca5c8f5adb13b130287b9","644ca700951b480e31fa966c");
+    console.log(s2)
+    } catch (e) {
+        console.log(e);
+    }
+
 */
   connection.closeConnection();
   console.log("Done!");
