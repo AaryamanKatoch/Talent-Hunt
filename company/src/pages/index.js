@@ -3,6 +3,8 @@ import SignUp from "./SignUp";
 import Dashboard from './Dashboard';
 import FindPeople from "./FindPeople";
 import SinglePerson from "./SinglePerson";
+import Home from "./Home";
+import MyDrawer from "./MyDrawer";
 
 const pages = {
     Login,
@@ -10,6 +12,8 @@ const pages = {
     Dashboard,
     FindPeople,
     SinglePerson,
+    Home,
+    MyDrawer,
 }
 
 export {pages}
