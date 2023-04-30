@@ -162,6 +162,59 @@ const updateJob = async (
   return await getJobById(id);
 };
 
+
+
+const addApplicationToJobs = async (jobId,applicationId) => {
+  if (!jobId) throw { status: "400", error: "No job id exists" };
+  if (typeof jobId !== "string")
+    throw { status: "400", error: "Type of job id is not a string" };
+  if (jobId.trim().length === 0)
+    throw {
+      status: "400",
+      error: "Job id cannot be empty or all white spaces",
+    };
+
+  jobId = jobId.trim();
+  if (!ObjectId.isValid(jobId))
+    throw { status: "400", error: "Job id is not valid" };
+
+    if (!applicationId) throw { status: "400", error: "No application id exists" };
+    if (typeof applicationId !== "string")
+      throw { status: "400", error: "Type of application id is not a string" };
+    if (applicationId.trim().length === 0)
+      throw {
+        status: "400",
+        error: "application id cannot be empty or all white spaces",
+      };
+  
+    applicationId = applicationId.trim();
+    if (!ObjectId.isValid(applicationId))
+      throw { status: "400", error: "application id is not valid" };
+
+
+  const jobsCollection = await jobs();
+
+  const jobbyid = await jobsCollection.findOne({ _id: ObjectId(jobId) });
+  if (jobbyid === null)
+    throw { status: "400", error: "No job found with that id" };
+
+  jobbyid._id = jobbyid._id.toString();
+  
+
+  updatedApplication=[]
+  for(i=0;i<jobbyid.applications.length;i++){
+    updatedApplication.push(jobbyid.applications[i])
+  }
+updatedApplication.push(applicationId)
+
+  let updated = await jobsCollection.updateOne({_id : ObjectId(jobId)},{$set : {"applications" : updatedApplication}});
+  // console.log(updateFlightClass);
+  if(updated.modifiedCount === 0) throw 'Cannot add application id to job collection';
+   
+  const jobbyidd = await jobsCollection.findOne({ _id: ObjectId(jobId) });
+return jobbyidd
+};
+
 const createJobByCompanyEmail = async (companyEmail, data) => {
   companyEmail = helper.common.isValidEmail(companyEmail);
   data = helper.job.isValidJobData(data);
@@ -287,6 +340,7 @@ module.exports = {
   removeJob,
   updateJob,
   getJobById,
+  addApplicationToJobs,
   createJobByCompanyEmail,
   updateJobByCompanyEmail,
   getAllJobsByCompanyEmail,
