@@ -150,6 +150,7 @@ function App() {
           <Routes>
             <Route path="/" element={<PrivateRoute />}>
               <Route path="/page/:page" element={<pages.Home />} />
+              <Route path="/dashboard" element={<pages.Dashboard />} />
               <Route
                 path="/jobDetails/:id"
                 element={<components.JobDetailsPage />}
@@ -157,7 +158,6 @@ function App() {
             </Route>
             <Route path="/login" element={<pages.Login />} />
             <Route path="/signup" element={<pages.SignUp />} />
-            <Route path="/dashboard" element={<pages.Dashboard />} />
           </Routes>
         </div>
       </Router>

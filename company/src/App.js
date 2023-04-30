@@ -1,3 +1,4 @@
+import CssBaseline from "@mui/material/CssBaseline";
 import "./assets/css/App.css";
 import { AuthProvider } from "./firebase/Auth";
 import PrivateRoute from "./components/PrivateRoute";
@@ -20,11 +21,13 @@ function App() {
           <pages.MyDrawer />
           <Routes>
             <Route path="/" element={<PrivateRoute />}>
-              <Route path="/" element={<pages.Home />} />
+              <Route path="/dashboard" element={<pages.Dashboard />} />
+              <Route path="/postJob" element={<pages.PostJob />} />
+              <Route path="/findPeople" element={<pages.FindPeople />} />
+              <Route path="/jobSeeker/:id" element={<pages.SinglePerson />} />
             </Route>
             <Route path="/login" element={<pages.Login/>} />
             <Route path="/signup" element={<pages.SignUp />} />
-            <Route path="/dashboard" element={<pages.Dashboard />} />
           </Routes>
         </div>
       </Router>
