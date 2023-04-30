@@ -64,3 +64,23 @@ router.route("/postJob").post(async (req, res) => {
     }
   }
 });
+
+router.route("/postJobByEmail").post(async (req, res) => {
+  try {
+    let data = req.body;
+    let companyEmail = data.email;
+    companyEmail = helper.common.isValidEmail(companyEmail);
+    data = helper.job.isValidJobData(data);
+    const job = await jobsData.createJobByCompanyEmail(companyEmail, data);
+    return res.status(200).json(job);
+  } catch (e) {
+    if (typeof e !== "object" || !("status" in e)) {
+      console.log(e);
+      return res.status(500).json("Internal server error");
+    } else {
+      return res.status(parseInt(e.status)).json(e.error);
+    }
+  }
+});
+
+module.exports = router;

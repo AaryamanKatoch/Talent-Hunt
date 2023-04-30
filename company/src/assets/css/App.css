@@ -12,6 +12,10 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.navBarLink {
+  text-decoration: none;
+  color: #282c34;
+}
 
 .App-header {
   background-color: #282c34;
@@ -35,4 +39,29 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.makeCenter{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.makeright {
+  text-align: right;
+}
+
+.Link-for-eventcard{
+  text-decoration: none !important;
+}
+
+.page_indicator{
+  margin: 30px;
+  margin-top: "1em" ;
+}
+
+.main-div{
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-decoration: none !important;
 }
