@@ -26,6 +26,7 @@ import { pages } from "./pages";
 import { components } from "./components";
 import JobDetailsPage from "./components/JobDetailsPage";
 import React, { useState, useEffect, useContext } from "react";
+import { ResumeProvider } from "./ContextResume";
 
 // function App() {
 //   return (
@@ -104,6 +105,7 @@ import React, { useState, useEffect, useContext } from "react";
 // }
 function App() {
   return (
+    <ResumeProvider>
     <AuthProvider>
       <Router>
         <div style={{ display: "flex" }}>
@@ -156,12 +158,16 @@ function App() {
                 element={<components.JobDetailsPage />}
               />
             </Route>
+            <Route path="/create-resume" element={<PrivateRoute />}>
+              <Route path="/create-resume" element={<components.CreateResume />} />
+            </Route>
             <Route path="/login" element={<pages.Login />} />
             <Route path="/signup" element={<pages.SignUp />} />
           </Routes>
         </div>
       </Router>
     </AuthProvider>
+    </ResumeProvider>
   );
 }
 
