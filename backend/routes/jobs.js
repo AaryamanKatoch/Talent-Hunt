@@ -28,7 +28,7 @@ router.route("/postJob").post(async (req, res) => {
     minimumQualification,
   } = req.body;
   try {
-    description = helper.jobHelper.checkifproperdescription(description);
+    description = await helper.jobhelper.checkifproperdescription(description);
     responsibilities = await helper.jobhelper.checkifproperresponsibilities(
       responsibilities
     );

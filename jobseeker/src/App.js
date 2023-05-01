@@ -152,16 +152,13 @@ function App() {
           <Routes>
             <Route path="/" element={<PrivateRoute />}>
               <Route path="/page/:page" element={<pages.Home />} />
-<<<<<<< HEAD
               <Route path="/jobDetails/:id" element={<components.JobDetailsPage />} />
               <Route path="/apply/:jobId" element={<pages.Application />} />
-=======
               <Route path="/dashboard" element={<pages.Dashboard />} />
               <Route
                 path="/jobDetails/:id"
                 element={<components.JobDetailsPage />}
               />
->>>>>>> 7e1b3829596ffe48490f233ee30ca60c92f7091a
             </Route>
             <Route path="/create-resume" element={<PrivateRoute />}>
               <Route path="/create-resume" element={<components.CreateResume />} />
