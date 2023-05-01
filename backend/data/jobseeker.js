@@ -255,6 +255,49 @@ const get_history_of_applications = async (jobSeekerId) => {
   return all_applications;
 };
 
+const get_history_of_applications_by_email = async (email) => {
+  email = helper.common.isValidEmail(email);
+  const jobSeekersCollection = await jobSeekers();
+  const applicationsCollection = await applications();
+  const jobseeker = await jobSeekersCollection.findOne({
+    email: email,
+  });
+
+  if (jobseeker == null) {
+    throw { status: "404", error: "Profile is not created for jobSeeker" };
+  }
+
+  console.log('******jobseeker*******',jobseeker.name)
+
+  const applications_IDs = jobseeker.jobs_applied;
+  console.log('****',applications_IDs)
+  applications_IDs.forEach((element) => {
+    element = ObjectId(element);
+  });
+
+  const all_applications = await applicationsCollection
+    .find({ _id: { $in: applications_IDs } })
+    .toArray();
+
+  if (!all_applications) {
+    throw { status: "404", error: "Could not get applications" };
+  }
+
+  if(all_applications.length <1){
+    throw { status: "404", error: "There's no any applications found in your profile" };
+  }
+
+  console.log('*******found applications********',all_applications)
+
+  all_applications.forEach((element) => {
+    element._id = element._id.toString();
+  });
+
+  console.log('aplications found!!!',all_applications)
+
+  return all_applications;
+};
+
 const getAllJobSeekers = async () => {
   const jobSeekerCollection = await jobSeekers();
   let allJobSeekers = await jobSeekerCollection.find({}).toArray();
@@ -268,7 +311,6 @@ const getAllJobSeekers = async () => {
   });
   return allJobSeekers;
 };
-
 
 const addApplicationToJobseeker = async (jobSeekerId,applicationId) => {
   if (!jobSeekerId) throw { status: "400", error: "No job seeker id exists" };
@@ -335,5 +377,6 @@ module.exports = {
   removeJobSeeker,
   get_history_of_applications,
   getAllJobSeekers,
-  addApplicationToJobseeker
+  addApplicationToJobseeker,
+  get_history_of_applications_by_email
 };

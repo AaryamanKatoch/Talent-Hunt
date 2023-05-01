@@ -69,7 +69,7 @@ const Home = () => {
 
   const buildCard = (job) => {
     return (
-      <Grid item xs={10} sm={10} md={10} lg={10} xl={10} key={job.id}>
+      <Grid item xs={10} sm={10} md={10} lg={10} xl={10} key={job._id}>
         <Card
           sx={{
             width: "100%",
@@ -98,7 +98,7 @@ const Home = () => {
                   }}
                   component="h3"
                 >
-                  Job title
+                  {job.name}
                 </Typography>
                 <Typography
                   sx={{
