@@ -38,6 +38,8 @@ const createApplication = async (
   if (!ObjectId.isValid(jobId))
     throw { status: "400", error: "job Id is not valid" };
 
+   
+
   if (!resumeId) throw { status: "400", error: "No resume Id exists" };
   if (typeof resumeId !== "string")
     throw { status: "400", error: "Type of resume Id is not a string" };
@@ -66,7 +68,7 @@ const createApplication = async (
     email: email,
     resumeId: resumeId,
     sex: sex,
-    visaStatus: visaStatus,
+    visaStatus: visaStatus
   };
 
   const insertInfo = await applicationsCollection.insertOne(application);

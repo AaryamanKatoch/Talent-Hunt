@@ -65,6 +65,16 @@ function MyDrawer(){
                   </ListItemButton>
                 </ListItem>
               </Link>
+              <Link to={`/create-resume`} className="navBarLink">
+                <ListItem disablePadding>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      <HomeIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={"Create Resume"} />
+                  </ListItemButton>
+                </ListItem>
+              </Link>
               <Divider />
               {currentUser? null : (<Link to="/login" className="navBarLink">
                 <ListItem disablePadding>

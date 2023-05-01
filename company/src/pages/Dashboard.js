@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-
+// import { AuthContext } from "../firebase/Auth";
 import CreateProfile from "../components/CreateProfile";
 import EditProfile from "../components/EditProfile";
 

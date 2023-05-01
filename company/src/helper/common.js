@@ -122,3 +122,39 @@ export const isValidWebImage = (url) => {
     throw new Error("It is not a proper web image");
   }
 };
+
+export const isValidVisaRequirement = (visaRequirements) => {
+  visaRequirements = checkIsProperString(visaRequirements, "Visa Requirements");
+  visaRequirements = visaRequirements.trim();
+  if (
+    visaRequirements.toLowerCase() !== "citizen" &&
+    visaRequirements.toLowerCase() !== "greencard" &&
+    visaRequirements.toLowerCase() !== "h1b" &&
+    visaRequirements.toLowerCase() !== "f1" &&
+    visaRequirements.toLowerCase() !== "h4ead"
+  ) {
+    throw new Error(
+      `VisaRequirement needs to be from the values [citizen,greencard,h1b,f1, h4ead]`
+    );
+  }
+  return visaRequirements;
+};
+
+export const isValidMinimumQualification = (minimumQualification) => {
+  minimumQualification = checkIsProperString(
+    minimumQualification,
+    "Minimum Qualification"
+  );
+  minimumQualification = minimumQualification.trim();
+  if (
+    minimumQualification.toLowerCase() !== "bachelors" &&
+    minimumQualification.toLowerCase() !== "masters" &&
+    minimumQualification.toLowerCase() !== "phd" &&
+    minimumQualification.toLowerCase() !== "other"
+  ) {
+    throw new Error(
+      `minimumQualification needs to be from the values [bachelors,masters,phd,others]`
+    );
+  }
+  return minimumQualification;
+};
