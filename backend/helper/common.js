@@ -228,5 +228,5 @@ module.exports = {
   isValidGpa,
   isValidYear,
   isValidStartEndYear,
-  isValidMonth
+  isValidMonth,
 };

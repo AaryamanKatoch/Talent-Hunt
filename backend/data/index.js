@@ -7,6 +7,7 @@ const educationData = require('./education');
 const experienceData = require('./experience');
 const projectData = require('./projects');
 
+
 module.exports = {
   company: companyData,
   jobSeeker: jobseekerData,
