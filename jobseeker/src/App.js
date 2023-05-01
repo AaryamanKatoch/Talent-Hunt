@@ -150,10 +150,8 @@ function App() {
           <Routes>
             <Route path="/" element={<PrivateRoute />}>
               <Route path="/page/:page" element={<pages.Home />} />
-              <Route
-                path="/jobDetails/:id"
-                element={<components.JobDetailsPage />}
-              />
+              <Route path="/jobDetails/:id" element={<components.JobDetailsPage />} />
+              <Route path="/apply/:jobId" element={<pages.Application />} />
             </Route>
             <Route path="/login" element={<pages.Login />} />
             <Route path="/signup" element={<pages.SignUp />} />

@@ -4,6 +4,7 @@ import Home from "./Home";
 import Logout from "./Logout";
 import MyDrawer from "./MyDrawer";
 import Dashboard from "./Dashboard";
+import Application from "./Application";
 
 const pages = {
   Login,
@@ -12,6 +13,7 @@ const pages = {
   Logout,
   MyDrawer,
   Dashboard,
+  Application,
 };
 
 export { pages };
