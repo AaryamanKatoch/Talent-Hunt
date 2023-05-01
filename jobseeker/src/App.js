@@ -26,6 +26,7 @@ import { pages } from "./pages";
 import { components } from "./components";
 import JobDetailsPage from "./components/JobDetailsPage";
 import React, { useState, useEffect, useContext } from "react";
+import { ResumeProvider } from "./ContextResume";
 
 // function App() {
 //   return (
@@ -104,6 +105,7 @@ import React, { useState, useEffect, useContext } from "react";
 // }
 function App() {
   return (
+    <ResumeProvider>
     <AuthProvider>
       <Router>
         <div style={{ display: "flex" }}>
@@ -150,16 +152,27 @@ function App() {
           <Routes>
             <Route path="/" element={<PrivateRoute />}>
               <Route path="/page/:page" element={<pages.Home />} />
+<<<<<<< HEAD
               <Route path="/jobDetails/:id" element={<components.JobDetailsPage />} />
               <Route path="/apply/:jobId" element={<pages.Application />} />
+=======
+              <Route path="/dashboard" element={<pages.Dashboard />} />
+              <Route
+                path="/jobDetails/:id"
+                element={<components.JobDetailsPage />}
+              />
+>>>>>>> 7e1b3829596ffe48490f233ee30ca60c92f7091a
+            </Route>
+            <Route path="/create-resume" element={<PrivateRoute />}>
+              <Route path="/create-resume" element={<components.CreateResume />} />
             </Route>
             <Route path="/login" element={<pages.Login />} />
             <Route path="/signup" element={<pages.SignUp />} />
-            <Route path="/dashboard" element={<pages.Dashboard />} />
           </Routes>
         </div>
       </Router>
     </AuthProvider>
+    </ResumeProvider>
   );
 }
 

@@ -1,24 +1,37 @@
-import CssBaseline from '@mui/material/CssBaseline';
-import './assets/css/App.css';
-import { BrowserRouter as Router, Routes, Route, Navigate  } from "react-router-dom";
-import {pages} from "./pages";
-// import { components } from "./components";
+import CssBaseline from "@mui/material/CssBaseline";
+import "./assets/css/App.css";
+import { AuthProvider } from "./firebase/Auth";
+import PrivateRoute from "./components/PrivateRoute";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  Link,
+} from "react-router-dom";
+import { pages } from "./pages";
+import { components } from "./components";
+import React, { useState, useEffect, useContext } from "react";
 
 function App() {
   return (
-    <div className="App">
-      <CssBaseline />
+    <AuthProvider>
       <Router>
-        <Routes>
-          <Route path="/login" element={<pages.Login/>} />
-          <Route path="/signup" element={<pages.SignUp/>} />
-          <Route path="/dashboard" element={<pages.Dashboard/>} />
-          <Route path="/findPeople" element={<pages.FindPeople />} />
-          <Route path="/jobSeeker/:id" element={<pages.SinglePerson />} />
-          <Route path="*" element={<Navigate  to="/dashboard"/>}/>
-        </Routes>
+        <div style={{ display: "flex" }}>
+          <pages.MyDrawer />
+          <Routes>
+            <Route path="/" element={<PrivateRoute />}>
+              <Route path="/dashboard" element={<pages.Dashboard />} />
+              <Route path="/postJob" element={<pages.PostJob />} />
+              <Route path="/findPeople" element={<pages.FindPeople />} />
+              <Route path="/jobSeeker/:id" element={<pages.SinglePerson />} />
+            </Route>
+            <Route path="/login" element={<pages.Login/>} />
+            <Route path="/signup" element={<pages.SignUp />} />
+          </Routes>
+        </div>
       </Router>
-    </div>
+    </AuthProvider>
   );
 }
 

@@ -55,23 +55,13 @@ function MyDrawer(){
             <h6 className='makeCenter'>{currentUser ? currentUser.email : ''}</h6></div>) : null}
             <Divider/>
             <List>
-            <Link to={`/page/${1}`} className="navBarLink">
+            <Link to={`/`} className="navBarLink">
                 <ListItem disablePadding>
                   <ListItemButton>
                     <ListItemIcon>
                       <HomeIcon/>
                     </ListItemIcon>
                     <ListItemText primary={"Home"} />
-                  </ListItemButton>
-                </ListItem>
-              </Link>
-              <Link to={`/create-resume`} className="navBarLink">
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <HomeIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary={"Create Resume"} />
                   </ListItemButton>
                 </ListItem>
               </Link>
