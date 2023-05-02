@@ -22,16 +22,16 @@ app.use(
   })
 );
 
-app.use("/jobseeker/HistoryOfApplications", async (req, res, next) => {
-  if(req.method === 'GET'){
-    let exists = await client.exists("jobSeekerApplications");
-    if(exists){
-      let applications = await client.get("jobSeekerApplications");
-      applications = JSON.parse(applications);
-      return res.status(200).json(applications);
-    }
-  }
-})
+// app.use("/jobseeker/HistoryOfApplications", async (req, res, next) => {
+//   if(req.method === 'GET'){
+//     let exists = await client.exists("jobSeekerApplications");
+//     if(exists){
+//       let applications = await client.get("jobSeekerApplications");
+//       applications = JSON.parse(applications);
+//       return res.status(200).json(applications);
+//     }
+//   }
+// })
 
 // const main=async()=>{
 //   const db = await connection.dbConnection();
