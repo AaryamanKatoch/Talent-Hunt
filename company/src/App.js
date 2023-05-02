@@ -29,11 +29,11 @@ function App() {
             {/* post job */}
             <Route path="/postJob" element={<PrivateRoute />}>
               <Route path="/postJob" element={<pages.PostJob />} />
+            </Route>
 
             {/* edit job */}
             <Route path="/editJob/:id" element={<PrivateRoute />}>
               <Route path="/editJob/:id" element={<pages.EditJob />} />
-
             </Route>
             
             {/* find People */}
