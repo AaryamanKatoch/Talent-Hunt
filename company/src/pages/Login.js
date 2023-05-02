@@ -76,7 +76,7 @@ function Login() {
   };
 
   if (currentUser) {
-    return <Navigate to={`/`} />;
+    return <Navigate to={`/dashboard`} />;
   }
 
   return (

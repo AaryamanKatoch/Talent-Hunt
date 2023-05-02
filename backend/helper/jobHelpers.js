@@ -75,11 +75,11 @@ async function checkifpropervisarequirements(vari){
    throw {status: '400', error : "Visa requirements cant be empty or all white spaces"};
 
    vari=vari.trim()
-   
-   if(vari.length<6)
-   throw {status: '400', error : "minimum length of visa requirements should be 6"};
-   if(vari.length>40000)
-   throw {status: '400', error : "maximum length of responsibilities should be 40000"};
+   if(!["Citizen", "GreenCard", "H1B", "F1", "H4EAD"].includes(vari)) throw new Error("Invalid Visa Status")
+//    if(vari.length<6)
+//    throw {status: '400', error : "minimum length of visa requirements should be 6"};
+//    if(vari.length>40000)
+//    throw {status: '400', error : "maximum length of responsibilities should be 40000"};
    return vari
 }
 

@@ -15,3 +15,4 @@ export const getAllPeople = () => {
 export const getSingleJobSeeker = (id) => {
     return axiosAuth.get(`/jobseeker/singleJobSeeker/${id}`);
 }
+

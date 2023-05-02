@@ -3,11 +3,12 @@ const router = express.Router();
 const xss = require("xss");
 const jobsData = require("../data/jobs");
 const jobseekerData = require("../data/jobseeker");
-const applicationData=require("../data/application")
-const jobs = mongoCollections.jobs;
-const applications=mongoCollections.applications
-const companies = mongoCollections.companies;
+const applicationData = require("../data/application");
+// const jobs = mongoCollections.jobs;
+// const applications=mongoCollections.applications
+// const companies = mongoCollections.companies;
 const jobhelper = require("../helper/jobHelpers");
+const commonHelper = require("../helper/common")
 const { ObjectId } = require("mongodb");
 const mongoCollections = require("../config/mongoCollections");
 
@@ -16,29 +17,26 @@ const mongoCollections = require("../config/mongoCollections");
 // 1 post to submit response
 
 router.route("/apply").post(async (req, res) => {
-    
-    let {
-      jobSeekerId,
-      jobId,
-      firstName,
-      lastName,
-      email,
-      resumeId,
-      sex,
-      visaStatus
-    } = req.body;
+  let {
+    jobId,
+    firstName,
+    lastName,
+    email,
+    sex,
+    visaStatus,
+  } = req.body;
 
-  jobSeekerId=""
-  jobId=""
+  let jobSeeker = await jobseekerData.getJobSeekerByEmail(email);
+  let jobSeekerId = jobSeeker._id;
+  let resumeId = "639eb64f29a0a99a2e5bfae5"; //random resume id
 
-
-  firstName=req.body.firstName
-  lastName=req.body.lastName
-  email=req.body.email
-  resumeId=req.body.resumeId 
-  // Have to get resume id from resume document. Will be done after parth pushes resume collection.
-  visaStatus=req.body.visaStatus
-
+  try {
+    firstName = req.body.firstName;
+  lastName = req.body.lastName;
+  email = req.body.email;
+  // resumeId = req.body.resumeId;
+  // Have to get resume id from resume document. Will be done after parth pushes resume collection.  
+  visaStatus = req.body.visaStatus;  
 
   if (!jobSeekerId) throw { status: "400", error: "No jobSeeker Id exists" };
   if (typeof jobSeekerId !== "string")
@@ -64,8 +62,6 @@ router.route("/apply").post(async (req, res) => {
   if (!ObjectId.isValid(jobId))
     throw { status: "400", error: "job Id is not valid" };
 
-
- 
   if (!resumeId) throw { status: "400", error: "No resume Id exists" };
   if (typeof resumeId !== "string")
     throw { status: "400", error: "Type of resume Id is not a string" };
@@ -78,26 +74,25 @@ router.route("/apply").post(async (req, res) => {
   if (!ObjectId.isValid(resumeId))
     throw { status: "400", error: "resume Id is not valid" };
 
-if(!firstName)
-throw {status: "400", error: "Firstname is not provided"}
-if(!lastName)
-throw {status: "400", error: "Lastname is not provided"}
-if(!email)
-throw {status: "400", error: "email is not provided"}
-if(!sex)
-throw {status: "400", error: "sex is not provided"}
-if(!visaStatus)
-throw {status: "400", error: "visa status is not provided"}
-
+  if (!firstName) throw { status: "400", error: "Firstname is not provided" };
+  if (!lastName) throw { status: "400", error: "Lastname is not provided" };
+  if (!email) throw { status: "400", error: "email is not provided" };
+  if (!sex) throw { status: "400", error: "sex is not provided" };
+  if (!visaStatus)
+    throw { status: "400", error: "visa status is not provided" };
 
   firstName = await jobhelper.checkifproperflname(firstName);
   last = await jobhelper.checkifproperflname(lastName);
-  email = await helper.isValidEmail(email);
+  email = await commonHelper.isValidEmail(email);
   sex = await jobhelper.checkifpropersex(sex);
   visaStatus = await jobhelper.checkifpropervisarequirements(visaStatus); //to be modified
+  } catch (error) {
+    console.log(error);
+  }
+  
 
-    try {
-      const application = await applicationData.createApplication(
+  try {
+    const application = await applicationData.createApplication(
       jobSeekerId,
       jobId,
       firstName,
@@ -106,17 +101,22 @@ throw {status: "400", error: "visa status is not provided"}
       resumeId,
       sex,
       visaStatus
-      );
-      
-      await jobsData.addApplicationToJobs(jobId,application._id.toString());
-      await jobseekerData.addApplicationToJobseeker("644ca5c8f5adb13b130287b9","644ca700951b480e31fa966c");
+    );
 
-      return res.status(200).json(application);
-    } catch (e) {
-      if (typeof e !== "object" || !("status" in e)) {
-        res.status(500).json("Internal server error");
-      } else {
-        res.status(parseInt(e.status)).json(e.error);
-      }
+    await jobsData.addApplicationToJobs(jobId, application._id.toString());
+    await jobseekerData.addApplicationToJobseeker(
+      jobSeekerId,
+      application._id.toString()
+    );
+
+    return res.status(200).json(application);
+  } catch (e) {
+    if (typeof e !== "object" || !("status" in e)) {
+      res.status(500).json("Internal server error");
+    } else {
+      res.status(parseInt(e.status)).json(e.error);
     }
-  });
+  }
+});
+
+module.exports = router;

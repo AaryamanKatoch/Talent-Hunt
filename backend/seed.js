@@ -228,21 +228,46 @@ async function main() {
   } catch (e) {
     console.log(e);
   }
-  /*
+
+  for (let i = 0; i < 50; i++) {
+    try{
+      let data={
+        name: `SDE${i}`,
+        description: "This is job for SDE",
+        responsibilities: "working on react and node",
+        visaRequirements: "f1",
+        minimumQualification: "masters",
+      }
+      let email="gk34@apple.com";
+      const addedjob= await jobData.createJobByCompanyEmail(email,data)
+      console.log('*****************************',addedjob)
+    }catch(e){
+      console.log(e);
+    }
+  }
+
+  try{
+    const anything=await jobseekerData.get_history_of_applications_by_email('rd34@gmail.com');
+    console.log(anything)
+  }catch(e){
+    console.log(e);
+  }
+
+/*
   
  //////////////////
-let job1=undefined
-   try {
-   job1 = await job.createJob(
-     "Testyyy job",
-     "backend stuff",
-    "will sponsor",
-   "undersgrad in cs"
-     );
-     console.log(job1)
-   } catch (e) {
-     console.log(e);
-   }
+// let job1=undefined
+  //  try {
+  //  job1 = await job.createJob(
+  //    "Testyyy job",
+  //    "backend stuff",
+  //   "will sponsor",
+  //  "undersgrad in cs"
+  //    );
+  //    console.log(job1)
+  //  } catch (e) {
+  //    console.log(e);
+  //  }
 
   
    try {
@@ -337,7 +362,7 @@ let job1=undefined
   //   console.log(e);
   // }
 
-
+/*
 try {
 
     job2 = await job.createJob("Test job2 ","backend stuff 2","will sponsor2","undersgrad in ece");

@@ -5,9 +5,9 @@ const jobsData = require("../data/jobs");
 const helper = require("../helper");
 const { ObjectId } = require("mongodb");
 
-router.route("/jobdetails").get(async (req, res) => {
+router.route("/jobDetails/:id").get(async (req, res) => {
   try {
-    let id = "";
+    let id = req.params.id;
     const data = await jobsData.getJobById(id);
     return res.json(data);
   } catch (e) {
@@ -28,7 +28,7 @@ router.route("/postJob").post(async (req, res) => {
     minimumQualification,
   } = req.body;
   try {
-    description = helper.jobHelper.checkifproperdescription(description);
+    description = await helper.jobhelper.checkifproperdescription(description);
     responsibilities = await helper.jobhelper.checkifproperresponsibilities(
       responsibilities
     );
@@ -148,3 +148,4 @@ router.route("/getJobByEmail").get(async (req, res) => {
 });
 
 module.exports = router;
+

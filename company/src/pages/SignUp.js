@@ -32,11 +32,11 @@ function SignUp() {
   const [error, setError] = useState();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (JSON.parse(localStorage.getItem("token_data"))) {
-      navigate("/dashboard");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (JSON.parse(localStorage.getItem("token_data"))) {
+  //     navigate("/dashboard");
+  //   }
+  // }, []);
 
   const validateRegister = async (e) => {
     e.preventDefault();
@@ -76,7 +76,7 @@ function SignUp() {
   };
 
   if (currentUser) {
-    return <Navigate to={`/`} />;
+    return <Navigate to={`/dashboard`} />;
   }
 
   return (
