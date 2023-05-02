@@ -1,37 +1,40 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const cors = require('cors');
-const session = require('express-session');
-const configRoutes = require('./routes');
+const cors = require("cors");
+const session = require("express-session");
+const configRoutes = require("./routes");
 const redis = require("redis");
 const client = redis.createClient();
-const connection = require('./config/mongoConnection');
+const connection = require("./config/mongoConnection");
 // const http = require("http");
-const data = require('./data');
-const jobs=data.jobs;
+const data = require("./data");
+const jobs = data.jobs;
 client.connect().then(() => {});
 
-app.use(express.json({limit: '50mb'}));
+app.use(express.json({ limit: "50mb" }));
 app.use(cors());
 app.use(
   session({
-      name: 'AuthCookie',
-      secret: 'some secret string!',
-      resave: false,
-      saveUninitialized: true
+    name: "AuthCookie",
+    secret: "some secret string!",
+    resave: false,
+    saveUninitialized: true,
   })
 );
 
 app.use("/jobseeker/HistoryOfApplications", async (req, res, next) => {
-  if(req.method === 'GET'){
+  if (req.method === "GET") {
     let exists = await client.exists("jobSeekerApplications");
-    if(exists){
+    if (exists) {
       let applications = await client.get("jobSeekerApplications");
       applications = JSON.parse(applications);
       return res.status(200).json(applications);
     }
   }
-})
+
+});
+
+
 
 // const main=async()=>{
 //   const db = await connection.dbConnection();
@@ -54,5 +57,6 @@ configRoutes(app);
 
 app.listen(3000, () => {
   console.log("We've now got a server!");
-  console.log('Your routes will be running on http://localhost:3000');
+  console.log("Your routes will be running on http://localhost:3000");
+
 });

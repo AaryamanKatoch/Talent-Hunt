@@ -323,6 +323,58 @@ const updateJobByCompanyEmail = async (jobId, companyEmail, data) => {
   return job1;
 };
 
+const deleteJobByCompanyEmail = async (jobId, companyEmail) => {
+  jobId = helper.common.isValidId(jobId);
+  companyEmail = helper.common.isValidEmail(companyEmail);
+  const companyCollection = await companies();
+  let company = await companyCollection.findOne({
+    email: companyEmail,
+  });
+  if (!company) {
+    throw {
+      status: "401",
+      error: `Company doesn't have profile created to post a job`,
+    };
+  }
+  const jobsCollection = await jobs();
+  let job = await getJobById(jobId);
+  if (job.companyEmail !== companyEmail) {
+    throw {
+      status: "401",
+      error: `Job isnt posting by the company to modify it`,
+    };
+  }
+
+  const updatedInfo = await jobsCollection.deleteOne({
+    _id: new ObjectId(jobId),
+  });
+  if (updatedInfo.modifiedCount === 0) {
+    throw {
+      status: "500",
+      error: "Could not delete job posting",
+    };
+  }
+
+  let a = company.jobs_posted;
+  a = a.filter((value) => value !== jobId);
+  let updatedCompany = {
+    jobs_posted: a,
+  };
+
+  const updatedInfo2 = await companyCollection.updateOne(
+    { email: companyEmail },
+    { $set: updatedCompany }
+  );
+  if (updatedInfo2.modifiedCount === 0) {
+    throw {
+      status: "500",
+      error: "Internal Server Error",
+    };
+  }
+
+  return { deleted: true };
+};
+
 const getAllJobsByCompanyEmail = async (companyEmail) => {
   const jobsCollection = await jobs();
   const arr = await jobsCollection
@@ -344,5 +396,6 @@ module.exports = {
   addApplicationToJobs,
   createJobByCompanyEmail,
   updateJobByCompanyEmail,
+  deleteJobByCompanyEmail,
   getAllJobsByCompanyEmail,
 };
