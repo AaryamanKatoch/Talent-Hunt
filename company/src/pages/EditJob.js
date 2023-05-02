@@ -1,18 +1,27 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../firebase/Auth";
-import CreateProfile from "../components/CreateProfile";
-import EditProfile from "../components/EditProfile";
+import EditJobForm from "../components/EditJobForm";
+import { useParams } from "react-router-dom";
+import JobCard from "../components/JobCard";
 
-function Dashboard() {
+function EditJob() {
   const [hasProfile, setHasProfile] = useState(false);
-  const [profileData, setProfileData] = useState(undefined);
+  const [hasCreatedJob, setHasCreatedJob] = useState(false);
+  const [jobData, setJobData] = useState(undefined);
   const [error, setError] = useState(undefined);
   const { currentUser } = useContext(AuthContext);
+  let { id } = useParams();
+  const [editing, setEditing] = useState(false);
+
+  const handleEditClick = () => {
+    setEditing(true);
+  };
 
   useEffect(() => {
     console.log("on load");
     checkuser();
+    checkuserPostedJob();
   }, []);
 
   const checkuser = async () => {
@@ -29,7 +38,6 @@ function Dashboard() {
           setHasProfile(false);
         } else {
           setHasProfile(true);
-          setProfileData(response.data);
         }
       })
       .catch((error) => {
@@ -37,48 +45,38 @@ function Dashboard() {
         setHasProfile(false);
         setError(error.response.data);
       });
-
-    // try {
-    //   const response = await api.routes.jobseeker();
-    //   if (response.data.noProfileExists) {
-    //     setHasProfile(false);
-    //   } else {
-    //     setHasProfile(true);
-    //     setProfileData(response.data);
-    //   }
-    // } catch (e) {
-    //   setHasProfile(false);
-    // }
   };
 
-  const handleCreateProfile = async (formData) => {
+  const checkuserPostedJob = async () => {
     // Send formData to server to create profile
-    formData.email = currentUser.email;
-    console.log(formData);
     await axios
-      .post("http://localhost:3000/company/dashboard", formData)
+      .get(`http://localhost:3000/jobs/editJobByEmail/${id}`, {
+        params: {
+          email: currentUser.email,
+        },
+      })
       .then((response) => {
         // handle success
-        setHasProfile(true);
-        setProfileData(response.data);
-        setError(undefined);
+        setHasCreatedJob(true);
+        setJobData(response.data);
       })
       .catch((error) => {
         // handle error
+        setHasCreatedJob(false);
         setError(error.response.data);
       });
   };
 
-  const handleEditProfile = async (formData) => {
-    // Send formData to server to update profile
+  const handleEditJob = async (formData) => {
     formData.email = currentUser.email;
-    console.log(formData);
+    // console.log(formData);
     await axios
-      .patch("http://localhost:3000/company/dashboard", formData)
+      .patch(`http://localhost:3000/jobs/editJobByEmail/${id}`, formData)
       .then((response) => {
         // handle success
         setHasProfile(true);
-        setProfileData(response.data);
+        setJobData(response.data);
+        setEditing(false);
         setError(undefined);
         console.log(response.data);
       })
@@ -94,14 +92,28 @@ function Dashboard() {
 
   return (
     <div>
-      <h1>Company Dashboard</h1>
+      <h1>Job Edit Page</h1>
       {hasProfile ? (
-        <EditProfile data={profileData} onSubmit={handleEditProfile} />
+        <div>
+          {hasCreatedJob ? (
+            <div>
+              {editing ? (
+                <EditJobForm data={jobData} onSubmit={handleEditJob} />
+              ) : (
+                <JobCard jobData={jobData} onEditClick={handleEditClick} />
+              )}
+            </div>
+          ) : (
+            <h1>Job Not Found</h1>
+          )}
+        </div>
       ) : (
-        <CreateProfile onSubmit={handleCreateProfile} />
+        <div>
+          <h1>Please create Profile first.</h1>
+        </div>
       )}
     </div>
   );
 }
 
-export default Dashboard;
+export default EditJob;

@@ -18,10 +18,8 @@ async function main() {
   let company1, company2, company3, company4;
   let job1;
 
-
-
   await db.dropDatabase();
-  
+
   try {
     let data = {
       name: "Dhavan Kanakia",
@@ -42,7 +40,6 @@ async function main() {
     console.log(e);
   }
 
-  
   try {
     let data = {
       name: "Ujas Italia",
@@ -259,18 +256,18 @@ async function main() {
 /*
   
  //////////////////
-let job1=undefined
-   try {
-   job1 = await job.createJob(
-     "Testyyy job",
-     "backend stuff",
-    "will sponsor",
-   "undersgrad in cs"
-     );
-     console.log(job1)
-   } catch (e) {
-     console.log(e);
-   }
+// let job1=undefined
+  //  try {
+  //  job1 = await job.createJob(
+  //    "Testyyy job",
+  //    "backend stuff",
+  //   "will sponsor",
+  //  "undersgrad in cs"
+  //    );
+  //    console.log(job1)
+  //  } catch (e) {
+  //    console.log(e);
+  //  }
 
   
    try {
@@ -280,7 +277,7 @@ let job1=undefined
     } catch (e) {
         console.log(e);
     }
-
+*/
   try {
     let companyEmail = "gk34@apple.com";
     let data = {
@@ -352,7 +349,7 @@ let job1=undefined
   } catch (e) {
     console.log(e);
   }
-
+  /*
   // try {
   // job1 = await job.createJob(
   //   "Testyyy job",
@@ -365,7 +362,7 @@ let job1=undefined
   //   console.log(e);
   // }
 
-
+/*
 try {
 
     job2 = await job.createJob("Test job2 ","backend stuff 2","will sponsor2","undersgrad in ece");

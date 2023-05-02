@@ -11,8 +11,7 @@ import { api } from "../api";
 
 const JobDetailsPage = () => {
   const params = useParams();
-  const id = params.id;
-  // console.log(id);
+  const id = params.jobId;
   const [data, setData] = useState();
   const [error, setError] = useState(null);
 
@@ -59,13 +58,16 @@ const JobDetailsPage = () => {
         <>
           <CardContent>
             <Typography variant="h4" color="textSecondary">
-              Company Name
+              {data.companyName}
+            </Typography>
+            <Typography variant="subtitle1" style={contentStyle}>
+              Job Name: {data.name}
             </Typography>
             <Typography variant="subtitle1" style={titleStyle}>
               Job Description: {data.description}
             </Typography>            
             <Typography variant="body1" style={contentStyle}>
-              Minimum Qulaification: {data.minimumRequirements}
+              Minimum Qulaification: {data.minimumQualification}
             </Typography>
             <Typography variant="body1" style={contentStyle}>
               Visa Requirements: {data.visaRequirements}

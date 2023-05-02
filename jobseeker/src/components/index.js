@@ -21,7 +21,7 @@ const components = {
   Experience,
   PersonalDetails,
   Projects,
-  Skills
+  Skills,
 };
 
 export { components };

@@ -157,6 +157,9 @@ router.route("/HistoryOfApplications").get(async (req, res) => {
     let email = req.body.email;
     email = common_helper.isValidEmail(email);
     const data = await jobSeekerData.get_history_of_applications_by_email(email);
+    if(data){
+      await client.set('jobSeekerApplications', JSON.stringify(data));
+    }
     res.json(data);
     return;
   } catch (e) {

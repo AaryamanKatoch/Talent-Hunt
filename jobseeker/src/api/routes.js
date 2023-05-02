@@ -27,3 +27,7 @@ export const jobseekerPost = (data) => {
 export const getJobDetails = (id) => {
   return axiosAuth.get(`/jobs/jobDetails/${id}`);
 }
+
+export const postJobApplication = (data) => {
+    return axiosAuth.post(`/application/apply`, data);
+}
