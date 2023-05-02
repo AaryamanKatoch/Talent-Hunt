@@ -11,8 +11,7 @@ import { api } from "../api";
 
 const JobDetailsPage = () => {
   const params = useParams();
-  const id = params.id;
-  // console.log(id);
+  const id = params.jobId;
   const [data, setData] = useState();
   const [error, setError] = useState(null);
 

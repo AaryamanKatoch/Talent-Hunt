@@ -106,68 +106,47 @@ import { ResumeProvider } from "./ContextResume";
 function App() {
   return (
     <ResumeProvider>
-    <AuthProvider>
-      <Router>
-        <div style={{ display: "flex" }}>
-          {/* <Drawer
-            sx={{
-              width: drawerWidth,
-              flexShrink: 0,
-              '& .MuiDrawer-paper': {
-                width: drawerWidth,
-                boxSizing: 'border-box',
-              },
-            }}
-            variant="permanent"
-            anchor="left"
-            open={true}
-          >
-            <Divider/>
-            <List>
-            <Link to="/" className="navBarLink">
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <HomeIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary={"Home"} />
-                  </ListItemButton>
-                </ListItem>
-              </Link>
-              <Divider />
-              <Link to="/login" className="navBarLink">
-                <ListItem disablePadding>
-                  <ListItemButton>
-                  <ListItemIcon>
-                    <LoginIcon/>
-                  </ListItemIcon>
-                    <ListItemText primary={"Login"} />
-                  </ListItemButton>
-                </ListItem>
-              </Link>
-              <Divider />
-            </List>
-          </Drawer> */}
-          <pages.MyDrawer />
-          <Routes>
-            <Route path="/" element={<PrivateRoute />}>
-              <Route path="/page/:page" element={<pages.Home />} />
-              <Route path="/apply/:jobId" element={<pages.Application />} />
-              <Route path="/dashboard" element={<pages.Dashboard />} />
-              <Route
-                path="/jobDetails/:id"
-                element={<components.JobDetailsPage />}
-              />
-            </Route>
-            <Route path="/create-resume" element={<PrivateRoute />}>
-              <Route path="/create-resume" element={<components.CreateResume />} />
-            </Route>
-            <Route path="/login" element={<pages.Login />} />
-            <Route path="/signup" element={<pages.SignUp />} />
-          </Routes>
-        </div>
-      </Router>
-    </AuthProvider>
+      <AuthProvider>
+        <Router>
+          <div style={{ display: "flex" }}>
+            <pages.MyDrawer />
+            <Routes>
+              {/* home */}
+              <Route path="/" element={<PrivateRoute />}>
+                <Route path="/page/:page" element={<pages.Home />} />
+              </Route>
+              {/* apply */}
+              <Route path="/apply/:jobId" element={<PrivateRoute />}>
+                <Route path="/apply/:jobId" element={<pages.Application />} />
+              </Route>
+              {/* job details */}
+              <Route path="/jobDetails/:jobId" element={<PrivateRoute />}>
+                <Route path="/jobDetails/:jobId" element={<components.JobDetailsPage />} />
+              </Route>
+              {/* dashboard */}
+              <Route path="/dashboard" element={<PrivateRoute />}>
+                <Route path="/dashboard" element={<pages.Dashboard />} />
+              </Route>
+              {/* create resume */}
+              <Route path="/create-resume" element={<PrivateRoute />}>
+                <Route
+                  path="/create-resume"
+                  element={<components.CreateResume />}
+                />
+              </Route>
+              {/* my applications */}
+              <Route path="/myApplications" element={<PrivateRoute />}>
+                <Route
+                  path="/myApplications"
+                  element={<pages.MyApplications />}
+                />
+              </Route>
+              <Route path="/login" element={<pages.Login />} />
+              <Route path="/signup" element={<pages.SignUp />} />
+            </Routes>
+          </div>
+        </Router>
+      </AuthProvider>
     </ResumeProvider>
   );
 }

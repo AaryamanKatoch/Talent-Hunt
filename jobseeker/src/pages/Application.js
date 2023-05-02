@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../api";
 import {
   TextField,
@@ -13,16 +13,17 @@ import { helper } from "../helper";
 import { AuthContext } from "../firebase/Auth";
 
 function Application() {
+  const navigate = useNavigate();
   const params = useParams();
   const jobId = params.jobId;
   // console.log(jobId);
   const [jobData, setJobData] = useState();
   const [error, setError] = useState(null);
-  const { currentUser } = useContext(AuthContext);
+  const {currentUser}  = useContext(AuthContext);
   const [application, setApplication] = useState({
     firstName: "",
     lastName: "",
-    email: "",
+    email: currentUser.email,
     sex: "",
     visaStatus: "",
   });
@@ -66,6 +67,8 @@ function Application() {
       }
       const {data} = await api.routes.postJobApplication(newApplication);
       console.log(data);
+      // navigate to my applications
+      navigate('/myApplications')
     } catch (error) {
       console.log(error.response.data);
       setError(error.response.data);
@@ -122,11 +125,9 @@ function Application() {
                 fullWidth
                 sx={{ mb: 3 }}
               />
-              <TextField
+              {/* <TextField
                 label="Email"
-                onChange={(e) =>
-                  setApplication({ ...application, email: e.target.value })
-                }
+                disable
                 required
                 variant="outlined"
                 color="secondary"
@@ -134,7 +135,7 @@ function Application() {
                 value={application.email}
                 fullWidth
                 sx={{ mb: 3 }}
-              />
+              /> */}
               <FormControl sx={{ m: 1, minWidth: 200 }}>
                 <InputLabel
                   id="demo-simple-select-helper-label"
