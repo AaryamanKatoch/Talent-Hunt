@@ -2,11 +2,13 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../firebase/Auth";
 import PostJobForm from "../components/PostJobForm";
+import { useNavigate } from "react-router-dom";
 
 function PostJob() {
   const [hasProfile, setHasProfile] = useState(false);
   const [error, setError] = useState(undefined);
   const { currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("on load");
@@ -45,7 +47,7 @@ function PostJob() {
         // handle success
         setHasProfile(true);
         setError(undefined);
-        console.log(response.data);
+        navigate("/");
       })
       .catch((error) => {
         // handle error
