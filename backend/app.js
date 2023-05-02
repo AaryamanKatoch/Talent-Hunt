@@ -31,7 +31,10 @@ app.use("/jobseeker/HistoryOfApplications", async (req, res, next) => {
       return res.status(200).json(applications);
     }
   }
+
 });
+
+
 
 // const main=async()=>{
 //   const db = await connection.dbConnection();
@@ -55,4 +58,5 @@ configRoutes(app);
 app.listen(3000, () => {
   console.log("We've now got a server!");
   console.log("Your routes will be running on http://localhost:3000");
+
 });
