@@ -73,7 +73,7 @@ const getJobById = async (jobId) => {
 
   const jobbyid = await jobsCollection.findOne({ _id: ObjectId(jobId) });
   if (jobbyid === null)
-    throw { status: "400", error: "No job found with that id" };
+    throw { status: "404", error: "No job found with that id" };
 
   jobbyid._id = jobbyid._id.toString();
 
@@ -162,9 +162,7 @@ const updateJob = async (
   return await getJobById(id);
 };
 
-
-
-const addApplicationToJobs = async (jobId,applicationId) => {
+const addApplicationToJobs = async (jobId, applicationId) => {
   if (!jobId) throw { status: "400", error: "No job id exists" };
   if (typeof jobId !== "string")
     throw { status: "400", error: "Type of job id is not a string" };
@@ -178,19 +176,19 @@ const addApplicationToJobs = async (jobId,applicationId) => {
   if (!ObjectId.isValid(jobId))
     throw { status: "400", error: "Job id is not valid" };
 
-    if (!applicationId) throw { status: "400", error: "No application id exists" };
-    if (typeof applicationId !== "string")
-      throw { status: "400", error: "Type of application id is not a string" };
-    if (applicationId.trim().length === 0)
-      throw {
-        status: "400",
-        error: "application id cannot be empty or all white spaces",
-      };
-  
-    applicationId = applicationId.trim();
-    if (!ObjectId.isValid(applicationId))
-      throw { status: "400", error: "application id is not valid" };
+  if (!applicationId)
+    throw { status: "400", error: "No application id exists" };
+  if (typeof applicationId !== "string")
+    throw { status: "400", error: "Type of application id is not a string" };
+  if (applicationId.trim().length === 0)
+    throw {
+      status: "400",
+      error: "application id cannot be empty or all white spaces",
+    };
 
+  applicationId = applicationId.trim();
+  if (!ObjectId.isValid(applicationId))
+    throw { status: "400", error: "application id is not valid" };
 
   const jobsCollection = await jobs();
 
@@ -199,20 +197,23 @@ const addApplicationToJobs = async (jobId,applicationId) => {
     throw { status: "400", error: "No job found with that id" };
 
   jobbyid._id = jobbyid._id.toString();
-  
 
-  updatedApplication=[]
-  for(i=0;i<jobbyid.applications.length;i++){
-    updatedApplication.push(jobbyid.applications[i])
+  updatedApplication = [];
+  for (i = 0; i < jobbyid.applications.length; i++) {
+    updatedApplication.push(jobbyid.applications[i]);
   }
-updatedApplication.push(applicationId)
+  updatedApplication.push(applicationId);
 
-  let updated = await jobsCollection.updateOne({_id : ObjectId(jobId)},{$set : {"applications" : updatedApplication}});
+  let updated = await jobsCollection.updateOne(
+    { _id: ObjectId(jobId) },
+    { $set: { applications: updatedApplication } }
+  );
   // console.log(updateFlightClass);
-  if(updated.modifiedCount === 0) throw 'Cannot add application id to job collection';
-   
+  if (updated.modifiedCount === 0)
+    throw "Cannot add application id to job collection";
+
   const jobbyidd = await jobsCollection.findOne({ _id: ObjectId(jobId) });
-return jobbyidd
+  return jobbyidd;
 };
 
 const createJobByCompanyEmail = async (companyEmail, data) => {
@@ -322,6 +323,58 @@ const updateJobByCompanyEmail = async (jobId, companyEmail, data) => {
   return job1;
 };
 
+const deleteJobByCompanyEmail = async (jobId, companyEmail) => {
+  jobId = helper.common.isValidId(jobId);
+  companyEmail = helper.common.isValidEmail(companyEmail);
+  const companyCollection = await companies();
+  let company = await companyCollection.findOne({
+    email: companyEmail,
+  });
+  if (!company) {
+    throw {
+      status: "401",
+      error: `Company doesn't have profile created to post a job`,
+    };
+  }
+  const jobsCollection = await jobs();
+  let job = await getJobById(jobId);
+  if (job.companyEmail !== companyEmail) {
+    throw {
+      status: "401",
+      error: `Job isnt posting by the company to modify it`,
+    };
+  }
+
+  const updatedInfo = await jobsCollection.deleteOne({
+    _id: new ObjectId(jobId),
+  });
+  if (updatedInfo.modifiedCount === 0) {
+    throw {
+      status: "500",
+      error: "Could not delete job posting",
+    };
+  }
+
+  let a = company.jobs_posted;
+  a = a.filter((value) => value !== jobId);
+  let updatedCompany = {
+    jobs_posted: a,
+  };
+
+  const updatedInfo2 = await companyCollection.updateOne(
+    { email: companyEmail },
+    { $set: updatedCompany }
+  );
+  if (updatedInfo2.modifiedCount === 0) {
+    throw {
+      status: "500",
+      error: "Internal Server Error",
+    };
+  }
+
+  return { deleted: true };
+};
+
 const getAllJobsByCompanyEmail = async (companyEmail) => {
   const jobsCollection = await jobs();
   const arr = await jobsCollection
@@ -343,5 +396,6 @@ module.exports = {
   addApplicationToJobs,
   createJobByCompanyEmail,
   updateJobByCompanyEmail,
+  deleteJobByCompanyEmail,
   getAllJobsByCompanyEmail,
 };
