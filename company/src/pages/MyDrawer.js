@@ -34,6 +34,7 @@ const drawerWidth = 240;
 
 function MyDrawer(){
   const {currentUser} = useContext(AuthContext);
+
     return (
       <Drawer
             sx={{
@@ -50,7 +51,7 @@ function MyDrawer(){
           >
             <Divider/>
             {currentUser? (<div><Stack direction="row" spacing={2} justifyContent="center" sx={{marginTop:'30px', marginBottom:'30px'}}>
-              <Avatar sx={{ width: 60, height: 60 }}>{currentUser ? currentUser.displayName[0] : ''}</Avatar>
+              <Avatar sx={{ width: 60, height: 60 }}>{currentUser && currentUser.displayName ? currentUser.displayName[0] : ' '}</Avatar>
             </Stack>
             <h6 className='makeCenter'>{currentUser ? currentUser.email : ''}</h6></div>) : null}
             <Divider/>
