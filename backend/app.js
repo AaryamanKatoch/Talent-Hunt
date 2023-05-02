@@ -31,7 +31,7 @@ app.use("/jobseeker/HistoryOfApplications", async (req, res, next) => {
       return res.status(200).json(applications);
     }
   }
-}
+})
 
 // const main=async()=>{
 //   const db = await connection.dbConnection();
