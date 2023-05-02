@@ -2,9 +2,10 @@ import CreateProfile from "./CreateProfile";
 import EditProfile from "./EditProfile";
 import BuildCard from "./BuildCard";
 import PostJobForm from "./PostJobForm";
-import socialSignIn from './SocialSignIn';
+import EditJobForm from "./EditJobForm";
+import JobCard from "./JobCard";
+import socialSignIn from "./SocialSignIn";
 import PrivateRoute from "./PrivateRoute";
-
 
 const components = {
   //add components here
@@ -14,6 +15,8 @@ const components = {
   socialSignIn,
   PrivateRoute,
   PostJobForm,
+  EditJobForm,
+  JobCard,
 };
 
 export { components };

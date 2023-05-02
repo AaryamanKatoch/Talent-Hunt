@@ -1,23 +1,24 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-// import { AuthContext } from "../firebase/Auth";
+import { AuthContext } from "../firebase/Auth";
 import PostJobForm from "../components/PostJobForm";
 
 function PostJob() {
   const [hasProfile, setHasProfile] = useState(false);
   const [error, setError] = useState(undefined);
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     console.log("on load");
     checkuser();
-  }, []);
+  });
 
   const checkuser = async () => {
     // Send formData to server to create profile
     await axios
       .get("http://localhost:3000/company/dashboard", {
         params: {
-          email: "tc34@apple.com",
+          email: currentUser.email,
         },
       })
       .then((response) => {
@@ -36,7 +37,7 @@ function PostJob() {
   };
 
   const handlePostJob = async (formData) => {
-    formData.email = "tc34@apple.com";
+    formData.email = currentUser.email;
     // console.log(formData);
     await axios
       .post("http://localhost:3000/jobs/postJobByEmail", formData)
