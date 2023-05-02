@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../firebase/Auth";
 import EditJobForm from "../components/EditJobForm";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import JobCard from "../components/JobCard";
 
 function EditJob() {
@@ -13,6 +13,7 @@ function EditJob() {
   const { currentUser } = useContext(AuthContext);
   let { id } = useParams();
   const [editing, setEditing] = useState(false);
+  const navigate = useNavigate();
 
   const handleEditClick = () => {
     setEditing(true);
@@ -86,6 +87,28 @@ function EditJob() {
       });
   };
 
+  const handleDeleteJob = async (formData) => {
+    formData.email = currentUser.email;
+    // console.log(formData);
+    await axios
+      .delete(`http://localhost:3000/jobs/editJobByEmail/${id}`, {
+        params: {
+          email: currentUser.email,
+        },
+      })
+      .then((response) => {
+        // handle success
+        setHasProfile(true);
+        setEditing(false);
+        setError(undefined);
+        navigate("/");
+      })
+      .catch((error) => {
+        // handle error
+        setError(error.response.data);
+      });
+  };
+
   if (error) {
     alert(error);
   }
@@ -95,12 +118,16 @@ function EditJob() {
       <h1>Job Edit Page</h1>
       {hasProfile ? (
         <div>
-          {hasCreatedJob ? (
+          {hasCreatedJob && jobData ? (
             <div>
               {editing ? (
                 <EditJobForm data={jobData} onSubmit={handleEditJob} />
               ) : (
-                <JobCard jobData={jobData} onEditClick={handleEditClick} />
+                <JobCard
+                  jobData={jobData}
+                  onEditClick={handleEditClick}
+                  onDeleteClick={handleDeleteJob}
+                />
               )}
             </div>
           ) : (

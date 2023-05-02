@@ -35,6 +35,9 @@ function JobCard(props) {
         <Button variant="outlined" onClick={onEditClick}>
           Edit
         </Button>
+        <Button variant="outlined" onClick={onDeleteClick}>
+          Delete
+        </Button>
       </CardContent>
     </Card>
   );

@@ -129,6 +129,27 @@ router
         return res.status(parseInt(e.status)).json(e.error);
       }
     }
+  })
+  .delete(async (req, res) => {
+    try {
+      const jobId = helper.common.isValidId(req.params.jobId);
+      const job = await jobsData.getJobById(jobId);
+      let companyEmail = req.query.email;
+      companyEmail = helper.common.isValidEmail(companyEmail);
+
+      const response = await jobsData.deleteJobByCompanyEmail(
+        jobId,
+        companyEmail
+      );
+      return res.status(200).json(response);
+    } catch (e) {
+      if (typeof e !== "object" || !("status" in e)) {
+        console.log(e);
+        return res.status(500).json("Internal server error");
+      } else {
+        return res.status(parseInt(e.status)).json(e.error);
+      }
+    }
   });
 
 router.route("/getJobByEmail").get(async (req, res) => {
@@ -148,4 +169,3 @@ router.route("/getJobByEmail").get(async (req, res) => {
 });
 
 module.exports = router;
-
