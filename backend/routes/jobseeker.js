@@ -5,7 +5,9 @@ const data = require("../data");
 const jobSeekerData = data.jobSeeker;
 const helper = require("../helper");
 const common_helper = require("../helper/common");
-
+const redis = require('redis');
+const client = redis.createClient();
+client.connect().then(() => {});
 router
   .route("/dashboard")
   .get(async (req, res) => {
@@ -139,37 +141,27 @@ router
       }
     }
   });
-//   .post(async (req, res) => {
-//     let data = req.body;
-//     try {
-//     } catch (error) {
-//       if (typeof e !== "object" || !("status" in e)) {
-//         console.log(e);
-//         res.status(500).json("Internal server error");
-//       } else {
-//         res.status(parseInt(e.status)).json(e.error);
-//       }
-//     }
-//   });
 
-router.route("/HistoryOfApplications").get(async (req, res) => {
-  try {
-    let email = req.body.email;
-    email = common_helper.isValidEmail(email);
-    const data = await jobSeekerData.get_history_of_applications_by_email(email);
-    if(data){
-      await client.set('jobSeekerApplications', JSON.stringify(data));
+router
+  .route("/HistoryOfApplications")
+  .get(async (req, res) => {
+    try {
+      let email = req.query.email;
+      email = common_helper.isValidEmail(email);
+      const data = await jobSeekerData.get_history_of_applications_by_email(email);
+      if(data){
+        await client.set('jobSeekerApplications', JSON.stringify(data));
+      }
+      res.json(data);
+      return;
+    } catch (e) {
+      if (typeof e !== "object" || !("status" in e)) {
+        console.log(e);
+        res.status(500).json("Internal server error");
+      } else {
+        res.status(parseInt(e.status)).json(e.error);
+      }
     }
-    res.json(data);
-    return;
-  } catch (e) {
-    if (typeof e !== "object" || !("status" in e)) {
-      console.log(e);
-      res.status(500).json("Internal server error");
-    } else {
-      res.status(parseInt(e.status)).json(e.error);
-    }
-  }
 });
 
 router.get("/allJobSeekers", async (req, res) => {

@@ -5,6 +5,7 @@ const resumes = mongoCollections.resumes;
 const helper = require("../helper");
 const applications = mongoCollections.applications;
 const { ObjectId } = require("mongodb");
+const jobsFuns=require('./jobs');
 
 const getAllJobs = async (page) => {
   if (!page) throw "please provide page number for the data function!";
@@ -22,11 +23,16 @@ const getAllJobs = async (page) => {
     .toArray();
 
   if (!allJobs) throw { status: "400", error: "Could not get all Jobs" };
+  if(allJobs.length<1) throw { status: "404", error: "No More Jobs" };
 
   for (let i = 0; i < allJobs.length; i++)
     allJobs[i]._id = allJobs[i]._id.toString();
 
-  return allJobs;
+  // const moreJobsExist = (await jobsCollection.find({}).count()) > skip + each_page;
+  const totalJobsCount = await jobsCollection.countDocuments({});
+  const moreJobsExist = totalJobsCount > skip + each_page;
+
+  return { jobs: allJobs, moreJobsExist };
 };
 
 const getJobSeekerByID = async (jobSeekerId) => {
@@ -259,6 +265,9 @@ const get_history_of_applications_by_email = async (email) => {
   email = helper.common.isValidEmail(email);
   const jobSeekersCollection = await jobSeekers();
   const applicationsCollection = await applications();
+  const jobsCollection = await jobs();
+  let jobids=[];
+  let data=[];
   const jobseeker = await jobSeekersCollection.findOne({
     email: email,
   });
@@ -267,13 +276,8 @@ const get_history_of_applications_by_email = async (email) => {
     throw { status: "404", error: "Profile is not created for jobSeeker" };
   }
 
-  console.log('******jobseeker*******',jobseeker.name)
-
-  const applications_IDs = jobseeker.jobs_applied;
-  console.log('****',applications_IDs)
-  applications_IDs.forEach((element) => {
-    element = ObjectId(element);
-  });
+  let applications_IDs = jobseeker.jobs_applied;
+  applications_IDs = applications_IDs.map(element => ObjectId(element));
 
   const all_applications = await applicationsCollection
     .find({ _id: { $in: applications_IDs } })
@@ -287,15 +291,19 @@ const get_history_of_applications_by_email = async (email) => {
     throw { status: "404", error: "There's no any applications found in your profile" };
   }
 
-  console.log('*******found applications********',all_applications)
-
   all_applications.forEach((element) => {
     element._id = element._id.toString();
+    jobids.push(ObjectId(element.jobId));
   });
 
-  console.log('aplications found!!!',all_applications)
+  const F_applications = await jobsCollection
+  .find({ _id: { $in: jobids } })
+  .toArray();
 
-  return all_applications;
+  if(F_applications.length <1 || F_applications===null){
+    throw { status: "404", error: "There's no any applications found in your profile" };
+  }
+  return F_applications;
 };
 
 const getAllJobSeekers = async () => {
