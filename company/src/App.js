@@ -21,12 +21,14 @@ function App() {
           <pages.MyDrawer />
           <Routes>
             <Route path="/" element={<PrivateRoute />}>
+              <Route path="/" element={<pages.Home />} />
               <Route path="/dashboard" element={<pages.Dashboard />} />
               <Route path="/postJob" element={<pages.PostJob />} />
+              <Route path="/editJob/:id" element={<pages.EditJob />} />
               <Route path="/findPeople" element={<pages.FindPeople />} />
               <Route path="/jobSeeker/:id" element={<pages.SinglePerson />} />
             </Route>
-            <Route path="/login" element={<pages.Login/>} />
+            <Route path="/login" element={<pages.Login />} />
             <Route path="/signup" element={<pages.SignUp />} />
           </Routes>
         </div>
