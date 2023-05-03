@@ -10,8 +10,9 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
-
+import axios from 'axios';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import { useResume } from '../ContextResume';
 
@@ -21,7 +22,7 @@ import { useResume } from '../ContextResume';
 function Projects(){
 //   const [inputValue, setInputValue] = useState("");
 
-  const { projects, setProjects } = useResume();
+const { personalDetails, setPersonalDetails, education, setEducation, skills, setSkills, experience, setExperience, projects, setProjects } = useResume();
 
     const addProjects = () => {
       let pr = {
@@ -46,6 +47,32 @@ function Projects(){
 
 console.log(projects);
 //   const theme = useTheme();
+const [openSnackbar, setOpenSnackbar] = React.useState(false);
+const [snackbarMessage, setSnackbarMessage] = React.useState('');
+
+async function postData(){
+  try {
+    let resumeData = {
+      personalDetails : personalDetails,
+      education : education,
+      skills : skills,
+      experience : experience,
+      projects : projects
+    };
+    // console.log(resumeData);
+    const postResumeData = await axios.post(`http://localhost:3000/jobseeker/create-resume`, resumeData);
+    // toast.success('Your resume has been created!');
+    console.log(postResumeData.status);
+    // if (postResumeData.status === 200) {
+    //   console.log('here');
+    //   setSnackbarMessage("Your resume has been created!");
+    // }
+    setOpenSnackbar(true);
+    setSnackbarMessage('Your resume has been created! Check your backend folder');
+  } catch (e) {
+    console.log(e);
+  }
+}
   
      
       const [expanded, setExpanded] = React.useState(false);
@@ -115,6 +142,32 @@ console.log(projects);
               
             )
           }
+          {
+            <Box sx={{marginTop:2}}>
+                <Stack direction='row' spacing={2}>
+                  <Button variant='contained' size='small'onClick={postData}>Download</Button>
+                </Stack>
+            </Box>
+          }
+          {
+            <Box>
+              <Snackbar
+                  open={openSnackbar}
+                  autoHideDuration={6000}
+                  onClose={() => setOpenSnackbar(false)}
+                >
+                  <MuiAlert
+                    elevation={6}
+                    variant="filled"
+                    onClose={() => setOpenSnackbar(false)}
+                    severity="success"
+                  >
+                    {snackbarMessage}
+                  </MuiAlert>
+                </Snackbar>
+            </Box>
+          }
+
           
          
         </Box>
