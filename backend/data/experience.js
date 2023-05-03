@@ -4,13 +4,13 @@ const resume = require('./resumes')
 const { ObjectId } = require("mongodb");
 const helper = require("../helper");
 
-async function createExperience(resumeId, company, address,description, start_year, end_year, start_month, end_month){
+async function createExperience(resumeId, company, address,position,description, start_year, end_year, start_month, end_month){
     resumeId = helper.common.isValidId(resumeId);
     
     company = helper.common.isValidString(company,'Company');
     
     address = helper.common.isValidString(address,'Address');
-    
+    position = helper.common.isValidString(position, 'Position');
     start_year = helper.common.isValidYear(start_year);
     
     end_year = helper.common.isValidYear(end_year);
@@ -29,6 +29,7 @@ async function createExperience(resumeId, company, address,description, start_ye
         _id : new ObjectId(),
         company : company,
         address : address,
+        position : position,
         description : description,
         start_year : start_year,
         start_month : start_month,        

@@ -140,7 +140,7 @@ const isValidURL = (url) => {
 
 const isValidContact = (contact) => {
 contact = isValidString(contact, "Contact Number");
-if(!contact.match(/^\+1?[ -]?\(?\d{3}\)?[ -]?\d{3}[ -]?\d{4}$/))
+if(!contact.match(/^\+?1?\s*[-.\s]?\(?\d{3}\)?\s*[-.\s]?\d{3}\s*[-.\s]?\d{4}$/))
   throw {status: '400', error : 'Invalid Contact Number'}
 return contact;
 }
