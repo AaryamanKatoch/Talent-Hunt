@@ -1,4 +1,5 @@
 import { Card, CardContent, Typography, Button, Grid } from "@mui/material";
+import { Link } from "react-router-dom";
 
 function ApplicantCard(props) {
   const { applicant } = props;
@@ -27,6 +28,14 @@ function ApplicantCard(props) {
             Visa Status: {applicant.visaStatus}
           </Typography>
         </CardContent>
+        <Button
+          component={Link}
+          to={`/jobSeeker/${applicant.jobSeekerId}`}
+          variant="contained"
+          color="primary"
+        >
+          More Details
+        </Button>
       </Card>
     </Grid>
   );
