@@ -12,9 +12,13 @@ import {
   Typography,
   ButtonBase,
   Button,
+  Snackbar,
+  Stack 
 } from "@mui/material";
 import noImage from "../assets/css/download.jpeg";
-// import { AuthContext } from "../firebase/Auth";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import MuiAlert from '@mui/material/Alert';
 
 const Img = styled("img")({
   margin: "auto",
@@ -32,9 +36,14 @@ const Home = () => {
   const [b_disabled, setBDisable] = useState(false);
   let page_player = useParams().page;
   let [hasError, setError] = useState(false);
+  let [errorMessage, setErrorMessage] = useState("");
   // const {currentUser} = useContext(AuthContext);
   let card = null;
   const regex = /(<([^>]+)>)/gi;
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 
   const clickEvent = () => {
     setBDisable(true);
@@ -48,7 +57,7 @@ const Home = () => {
   }, [b_disabled]);
 
   useEffect(() => {
-    console.log("on load useeffect");
+    // console.log("on load useeffect");
     // console.log(currentUser);
     // console.log(currentUser.email)
     // console.log(currentUser.displayName)
@@ -58,10 +67,19 @@ const Home = () => {
           "http://localhost:3000/jobseeker/jobs",
           { params: { page: page_player } }
         );
+        console.log(data.jobs)
+        console.log(data.moreJobsExist)
+        // if(data==null || data.jobs.length<1){
+        //   setErrorMessage('something went wrong! \n please Try Again!');
+        //   setError(true);
+        //   setLoading(false);
+        // }
         setJobsData(data);
         setLoading(false);
-      } catch (e) {
-        console.log(e);
+      }catch (e) {
+        setErrorMessage(e.response.data);
+        setError(true);
+        setLoading(false);
       }
     }
     fetchData();
@@ -121,29 +139,25 @@ const Home = () => {
   };
 
   card =
-    jobsData &&
-    jobsData.map((job) => {
+    jobsData && jobsData.jobs && 
+    jobsData.jobs.map((job) => {
       return buildCard(job);
     });
 
   if (loading) {
     return (
-      <div>
-        <h2>Loading....</h2>
-      </div>
+      <Box sx={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+        <CircularProgress />
+      </Box>
     );
   } else if (hasError) {
     return (
-      <div>
-        <h2>has error</h2>
-      </div>
+      <div className="makeCenter">
+      <Alert severity="error">{errorMessage}</Alert>
+    </div>
     );
   } else {
     return (
-      // <div>
-      //   <h2>Home</h2>
-      //   <Logout/>
-      // </div>
       <div className="main-div">
         <div className="page-div makeCenter">
           {page_player > 1 && (
@@ -161,7 +175,7 @@ const Home = () => {
             </Link>
           )}
           <h4 className="page_indicator">{page_player}</h4>
-          {page_player < 49 && (
+          {jobsData.moreJobsExist && (
             <Link to={`/page/${Number(page_player) + 1}`}>
               <Button
                 variant="outlined"
