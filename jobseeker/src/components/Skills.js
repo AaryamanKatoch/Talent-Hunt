@@ -65,7 +65,7 @@ console.log(skills);
                     </Box>
                 
                 </Stack> 
-                <Box sx={{ display: 'flex',alignItems: 'flex-start', border: '1px solid #EDF2F7',backgroundColor: '#EDF2F7', marginTop: 5, borderWidth : '1px', justifyContent: 'flex-start', width: '75%' }} borderColor={'#EDF2F7'}>
+                <Box sx={{ display: 'flex',alignItems: 'flex-start', marginTop: 5, justifyContent: 'flex-start' }} >
                     {skills.length > 0 && skills.map((skill,index)=>(
                          <Chip
                          color="primary"
