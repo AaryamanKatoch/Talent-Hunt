@@ -13,7 +13,7 @@ function PostJob() {
   useEffect(() => {
     console.log("on load");
     checkuser();
-  });
+  }, []);
 
   const checkuser = async () => {
     // Send formData to server to create profile

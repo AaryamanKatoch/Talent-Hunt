@@ -4,6 +4,7 @@ import BuildCard from "./BuildCard";
 import PostJobForm from "./PostJobForm";
 import EditJobForm from "./EditJobForm";
 import JobCard from "./JobCard";
+import ApplicantCard from "./ApplicantsCard";
 import socialSignIn from "./SocialSignIn";
 import PrivateRoute from "./PrivateRoute";
 
@@ -17,6 +18,7 @@ const components = {
   PostJobForm,
   EditJobForm,
   JobCard,
+  ApplicantCard,
 };
 
 export { components };

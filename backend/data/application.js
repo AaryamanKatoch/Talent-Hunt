@@ -38,8 +38,6 @@ const createApplication = async (
   if (!ObjectId.isValid(jobId))
     throw { status: "400", error: "job Id is not valid" };
 
-   
-
   if (!resumeId) throw { status: "400", error: "No resume Id exists" };
   if (typeof resumeId !== "string")
     throw { status: "400", error: "Type of resume Id is not a string" };
@@ -68,7 +66,7 @@ const createApplication = async (
     email: email,
     resumeId: resumeId,
     sex: sex,
-    visaStatus: visaStatus
+    visaStatus: visaStatus,
   };
 
   const insertInfo = await applicationsCollection.insertOne(application);
@@ -88,6 +86,17 @@ const createApplication = async (
 const getAllApplications = async () => {
   const applicationsCollection = await applications();
   const arr = await applicationsCollection.find({}).toArray();
+  if (arr === null) return [];
+  for (i in arr) {
+    arr[i]._id = arr[i]._id.toString();
+  }
+  return arr;
+};
+
+const getAllApplicationsByJobId = async (jobId) => {
+  jobId = helper.checkIsProperId(jobId);
+  const applicationsCollection = await applications();
+  const arr = await applicationsCollection.find({ jobId: jobId }).toArray();
   if (arr === null) return [];
   for (i in arr) {
     arr[i]._id = arr[i]._id.toString();
@@ -213,6 +222,7 @@ const updateApplication = async (
 
 module.exports = {
   getAllApplications,
+  getAllApplicationsByJobId,
   createApplication,
   removeApplication,
   updateApplication,

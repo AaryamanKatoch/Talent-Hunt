@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const xss = require("xss");
 const jobsData = require("../data/jobs");
+const applicationData = require("../data/application");
 const helper = require("../helper");
 const { ObjectId } = require("mongodb");
 
@@ -151,6 +152,30 @@ router
       }
     }
   });
+
+router.route("/applicants/:jobId").get(async (req, res) => {
+  try {
+    const jobId = helper.common.isValidId(req.params.jobId);
+    const job = await jobsData.getJobById(jobId);
+    let companyEmail = req.query.email;
+    companyEmail = helper.common.isValidEmail(companyEmail);
+    if (companyEmail !== job.companyEmail) {
+      throw {
+        status: "403",
+        error: "You have not posted the job so you cannot edit it",
+      };
+    }
+    const applicants = await applicationData.getAllApplicationsByJobId(jobId);
+    return res.status(200).json(applicants);
+  } catch (e) {
+    if (typeof e !== "object" || !("status" in e)) {
+      console.log(e);
+      return res.status(500).json("Internal server error");
+    } else {
+      return res.status(parseInt(e.status)).json(e.error);
+    }
+  }
+});
 
 router.route("/getJobByEmail").get(async (req, res) => {
   try {
