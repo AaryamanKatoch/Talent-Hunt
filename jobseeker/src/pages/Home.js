@@ -76,6 +76,7 @@ const Home = () => {
         // }
         setJobsData(data);
         setLoading(false);
+        setError(false);
       }catch (e) {
         setErrorMessage(e.response.data);
         setError(true);

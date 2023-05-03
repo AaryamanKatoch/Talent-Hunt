@@ -27,7 +27,7 @@ function BuildCard({ data }) {
             className="card bg-dark"
             style={{
               width: "15rem",
-              height: "17rem",
+              height: "19rem",
               marginLeft: "10px",
               marginRight: "10px",
               borderRadius: 5,
@@ -39,10 +39,12 @@ function BuildCard({ data }) {
               <h5 className="card-title">
                 {data.name}
               </h5>
-              <br /><hr />
-              <p className="card-text">{data["Number of years of experience"]} years of experience</p>
               <hr />
-              <p className="card-text">{data["field"]}</p>
+              <p className="card-text">{data["email"]}</p>
+              <hr />
+              <p className="card-text">{data["years_of_experience"]} years of experience</p>
+              <hr />
+              <p className="card-text">{data["field_of_employment"]}</p>
               <hr />
               <Link to={`/jobSeeker/${data._id}`}><p className="card-text btn btn-info">Know More</p></Link>
             </div>

@@ -24,6 +24,7 @@ function FindPeople() {
     const fetch = async () => {
       try {
         let { data } = await api.routes.getAllPeople();
+        // console.log(data)
         setAllPeople(data);
       } catch (error) {
         console.log(error.response.data);

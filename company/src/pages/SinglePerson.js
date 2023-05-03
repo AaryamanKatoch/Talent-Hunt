@@ -4,7 +4,7 @@ import { api } from "../api";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
+import {Button, Divider} from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 function SinglePerson() {
@@ -50,7 +50,7 @@ function SinglePerson() {
                 </Typography>
               </div>
             </div>
-            <br />
+            <Divider /><br />
             <div className="row">
               <div className="col-2">
                 <Typography variant="body1" color="text.secondary" gutterBottom>
@@ -62,7 +62,7 @@ function SinglePerson() {
                   {jobSeeker.email}
                 </Typography>
               </div>
-            </div>
+            </div><Divider /><br />
             <div className="row">
               <div className="col-2">
                 <Typography variant="body1" color="text.secondary" gutterBottom>
@@ -78,7 +78,7 @@ function SinglePerson() {
                   </ul>
                 </Typography>
               </div>
-            </div>
+            </div><Divider /><br />
             <div className="row">
               <div className="col-2">
                 <Typography variant="body1" color="text.secondary" gutterBottom>
@@ -87,10 +87,10 @@ function SinglePerson() {
               </div>
               <div className="col-3">
                 <Typography variant="body1" color="text.secondary" gutterBottom>
-                  {jobSeeker.field}
+                  {jobSeeker.field_of_employment}
                 </Typography>
               </div>
-            </div>
+            </div><Divider /><br />
             <div className="row">
               <div className="col-2">
                 <Typography variant="body1" color="text.secondary" gutterBottom>
@@ -99,7 +99,7 @@ function SinglePerson() {
               </div>
               <div className="col-3">
                 <Typography variant="body1" color="text.secondary" gutterBottom>
-                  {jobSeeker["Number of years of experience"]}
+                  {jobSeeker["years_of_experience"]} years
                 </Typography>
               </div>
             </div>

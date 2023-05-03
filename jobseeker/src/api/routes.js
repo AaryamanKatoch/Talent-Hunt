@@ -31,3 +31,7 @@ export const getJobDetails = (id) => {
 export const postJobApplication = (data) => {
     return axiosAuth.post(`/application/apply`, data);
 }
+
+export const getJobSeekerApplications = (e) => {
+  return axiosAuth.get(`/jobseeker/HistoryOfApplications`, {params: {email: e}})
+}
