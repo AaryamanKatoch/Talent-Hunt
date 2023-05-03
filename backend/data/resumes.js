@@ -28,7 +28,7 @@ async function deleteResumeById(id){
     return deletedResume;
 }
 
-async function createResume(name, address, linkedin, email, contact, skills, achievements){
+async function createResume(name, address, linkedin, email, contact, skills){
     name = helper.common.isValidString(name, 'Name');
     address = helper.common.isValidString(address, 'Address');
     linkedin = helper.common.isValidURL(linkedin);
@@ -37,10 +37,10 @@ async function createResume(name, address, linkedin, email, contact, skills, ach
     for(let i = 0; i < skills.length; i++){
         skills[i] = helper.common.isValidString(skills[i], 'Skill');
     }
-    achievements = helper.common.isValidString(achievements,'Achievements');
+    // achievements = helper.common.isValidString(achievements,'Achievements');
     let education = [];
     let experience = [];
-    let projects = [];
+    let project = [];
     const resumeCollection = await resumes();
     let resumeObj = {
         name : name,
@@ -51,8 +51,7 @@ async function createResume(name, address, linkedin, email, contact, skills, ach
         skills : skills,
         education : education,
         experience: experience,
-        projects : projects,
-        achievements : achievements
+        project : project,
     };
     
     const insertInfo = await resumeCollection.insertOne(resumeObj);
@@ -70,8 +69,8 @@ async function createResume(name, address, linkedin, email, contact, skills, ach
     newResume._id = newResume._id.toString();
     return newResume;
 }
-async function updateResume(resumeId, name, address, linkedin, email, contact, skills, achievements){
-    if(!resumeId || !name || !address || !linkedin || !email || !contact || !skills || !achievements){
+async function updateResume(resumeId, name, address, linkedin, email, contact, skills){
+    if(!resumeId || !name || !address || !linkedin || !email || !contact || !skills){
         throw {status : '404', error : 'At least one field needs to be passed!'};
     }
     resumeId = helper.common.isValidId(resumeId);
@@ -83,7 +82,7 @@ async function updateResume(resumeId, name, address, linkedin, email, contact, s
     for(let i = 0; i < skills.length; i++){
         skills[i] = helper.common.isValidString(skills[i], 'Skill');
     }
-    achievements = helper.common.isValidString(achievements,'Achievements');
+   
     let resumeCollection = await resumes();
     let resumeUpdation = await resumeCollection.findOne({_id: ObjectId(resumeId)});
     //console.log(updated);
@@ -99,7 +98,7 @@ async function updateResume(resumeId, name, address, linkedin, email, contact, s
         education : resumeUpdation.education,
         experience: resumeUpdation.experience,
         projects : resumeUpdation.projects,
-        achievements : achievements
+       
     }
 
     const updatedInfo = await resumeCollection.updateOne(

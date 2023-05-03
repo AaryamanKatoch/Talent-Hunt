@@ -4,6 +4,12 @@ const xss = require("xss");
 const data = require("../data");
 const jobSeekerData = data.jobSeeker;
 const helper = require("../helper");
+const pdfCreateResume = require('../data/pdfCreateResume');
+const resumes = require('../data/resumes');
+const educationData = require('../data/education');
+const experienceData = require('../data/experience');
+const projectsData = require('../data/projects');
+const fs = require('fs');
 const common_helper = require("../helper/common");
 const redis = require('redis');
 const client = redis.createClient();
@@ -178,5 +184,122 @@ router.get("/allJobSeekers", async (req, res) => {
     }
   }
 });
+
+router
+    .route("/create-resume")
+    .post(async (req,res)=>{
+        let resumeData = req.body;
+        //  console.log(resumeData.personalDetails);
+        let personalDetails = resumeData.personalDetails;
+        let education = resumeData.education;
+        let experience = resumeData.experience;
+        let projects = resumeData.projects;
+        let skills = resumeData.skills;
+
+     try {
+        personalDetails.name = helper.common.isValidString(personalDetails.name, 'Name');
+        
+        personalDetails.address = helper.common.isValidString(personalDetails.address, 'Address');
+       
+        personalDetails.linkedin = helper.common.isValidURL(personalDetails.linkedin);
+        
+        personalDetails.email = helper.common.isValidEmail(personalDetails.email);
+        // console.log("here");
+        personalDetails.contact = helper.common.isValidContact(personalDetails.contact);
+        // console.log("here");
+
+        for(let i = 0; i < skills.length; i++){
+            skills[i] = helper.common.isValidString(skills[i], 'Skill');
+        }
+       
+     } catch (e) {
+      if (typeof e !== "object" || !("status" in e)) {
+        console.log(e);
+        return res.status(500).json("Internal server error");
+      } else {
+        return res.status(parseInt(e.status)).json(e.error);
+      }
+     }
+     let createdResume;
+        try {
+            createdResume = await resumes.createResume(personalDetails.name,  personalDetails.address, personalDetails.linkedin, personalDetails.email, personalDetails.contact, skills)
+            //  console.log(createdResume);
+        } catch (e) {
+          if (typeof e !== "object" || !("status" in e)) {
+            console.log(e);
+           return res.status(500).json("Internal server error");
+          } else {
+           return res.status(parseInt(e.status)).json(e.error);
+          }
+        }
+        // console.log(education);
+        try {
+            for(let  i =0 ; i < education.length; i++){
+                education[i].school = helper.common.isValidString(education[i].school,'School');
+                education[i].address = helper.common.isValidString(education[i].address,'Address');
+                education[i].degree = helper.common.isValidString(education[i].degree,'Degree');
+                education[i].gpa = helper.common.isValidGpa(education[i].gpa);
+                education[i].startYear = helper.common.isValidYear(education[i].startYear);
+                education[i].endYear = helper.common.isValidYear(education[i].endYear);
+                helper.common.isValidStartEndYear(education[i].startYear,education[i].endYear);
+                let createdEducation = await educationData.createEducation(createdResume._id,education[i].school, education[i].address, education[i].degree, education[i].gpa, education[i].startYear, education[i].endYear);
+                //  console.log(createdEducation);
+            }
+        } catch (e) {
+          if (typeof e !== "object" || !("status" in e)) {
+            console.log(e);
+           return res.status(500).json("Internal server error");
+          } else {
+           return res.status(parseInt(e.status)).json(e.error);
+          }
+        }
+
+        try {
+            for(let  i =0 ; i < experience.length; i++){
+                experience[i].company = helper.common.isValidString(experience[i].company,'Company');    
+                experience[i].address = helper.common.isValidString(experience[i].address,'Address');
+                experience[i].position = helper.common.isValidString(experience[i].position, 'Position');
+                experience[i].startYear = helper.common.isValidYear(experience[i].startYear);                
+                experience[i].endYear = helper.common.isValidYear(experience[i].endYear);                
+                helper.common.isValidStartEndYear(experience[i].startYear,experience[i].endYear);            
+                experience[i].startMonth = helper.common.isValidMonth(experience[i].startMonth);            
+                experience[i].endMonth = helper.common.isValidMonth(experience[i].endMonth);                
+                experience[i].description = helper.common.isValidString(experience[i].description);
+
+                let createdExperience = await experienceData.createExperience(createdResume._id,experience[i].company, experience[i].address, experience[i].position, experience[i].description, experience[i].startYear, experience[i].endYear, experience[i].startMonth, experience[i].endMonth);
+                 console.log(createdExperience);
+            }
+        } catch (e) {
+          if (typeof e !== "object" || !("status" in e)) {
+            console.log(e);
+           return res.status(500).json("Internal server error");
+          } else {
+            return res.status(parseInt(e.status)).json(e.error);
+          }
+        }
+
+        try {
+            for(let  i =0 ; i < projects.length; i++){
+                projects[i].name = helper.common.isValidString(projects[i].name,'Project Name');
+                projects[i].description = helper.common.isValidString(projects[i].description, 'Project Description');
+
+                let createdProject = await projectsData.createProject(createdResume._id,projects[i].name, projects[i].description);
+                // console.log(createdProject);
+            }
+        } catch (e) {
+          if (typeof e !== "object" || !("status" in e)) {
+            console.log(e);
+            return res.status(500).json("Internal server error");
+          } else {
+            return res.status(parseInt(e.status)).json(e.error);
+          }
+        }
+        console.log("here done");
+        let pdf =  await pdfCreateResume.createResumePdf(resumeData);
+        // console.log(pdf);
+        return res.send(pdf);
+        // return;
+    });
+
 
 module.exports = router;
