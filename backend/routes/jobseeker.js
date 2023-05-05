@@ -11,6 +11,7 @@ const experienceData = require('../data/experience');
 const projectsData = require('../data/projects');
 const fs = require('fs');
 const common_helper = require("../helper/common");
+const streamToBuffer = require('stream-to-buffer');
 const redis = require('redis');
 const client = redis.createClient();
 client.connect().then(() => {});
@@ -296,8 +297,56 @@ router
         }
         console.log("here done");
         let pdf =  await pdfCreateResume.createResumePdf(resumeData);
+        // const pdfBlob = new Blob([pdf], { type: 'application/pdf' });
+        // saveAs(pdfBlob, 'myPDF.pdf');
+        // var file = fs.createReadStream('./resume.pdf');
+        // var stat = fs.statSync('./resume.pdf');
+        // res.setHeader('Content-Length', stat.size);
+        // res.setHeader('Content-Type', 'application/pdf');
+        // res.setHeader('Content-Disposition', 'attachment; filename=resume.pdf');
+        // file.pipe(res);
+        // res.send(pdf);
+        // const filePath = './resume.pdf';
+        // const fileSize = fs.statSync(filePath).size;
+      
+        // res.setHeader('Content-Type', 'application/pdf');
+        // res.setHeader('Content-Disposition', 'attachment; filename=resume.pdf');
+        // // res.setHeader('Content-Length', fileSize);
+      
+        // const stream = fs.createReadStream(filePath);
+        // stream.pipe(res);
+        // const pdfBase64 = Buffer.from(pdf).toString('base64');
+        streamToBuffer(pdf, (err, buffer) => {
+          if (err) {
+            console.error('Error converting stream to buffer:', err);
+            return res.status(500).send('Error generating PDF file');
+          } else {
+            res.set('Content-Type', 'application/pdf');
+            res.set('Content-Disposition', 'attachment; filename="resume.pdf"');
+            return res.send(buffer);
+          }
+        });
+
+  //       const file = fs.createWriteStream('resume.pdf');
+          // file.write(pdf);
+          // file.on('finish', () => {
+          //   const fileSize = fs.statSync('resume.pdf').size;
+          //   res.setHeader('Content-Type', 'application/pdf');
+          //   res.setHeader('Content-Disposition', 'attachment; filename=resume.pdf');
+          //   res.setHeader('Content-Length', fileSize);
+          //   const stream = fs.createReadStream('resume.pdf');
+          //   stream.pipe(res);
+          // });
+          // file.end();
+      // res.set({
+      //     'Content-Type': 'application/pdf',
+      //     'Content-Disposition': 'attachment; filename=resume.pdf'
+      //   });
+        
+      //   res.send(Buffer.from(pdf));
+      // res.download('./resume.pdf');
         // console.log(pdf);
-        return res.send(pdf);
+        // return res.send(pdf);
         // return;
     });
 
