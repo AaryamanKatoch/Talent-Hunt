@@ -60,7 +60,24 @@ async function postData(){
       projects : projects
     };
     // console.log(resumeData);
-    const postResumeData = await axios.post(`http://localhost:3000/jobseeker/create-resume`, resumeData);
+    const postResumeData = await axios.post(`http://localhost:3000/jobseeker/create-resume`, resumeData,  { responseType: 'arraybuffer' });
+    // const binaryData = atob(response.data);
+    // const buffer = new ArrayBuffer(binaryData.length);
+    // const view = new Uint8Array(buffer);
+
+    // for (let i = 0; i < binaryData.length; i++) {
+    //   view[i] = binaryData.charCodeAt(i);
+    // }
+    const blob = new Blob([postResumeData.data], { type: 'application/pdf' });
+    // const blob = new Blob([buffer], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
     // toast.success('Your resume has been created!');
     console.log(postResumeData.status);
     // if (postResumeData.status === 200) {
@@ -68,7 +85,7 @@ async function postData(){
     //   setSnackbarMessage("Your resume has been created!");
     // }
     setOpenSnackbar(true);
-    setSnackbarMessage('Your resume has been created! Check your backend folder');
+    setSnackbarMessage('Your resume has been created!');
   } catch (e) {
     console.log(e);
   }
