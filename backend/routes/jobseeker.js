@@ -198,9 +198,9 @@ router
         let skills = resumeData.skills;
 
      try {
-        personalDetails.name = helper.common.isValidString(personalDetails.name, 'Name');
+        personalDetails.name = helper.common.isValidString(personalDetails.name, 'Personal Name');
         
-        personalDetails.address = helper.common.isValidString(personalDetails.address, 'Address');
+        personalDetails.address = helper.common.isValidString(personalDetails.address, 'Personal Address');
        
         personalDetails.linkedin = helper.common.isValidURL(personalDetails.linkedin);
         
@@ -218,7 +218,7 @@ router
         console.log(e);
         return res.status(500).json("Internal server error");
       } else {
-        return res.status(parseInt(e.status)).json(e.error);
+        return res.status(parseInt(e.status)).json({error : e.error});
       }
      }
      let createdResume;
@@ -228,9 +228,9 @@ router
         } catch (e) {
           if (typeof e !== "object" || !("status" in e)) {
             console.log(e);
-           return res.status(500).json("Internal server error");
+            return res.status(500).json("Internal server error");
           } else {
-           return res.status(parseInt(e.status)).json(e.error);
+            return res.status(parseInt(e.status)).json({error : e.error});
           }
         }
         // console.log(education);
@@ -249,9 +249,9 @@ router
         } catch (e) {
           if (typeof e !== "object" || !("status" in e)) {
             console.log(e);
-           return res.status(500).json("Internal server error");
+            return res.status(500).json("Internal server error");
           } else {
-           return res.status(parseInt(e.status)).json(e.error);
+            return res.status(parseInt(e.status)).json({error : e.error});
           }
         }
 
@@ -273,9 +273,9 @@ router
         } catch (e) {
           if (typeof e !== "object" || !("status" in e)) {
             console.log(e);
-           return res.status(500).json("Internal server error");
+            return res.status(500).json("Internal server error");
           } else {
-            return res.status(parseInt(e.status)).json(e.error);
+            return res.status(parseInt(e.status)).json({error : e.error});
           }
         }
 
@@ -292,10 +292,10 @@ router
             console.log(e);
             return res.status(500).json("Internal server error");
           } else {
-            return res.status(parseInt(e.status)).json(e.error);
+            return res.status(parseInt(e.status)).json({error : e.error});
           }
         }
-        console.log("here done");
+        // console.log("here done");
         let pdf =  await pdfCreateResume.createResumePdf(resumeData);
         // const pdfBlob = new Blob([pdf], { type: 'application/pdf' });
         // saveAs(pdfBlob, 'myPDF.pdf');
