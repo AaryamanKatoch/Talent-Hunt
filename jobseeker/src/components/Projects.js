@@ -1,6 +1,6 @@
 
 import Box from '@mui/material/Box';
-import React from 'react';
+import React, {useState} from 'react';
 import Stack from '@mui/material/Stack';
 
 import { FormControl } from '@mui/material';
@@ -50,6 +50,9 @@ console.log(projects);
 const [openSnackbar, setOpenSnackbar] = React.useState(false);
 const [snackbarMessage, setSnackbarMessage] = React.useState('');
 
+const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
+const [errorSnackbarMessage, setErrorSnackbarMessage] = useState('');
+
 async function postData(){
   try {
     let resumeData = {
@@ -88,6 +91,16 @@ async function postData(){
     setSnackbarMessage('Your resume has been created!');
   } catch (e) {
     console.log(e);
+     // console.log(e);
+     const buffer = e.response.data;
+     // console.log(buffer);
+   const decoder = new TextDecoder('utf-8');
+   // console.log(decoder);
+   // console.log(decoder.decode(buffer));
+   const errorResponse = JSON.parse(decoder.decode(buffer));
+     console.log(errorResponse.error);
+     setErrorSnackbarOpen(true);
+     setErrorSnackbarMessage(errorResponse.error);
   }
 }
   
@@ -126,7 +139,7 @@ async function postData(){
                         Address
                       </InputLabel> */}
                       {/* <FormLabel htmlFor="name">Contact</FormLabel> */}
-                      <Textarea name='name'  onChange={(e)=>{onProjectChange(e,index)}} variant='soft' size='md' label='Name' placeholder='Name'></Textarea>
+                      <Textarea name='name' value={projects[index].name || ''} onChange={(e)=>{onProjectChange(e,index)}} variant='soft' size='md' label='Name' placeholder='Name'></Textarea>
                       {/* <BootstrapInput  label='Address'/> */}
                   </FormControl>
                 </Stack>
@@ -135,7 +148,7 @@ async function postData(){
                       {/* <InputLabel htmlFor="bootstrap-input">
                         Description
                       </InputLabel> */}
-                      <Textarea name='description' onChange={(e)=>{onProjectChange(e,index)}} minRows={4}   variant='soft' size='md' label='Description' placeholder='Description'></Textarea>
+                      <Textarea name='description' value={projects[index].description || ''} onChange={(e)=>{onProjectChange(e,index)}} minRows={4}   variant='soft' size='md' label='Description' placeholder='Description'></Textarea>
                       {/* <BootstrapTextarea  minRows={4} style={{ ':focus' : { bordercolor: "#90caf9" }}}/> */}
                 </FormControl>
 
@@ -182,6 +195,16 @@ async function postData(){
                     {snackbarMessage}
                   </MuiAlert>
                 </Snackbar>
+            </Box>
+          }
+
+          {
+            <Box>
+              <Snackbar open={errorSnackbarOpen} autoHideDuration={8000} onClose={()=> setErrorSnackbarOpen(false)}>
+                <MuiAlert elevation={6} variant="filled" onClose={()=> setErrorSnackbarOpen(false)} severity="error">
+                  {errorSnackbarMessage}
+                </MuiAlert>
+             </Snackbar>
             </Box>
           }
 

@@ -83,7 +83,7 @@ function Education(){
                   School
                 </InputLabel> */}
                 {/* {console.log(index)} */}
-                <Textarea name='school'   variant='soft' size='md' label='School' placeholder='School' onChange={(e)=>{onEducationChange(e,index)}}></Textarea>
+                <Textarea name='school'  value={education[index].school || ''}   variant='soft' size='md' label='School' placeholder='School' onChange={(e)=>{onEducationChange(e,index)}}></Textarea>
                       {/* <FormLabel htmlFor="name">Full Name</FormLabel> */}
                       {/* <BootstrapInput label='School'/> */}
                   </FormControl>
@@ -92,7 +92,7 @@ function Education(){
                     Degree
                   </InputLabel> */}
                       {/* <FormLabel htmlFor="name">Email</FormLabel> */}
-                      <Textarea name='degree'  variant='soft' size='md' label='Degree' placeholder='Degree' onChange={(e)=>{onEducationChange(e,index)}}></Textarea>
+                      <Textarea name='degree' value={education[index].degree || ''}  variant='soft' size='md' label='Degree' placeholder='Degree' onChange={(e)=>{onEducationChange(e,index)}}></Textarea>
                       {/* <BootstrapInput label='Degree'/> */}
                   </FormControl>
                 </Stack>
@@ -102,7 +102,7 @@ function Education(){
                         Address
                       </InputLabel> */}
                       {/* <FormLabel htmlFor="name">Contact</FormLabel> */}
-                      <Textarea name='address'  variant='soft' size='md' label='Address' placeholder='Address' onChange={(e)=>{onEducationChange(e,index)}}></Textarea>
+                      <Textarea name='address' value={education[index].address || ''}  variant='soft' size='md' label='Address' placeholder='Address' onChange={(e)=>{onEducationChange(e,index)}}></Textarea>
                       {/* <BootstrapInput label='Address'/> */}
                   </FormControl>
                   <FormControl>
@@ -110,7 +110,7 @@ function Education(){
                         GPA
                       </InputLabel> */}
                       {/* <FormLabel htmlFor="name">Address</FormLabel> */}
-                      <Textarea name='gpa'   variant='soft' size='md' label='GPA'  placeholder='GPA' onChange={(e)=>{onEducationChange(e,index)}}></Textarea>
+                      <Textarea name='gpa' value={education[index].gpa || ''}  variant='soft' size='md' label='GPA'  placeholder='GPA' onChange={(e)=>{onEducationChange(e,index)}}></Textarea>
                       {/* <BootstrapInput label='GPA'/> */}
                   </FormControl>
                 </Stack>
@@ -120,14 +120,14 @@ function Education(){
                         Start Year
                       </InputLabel>
                        <BootstrapInput label='Start Year'/>  */}
-                       <Textarea name='startYear'  variant='soft' size='md' label='Start year' placeholder='Start Year' onChange={(e)=>{onEducationChange(e,index)}}></Textarea>
+                       <Textarea name='startYear' value={education[index].startYear || ''}  variant='soft' size='md' label='Start year' placeholder='Start Year' onChange={(e)=>{onEducationChange(e,index)}}></Textarea>
                   </FormControl>
                   <FormControl>
                       {/* <InputLabel htmlFor="bootstrap-input">
                         End Year
                       </InputLabel> */}
                       {/* <FormLabel htmlFor="name">Address</FormLabel> */}
-                      <Textarea name='endYear'  variant='soft' size='md' label='End year' placeholder='End Year' onChange={(e)=>{onEducationChange(e,index)}}></Textarea>
+                      <Textarea name='endYear' value={education[index].endYear || ''}  variant='soft' size='md' label='End year' placeholder='End Year' onChange={(e)=>{onEducationChange(e,index)}}></Textarea>
                       {/* <BootstrapInput label='End Year'/> */}
                   </FormControl>
                 </Stack>

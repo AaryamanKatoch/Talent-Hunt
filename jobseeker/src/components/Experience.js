@@ -85,7 +85,7 @@ console.log(experience);
                 {/* <InputLabel  htmlFor="bootstrap-input">
                   Company
                 </InputLabel> */}
-                <Textarea name='company' onChange={(e)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='company' placeholder='Company'></Textarea>
+                <Textarea name='company' value={experience[index].company || ''} onChange={(e)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='company' placeholder='Company'></Textarea>
                       {/* <FormLabel htmlFor="name">Full Name</FormLabel> */}
                       {/* <BootstrapInput label='Company'/> */}
                   </FormControl>
@@ -93,7 +93,7 @@ console.log(experience);
                   {/* <InputLabel htmlFor="bootstrap-input">
                     Position
                   </InputLabel> */}
-                  <Textarea name='position' onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='Position' placeholder='Position'></Textarea>
+                  <Textarea name='position' value={experience[index].position || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='Position' placeholder='Position'></Textarea>
                       {/* <FormLabel htmlFor="name">Email</FormLabel>  */}
                       {/* <BootstrapInput label='Position'/> */}
                   </FormControl>
@@ -113,14 +113,14 @@ console.log(experience);
                     {/* <InputLabel htmlFor="bootstrap-input">
                         Start Month
                       </InputLabel> */}
-                      <Textarea name='startMonth' onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='Start Month' placeholder='Start Month'></Textarea>
+                      <Textarea name='startMonth' value={experience[index].startMonth || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='Start Month' placeholder='Start Month'></Textarea>
                        {/* <BootstrapInput label='Start Month'/>  */}
                   </FormControl>
                   <FormControl>
                       {/* <InputLabel htmlFor="bootstrap-input">
                         Start Year
                       </InputLabel> */}
-                      <Textarea name='startYear' onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='Start Year' placeholder='Start Year'></Textarea>
+                      <Textarea name='startYear' value={experience[index].startYear || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='Start Year' placeholder='Start Year'></Textarea>
                       {/* <FormLabel htmlFor="name">Address</FormLabel> */}
                       {/* <BootstrapInput label='Start Year'/> */}
                   </FormControl>
@@ -130,7 +130,7 @@ console.log(experience);
                     {/* <InputLabel htmlFor="bootstrap-input">
                         End Month
                       </InputLabel> */}
-                      <Textarea name='endMonth' onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='End Month' placeholder='End Month'></Textarea>
+                      <Textarea name='endMonth' value={experience[index].endMonth || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='End Month' placeholder='End Month'></Textarea>
                        {/* <BootstrapInput label='End Month'/>  */}
                   </FormControl>
                   <FormControl>
@@ -138,7 +138,7 @@ console.log(experience);
                         End Year
                       </InputLabel> */}
                       {/* <FormLabel htmlFor="name">Address</FormLabel> */}
-                      <Textarea name='endYear' onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='End Year' placeholder='End Year'></Textarea>
+                      <Textarea name='endYear' value={experience[index].endYear || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='End Year' placeholder='End Year'></Textarea>
                       {/* <BootstrapInput label='End Year'/> */}
                   </FormControl>
                 </Stack>
@@ -148,7 +148,7 @@ console.log(experience);
                         Address
                       </InputLabel> */}
                       {/* <FormLabel htmlFor="name">Contact</FormLabel> */}
-                      <Textarea name='address' onChange={(e,i)=>{onExperienceChange(e,index)}} variant='soft' size='md' label='Address' placeholder='Address'></Textarea>
+                      <Textarea name='address' value={experience[index].address || ''} onChange={(e,i)=>{onExperienceChange(e,index)}} variant='soft' size='md' label='Address' placeholder='Address'></Textarea>
                       {/* <BootstrapInput  label='Address'/> */}
                   </FormControl>
                 </Stack>
@@ -157,7 +157,7 @@ console.log(experience);
                       {/* <InputLabel htmlFor="bootstrap-input">
                         Description
                       </InputLabel> */}
-                      <Textarea name='description' onChange={(e,i)=>{onExperienceChange(e,index)}} minRows={4}   variant='soft' size='md' label='Description' placeholder='Description'></Textarea>
+                      <Textarea name='description' value={experience[index].description || ''} onChange={(e,i)=>{onExperienceChange(e,index)}} minRows={4}   variant='soft' size='md' label='Description' placeholder='Description'></Textarea>
                       {/* <BootstrapTextarea  minRows={4} style={{ ':focus' : { bordercolor: "#90caf9" }}}/> */}
                 </FormControl>
 
