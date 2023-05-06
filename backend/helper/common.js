@@ -1,5 +1,5 @@
 const { ObjectId } = require("mongodb");
-const isUrl = require("is-url");
+const isURL = require('isurl');
 
 const isValidString = (string, parameter) => {
   if (!string)
@@ -120,7 +120,7 @@ function isValidInteger(n) {
 }
 
 function isValidWebImage(url) {
-  if (isUrl(url)) {
+  if (isURL(new URL(url))) {
     if (/\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url)) {
       return url;
     } else {
