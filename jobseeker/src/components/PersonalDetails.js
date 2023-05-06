@@ -34,6 +34,7 @@ function PersonalDetails() {
             </InputLabel> */}
             <Textarea
               name="name"
+              value={personalDetails.name || ''}
               variant="soft"
               size="md"
               label="Full Name"
@@ -53,6 +54,7 @@ function PersonalDetails() {
               </InputLabel> */}
             <Textarea
               name="email"
+              
               variant="soft"
               size="md"
               label="Email"
@@ -74,6 +76,7 @@ function PersonalDetails() {
                   </InputLabel> */}
             <Textarea
               name="contact"
+              value={personalDetails.contact || ''} 
               color="neutral"
               variant="soft"
               size="md"
@@ -92,6 +95,7 @@ function PersonalDetails() {
                   </InputLabel> */}
             <Textarea
               name="address"
+              value={personalDetails.address || ''}
               variant="soft"
               size="md"
               label="Address"
@@ -110,6 +114,7 @@ function PersonalDetails() {
                   </InputLabel> */}
           <Textarea
             name="linkedin"
+            value={personalDetails.linkedin || ''} 
             variant="soft"
             size="md"
             label="Linkedin"
