@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Logout from "./Logout";
 import { Link, useParams } from "react-router-dom";
+import { useNavigate  } from 'react-router-dom';
 import { styled } from "@mui/material/styles";
 import {
   Card,
@@ -25,12 +26,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import MuiAlert from '@mui/material/Alert';
 
-const Img = styled("img")({
-  margin: "auto",
-  display: "block",
-  maxWidth: "100%",
-  maxHeight: "100%",
-});
+// const Img = styled("img")({
+//   margin: "auto",
+//   display: "block",
+//   maxWidth: "100%",
+//   maxHeight: "100%",
+// });
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -43,12 +44,12 @@ const Home = () => {
   let [errorMessage, setErrorMessage] = useState("");
   const [visaReq, setVisaReq] = useState("");
   const [minQual, setMinQual] = useState("");
-
+  const navigate = useNavigate();
   let card = null;
   const regex = /(<([^>]+)>)/gi;
 
   const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    return <MuiAlert elevation={10} ref={ref} variant="filled" {...props} />;
   });
 
   const clickEvent = () => {
@@ -61,6 +62,21 @@ const Home = () => {
     }, 1000);
     return () => clearTimeout(timer);
   }, [b_disabled]);
+
+  useEffect(() => {
+    const handlePopstate = () => {
+      setVisaReq("");
+      setMinQual("");
+      setSearchTerm("");
+      setWantAttention(true);
+    };
+
+    window.addEventListener("popstate", handlePopstate);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopstate);
+    };
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -77,6 +93,7 @@ const Home = () => {
         setErrorMessage(e.response.data);
         setError(true);
         setLoading(false);
+        setWantAttention(false);
       }
     }
     fetchData();
@@ -85,15 +102,7 @@ const Home = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     setWantAttention(true);
-    if(searchTerm){
-      console.log(searchTerm)
-    }
-    if(minQual){
-      console.log(minQual)
-    }
-    if(visaReq){
-      console.log(visaReq)
-    }
+    navigate(`/page/${1}`);
   };
 
   const buildCard = (job) => {
@@ -150,7 +159,6 @@ const Home = () => {
   };
 
 
-
   card =
     jobsData && jobsData.jobs && 
     jobsData.jobs.map((job) => {
@@ -163,13 +171,15 @@ const Home = () => {
         <CircularProgress />
       </Box>
     );
-  } else if (hasError) {
-    return (
-      <div className="makeCenter">
-      <Alert severity="error">{errorMessage}</Alert>
-    </div>
-    );
-  } else {
+  } 
+  // else if (hasError) {
+  //   return (
+  //     <div className="makeCenter">
+  //     <Alert severity="error">{errorMessage}</Alert>
+  //   </div>
+  //   );
+  // } 
+  else {
     return (
       <div className="main-div">
               <div className="container form-container">
@@ -252,6 +262,14 @@ const Home = () => {
                   </div>
                 </form>
               </div>
+        
+        {hasError ? 
+        (<div className="makeCenter">
+          <Alert severity="error">{errorMessage}</Alert>
+        </div>) 
+        :
+        (
+        <div>
         <div className="page-div makeCenter">
           {page_player > 1 && (
             <Link to={`/page/${Number(page_player) - 1}`}>
@@ -297,6 +315,8 @@ const Home = () => {
         >
           {card}
         </Grid>
+        </div>
+        )}
       </div>
     );
   }
