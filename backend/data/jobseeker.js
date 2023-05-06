@@ -7,17 +7,36 @@ const applications = mongoCollections.applications;
 const { ObjectId } = require("mongodb");
 const jobsFuns=require('./jobs');
 
-const getAllJobs = async (page) => {
+const getAllJobs = async (page,search,visaReq,minQual) => {
   if (!page) throw "please provide page number for the data function!";
   if (isNaN(page)) throw "page number should be valid number";
   if (page < 1) throw "page number should be greater than 1";
 
+  // console.log('1',search,"*****");
+  // console.log('2',visaReq,"*****");
+  // console.log('3',minQual,"*****");
+
   const each_page = 20;
   const skip = (page - 1) * each_page;
+  let moreJobsExist=false;
 
   const jobsCollection = await jobs();
+
+  let query = {};
+  if (search) {
+    query = { name: { $regex: search, $options: "i" } };
+  }
+  if (visaReq) {
+    query.visaRequirements = visaReq;
+  }
+  if (minQual) {
+    query.minimumQualification = minQual;
+  }
+
+  console.log(query)
+
   const allJobs = await jobsCollection
-    .find({})
+    .find(query)
     .skip(skip)
     .limit(each_page)
     .toArray();
@@ -29,8 +48,20 @@ const getAllJobs = async (page) => {
     allJobs[i]._id = allJobs[i]._id.toString();
 
   // const moreJobsExist = (await jobsCollection.find({}).count()) > skip + each_page;
-  const totalJobsCount = await jobsCollection.countDocuments({});
-  const moreJobsExist = totalJobsCount > skip + each_page;
+  // const totalJobsCount = await jobsCollection.countDocuments({});
+  // const moreJobsExist = totalJobsCount > skip + each_page;
+
+  const allJobsnext = await jobsCollection
+  .find(query)
+  .skip(skip + each_page)
+  .limit(each_page)
+  .toArray();
+
+  if(allJobsnext.length>1){
+    moreJobsExist=true;
+  }
+
+  console.log(moreJobsExist);
 
   return { jobs: allJobs, moreJobsExist };
 };

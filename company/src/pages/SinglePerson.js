@@ -4,7 +4,7 @@ import { api } from "../api";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import {Button, Divider} from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 function SinglePerson() {
@@ -50,7 +50,8 @@ function SinglePerson() {
                 </Typography>
               </div>
             </div>
-            <Divider /><br />
+            <Divider />
+            <br />
             <div className="row">
               <div className="col-2">
                 <Typography variant="body1" color="text.secondary" gutterBottom>
@@ -62,7 +63,9 @@ function SinglePerson() {
                   {jobSeeker.email}
                 </Typography>
               </div>
-            </div><Divider /><br />
+            </div>
+            <Divider />
+            <br />
             <div className="row">
               <div className="col-2">
                 <Typography variant="body1" color="text.secondary" gutterBottom>
@@ -70,15 +73,17 @@ function SinglePerson() {
                 </Typography>
               </div>
               <div className="col-3">
-                <Typography variant="body1" color="text.secondary" gutterBottom>                    
-                  <ul style={{ listStyle: "none" }}>                    
+                <Typography variant="body1" color="text.secondary" gutterBottom>
+                  <ul style={{ listStyle: "none" }}>
                     {jobSeeker.skills.map((skill) => {
                       return <li key={Math.random()}>{skill}</li>;
                     })}
                   </ul>
                 </Typography>
               </div>
-            </div><Divider /><br />
+            </div>
+            <Divider />
+            <br />
             <div className="row">
               <div className="col-2">
                 <Typography variant="body1" color="text.secondary" gutterBottom>
@@ -90,7 +95,9 @@ function SinglePerson() {
                   {jobSeeker.field_of_employment}
                 </Typography>
               </div>
-            </div><Divider /><br />
+            </div>
+            <Divider />
+            <br />
             <div className="row">
               <div className="col-2">
                 <Typography variant="body1" color="text.secondary" gutterBottom>
@@ -108,9 +115,11 @@ function SinglePerson() {
             <Button size="normal" color="info">
               Get Resume
             </Button>
-            <Link to='/findPeople'><Button size="normal" color="info" style={{marginLeft: "5px"}}>
-              Go Back
-            </Button></Link>
+            <Link to="/">
+              <Button size="normal" color="info" style={{ marginLeft: "5px" }}>
+                Go Back
+              </Button>
+            </Link>
           </CardActions>
         </Card>
       )}

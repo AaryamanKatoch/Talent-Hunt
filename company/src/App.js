@@ -20,12 +20,11 @@ function App() {
         <div style={{ display: "flex" }}>
           <pages.MyDrawer />
           <Routes>
-
             {/* dashboard */}
             <Route path="/dashboard" element={<PrivateRoute />}>
               <Route path="/dashboard" element={<pages.Dashboard />} />
             </Route>
-            
+
             {/* post job */}
             <Route path="/postJob" element={<PrivateRoute />}>
               <Route path="/postJob" element={<pages.PostJob />} />
@@ -35,12 +34,17 @@ function App() {
             <Route path="/editJob/:id" element={<PrivateRoute />}>
               <Route path="/editJob/:id" element={<pages.EditJob />} />
             </Route>
-            
+
+            {/* job applicants*/}
+            <Route path="/applicants/:id" element={<PrivateRoute />}>
+              <Route path="/applicants/:id" element={<pages.Applicants />} />
+            </Route>
+
             {/* find People */}
             <Route path="/findPeople" element={<PrivateRoute />}>
               <Route path="/findPeople" element={<pages.FindPeople />} />
             </Route>
-            
+
             {/* single job seeker */}
             <Route path="/jobSeeker/:id" element={<PrivateRoute />}>
               <Route path="/jobSeeker/:id" element={<pages.SinglePerson />} />
@@ -50,9 +54,9 @@ function App() {
             <Route path="/" element={<PrivateRoute />}>
               <Route path="/" element={<pages.Home />} />
             </Route>
-            
+
             {/* my jobs */}
-            
+
             <Route path="/login" element={<pages.Login />} />
             <Route path="/signup" element={<pages.SignUp />} />
           </Routes>

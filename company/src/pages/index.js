@@ -7,6 +7,7 @@ import PostJob from "./PostJob";
 import EditJob from "./EditJob";
 import Home from "./Home";
 import MyDrawer from "./MyDrawer";
+import Applicants from "./Applicants";
 
 const pages = {
   Login,
@@ -18,6 +19,7 @@ const pages = {
   EditJob,
   Home,
   MyDrawer,
+  Applicants,
 };
 
 export { pages };

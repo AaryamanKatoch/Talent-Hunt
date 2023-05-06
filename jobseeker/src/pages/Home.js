@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Logout from "./Logout";
 import { Link, useParams } from "react-router-dom";
+import { useNavigate  } from 'react-router-dom';
 import { styled } from "@mui/material/styles";
 import {
   Card,
@@ -13,36 +14,42 @@ import {
   ButtonBase,
   Button,
   Snackbar,
-  Stack 
+  Stack,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import noImage from "../assets/css/download.jpeg";
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import MuiAlert from '@mui/material/Alert';
 
-const Img = styled("img")({
-  margin: "auto",
-  display: "block",
-  maxWidth: "100%",
-  maxHeight: "100%",
-});
+// const Img = styled("img")({
+//   margin: "auto",
+//   display: "block",
+//   maxWidth: "100%",
+//   maxHeight: "100%",
+// });
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
-  const [searchData, setSearchData] = useState(undefined);
   const [jobsData, setJobsData] = useState(undefined);
   const [searchTerm, setSearchTerm] = useState("");
-  const [pageNo, setPageNo] = useState(1);
   const [b_disabled, setBDisable] = useState(false);
+  const [wantAttention, setWantAttention] = useState(false);
   let page_player = useParams().page;
   let [hasError, setError] = useState(false);
   let [errorMessage, setErrorMessage] = useState("");
-  // const {currentUser} = useContext(AuthContext);
+  const [visaReq, setVisaReq] = useState("");
+  const [minQual, setMinQual] = useState("");
+  const navigate = useNavigate();
   let card = null;
   const regex = /(<([^>]+)>)/gi;
 
   const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    return <MuiAlert elevation={10} ref={ref} variant="filled" {...props} />;
   });
 
   const clickEvent = () => {
@@ -57,34 +64,46 @@ const Home = () => {
   }, [b_disabled]);
 
   useEffect(() => {
-    // console.log("on load useeffect");
-    // console.log(currentUser);
-    // console.log(currentUser.email)
-    // console.log(currentUser.displayName)
+    const handlePopstate = () => {
+      setVisaReq("");
+      setMinQual("");
+      setSearchTerm("");
+      setWantAttention(true);
+    };
+
+    window.addEventListener("popstate", handlePopstate);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopstate);
+    };
+  }, []);
+
+  useEffect(() => {
     async function fetchData() {
       try {
         const { data } = await axios.get(
           "http://localhost:3000/jobseeker/jobs",
-          { params: { page: page_player } }
+          { params: { page: page_player ,search:searchTerm, visaReq:visaReq, minQual:minQual} }
         );
-        console.log(data.jobs)
-        console.log(data.moreJobsExist)
-        // if(data==null || data.jobs.length<1){
-        //   setErrorMessage('something went wrong! \n please Try Again!');
-        //   setError(true);
-        //   setLoading(false);
-        // }
         setJobsData(data);
         setLoading(false);
+        setWantAttention(false);
         setError(false);
       }catch (e) {
         setErrorMessage(e.response.data);
         setError(true);
         setLoading(false);
+        setWantAttention(false);
       }
     }
     fetchData();
-  }, [page_player]);
+  }, [page_player,wantAttention]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setWantAttention(true);
+    navigate(`/page/${1}`);
+  };
 
   const buildCard = (job) => {
     return (
@@ -139,6 +158,7 @@ const Home = () => {
     );
   };
 
+
   card =
     jobsData && jobsData.jobs && 
     jobsData.jobs.map((job) => {
@@ -151,15 +171,105 @@ const Home = () => {
         <CircularProgress />
       </Box>
     );
-  } else if (hasError) {
-    return (
-      <div className="makeCenter">
-      <Alert severity="error">{errorMessage}</Alert>
-    </div>
-    );
-  } else {
+  } 
+  // else if (hasError) {
+  //   return (
+  //     <div className="makeCenter">
+  //     <Alert severity="error">{errorMessage}</Alert>
+  //   </div>
+  //   );
+  // } 
+  else {
     return (
       <div className="main-div">
+              <div className="container form-container">
+                <form id="search-form" onSubmit={handleSearch}>
+                  <div className="row">
+                    <TextField
+                      label="Search"
+                      type="text"
+                      size="small"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      variant="outlined"
+                      color="secondary"
+                      className="col-3"
+                      autoFocus
+                    />
+                    <div className="col-1"></div>
+                    <FormControl className="col-2">
+                      <InputLabel
+                        id="demo-simple-select-helper-label"
+                        color="secondary"
+                      >
+                        Visa Requirements
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-helper-label"
+                        id="demo-simple-select-helper"
+                        value={visaReq}
+                        label="Type"
+                        color="secondary"
+                        size="small"
+                        onChange={(e) => setVisaReq(e.target.value)}
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={"Citizen"}>Citizen</MenuItem>
+                        <MenuItem value={"GreenCard"}>Green Card</MenuItem>
+                        <MenuItem value={"H1B"}>H1B</MenuItem>
+                        <MenuItem value={"F1"}>F1</MenuItem>
+                        <MenuItem value={"H4EAD"}>H4EAD</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <div className="col-1"></div>
+                    <FormControl className="col-2">
+                      <InputLabel
+                        id="demo-simple-select-helper-label"
+                        color="secondary"
+                      >
+                        Minimum Qualification
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-helper-label"
+                        id="demo-simple-select-helper"
+                        value={minQual}
+                        label="Type"
+                        color="secondary"
+                        size="small"
+                        onChange={(e) => setMinQual(e.target.value)}
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={"bachelors"}>Bachelors Degree</MenuItem>
+                        <MenuItem value={"masters"}>Masters Degree</MenuItem>
+                        <MenuItem value={"phd"}>PHD</MenuItem>
+                        <MenuItem value={"other"}>Other</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <div className="col-1"></div>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      type="submit"
+                      className="col-1"
+                      style={{ maxHeight: "40px" }}
+                    >
+                      Search
+                    </Button>
+                  </div>
+                </form>
+              </div>
+        
+        {hasError ? 
+        (<div className="makeCenter">
+          <Alert severity="error">{errorMessage}</Alert>
+        </div>) 
+        :
+        (
+        <div>
         <div className="page-div makeCenter">
           {page_player > 1 && (
             <Link to={`/page/${Number(page_player) - 1}`}>
@@ -205,6 +315,8 @@ const Home = () => {
         >
           {card}
         </Grid>
+        </div>
+        )}
       </div>
     );
   }

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import { Button, Card, CardContent, Grid, Typography } from "@mui/material";
 import noImage from "../assets/css/download.jpeg";
 import { AuthContext } from "../firebase/Auth";
 
@@ -55,7 +55,7 @@ const Home = () => {
               "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
           }}
         >
-          <Link className="Link-for-eventcard" to={`/editJob/${job._id}`}>
+          <div className="eventcard" to={`/editJob/${job._id}`}>
             <CardContent>
               <Typography variant="h5" component="h2" gutterBottom>
                 Role: {job.name}
@@ -67,7 +67,23 @@ const Home = () => {
                 Minimum Qualification: {job.minimumQualification}
               </Typography>
             </CardContent>
-          </Link>
+            <Button
+              component={Link}
+              to={`/editJob/${job._id}`}
+              variant="contained"
+              color="primary"
+            >
+              Edit Job
+            </Button>
+            <Button
+              component={Link}
+              to={`/applicants/${job._id}`}
+              variant="contained"
+              color="primary"
+            >
+              View Applications
+            </Button>
+          </div>
         </Card>
       </Grid>
     );
