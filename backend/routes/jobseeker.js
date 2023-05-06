@@ -134,8 +134,16 @@ router
   .route("/jobs") //GET all jobs
   .get(async (req, res) => {
     try {
+      //console.log(req.query)
       const pageNumber = parseInt(req.query.page) || 1;
-      const data = await jobSeekerData.getAllJobs(pageNumber);
+      const search = req.query.search || "";
+      const visaReq = req.query.visaReq || "";
+      const minQual = req.query.minQual || "";
+      // console.log('0',pageNumber,"*****");
+      // console.log('1',search,"*****");
+      // console.log('2',visaReq,"*****");
+      // console.log('3',minQual,"*****");
+      const data = await jobSeekerData.getAllJobs(pageNumber,search,visaReq,minQual);
       res.json(data);
       return;
     } catch (e) {
