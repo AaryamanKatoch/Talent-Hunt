@@ -28,7 +28,7 @@ function Experience(){
           
           company: "",
           address: "",
-          description: "",
+          bulletPoints: [""],
           position: "",
           startYear: "",
           starMonth:"",
@@ -51,6 +51,25 @@ function Experience(){
     ));
 
     setExperience(updatedExperience);
+}
+
+const addBulletPoint = (index) => {
+  const updatedExperiences = [...experience]
+  // console.log(updatedExperiences);
+  updatedExperiences[index].bulletPoints.push('')
+  setExperience(updatedExperiences)
+}
+
+const deleteBulletPoint = (expIndex, bpIndex) => {
+  const updatedExperiences = [...experience]
+  updatedExperiences[expIndex].bulletPoints.splice(bpIndex, 1)
+  setExperience(updatedExperiences)
+}
+
+const bulletPointChange = (event, expIndex, bpIndex) => {
+  const updatedExperiences = [...experience]
+  updatedExperiences[expIndex].bulletPoints[bpIndex] = event.target.value
+  setExperience(updatedExperiences)
 }
 
 console.log(experience);
@@ -153,14 +172,25 @@ console.log(experience);
                   </FormControl>
                 </Stack>
                 <Stack  spacing={{ xs: 1, sm: 2, md: 4 }}>
-                  <FormControl>
-                      {/* <InputLabel htmlFor="bootstrap-input">
-                        Description
-                      </InputLabel> */}
+                  {/* <FormControl>
+                     
                       <Textarea name='description' value={experience[index].description || ''} onChange={(e,i)=>{onExperienceChange(e,index)}} minRows={4}   variant='soft' size='md' label='Description' placeholder='Description'></Textarea>
-                      {/* <BootstrapTextarea  minRows={4} style={{ ':focus' : { bordercolor: "#90caf9" }}}/> */}
-                </FormControl>
-
+                      
+                </FormControl> */}
+                { experience[index].bulletPoints.map((bulletPoint,ind)=>(
+                    <Stack key={ind}>
+                      <Stack direction="row" spacing={2}>                      
+                       <Box flex={1}><Textarea flex={1} value={experience[index].bulletPoints[ind] || ''} onChange={(e,i)=>{bulletPointChange(e,index,ind)}} variant='soft' size='md' label='Bullet' placeholder='Bullet Point'></Textarea></Box> 
+                        <Button flex="none" variant="contained" size="small" color='error' onClick={() => deleteBulletPoint(index,ind)}>Delete</Button>
+                      </Stack>
+                      
+                    </Stack>
+                ))}
+                 <Box sx={{marginTop:2}}>
+                    <Stack direction="row" spacing={2}>
+                      <Button variant="contained" size="small" onClick={()=>addBulletPoint(index)}>Add Bullet</Button>
+                    </Stack>
+                </Box>
                 </Stack>
                 <Stack direction="row" spacing={2}>
                   <Button variant="contained" size="small" color='error' onClick={() => deleteExperience(index)}>Delete</Button>
