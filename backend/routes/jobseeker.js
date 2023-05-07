@@ -13,6 +13,7 @@ const projectsData = require("../data/projects");
 const common_helper = require("../helper/common");
 const fs = require("fs");
 var im = require("imagemagick");
+const streamToBuffer = require('stream-to-buffer');
 const redis = require("redis");
 const client = redis.createClient();
 client.connect().then(() => {});
@@ -249,79 +250,51 @@ router.route("/create-resume").post(async (req, res) => {
     );
     // console.log("here");
 
-    for (let i = 0; i < skills.length; i++) {
-      skills[i] = helper.common.isValidString(skills[i], "Skill");
-    }
-  } catch (e) {
-    if (typeof e !== "object" || !("status" in e)) {
-      console.log(e);
-      return res.status(500).json("Internal server error");
-    } else {
-      return res.status(parseInt(e.status)).json(e.error);
-    }
-  }
-  let createdResume;
-  try {
-    createdResume = await resumes.createResume(
-      personalDetails.name,
-      personalDetails.address,
-      personalDetails.linkedin,
-      personalDetails.email,
-      personalDetails.contact,
-      skills
-    );
-    //  console.log(createdResume);
-  } catch (e) {
-    if (typeof e !== "object" || !("status" in e)) {
-      console.log(e);
-      return res.status(500).json("Internal server error");
-    } else {
-      return res.status(parseInt(e.status)).json(e.error);
-    }
-  }
-  // console.log(education);
-  try {
-    for (let i = 0; i < education.length; i++) {
-      education[i].school = helper.common.isValidString(
-        education[i].school,
-        "School"
-      );
-      education[i].address = helper.common.isValidString(
-        education[i].address,
-        "Address"
-      );
-      education[i].degree = helper.common.isValidString(
-        education[i].degree,
-        "Degree"
-      );
-      education[i].gpa = helper.common.isValidGpa(education[i].gpa);
-      education[i].startYear = helper.common.isValidYear(
-        education[i].startYear
-      );
-      education[i].endYear = helper.common.isValidYear(education[i].endYear);
-      helper.common.isValidStartEndYear(
-        education[i].startYear,
-        education[i].endYear
-      );
-      let createdEducation = await educationData.createEducation(
-        createdResume._id,
-        education[i].school,
-        education[i].address,
-        education[i].degree,
-        education[i].gpa,
-        education[i].startYear,
-        education[i].endYear
-      );
-      //  console.log(createdEducation);
-    }
-  } catch (e) {
-    if (typeof e !== "object" || !("status" in e)) {
-      console.log(e);
-      return res.status(500).json("Internal server error");
-    } else {
-      return res.status(parseInt(e.status)).json(e.error);
-    }
-  }
+        for(let i = 0; i < skills.length; i++){
+            skills[i] = helper.common.isValidString(skills[i], 'Skill');
+        }
+       
+     } catch (e) {
+      if (typeof e !== "object" || !("status" in e)) {
+        console.log(e);
+        return res.status(500).json("Internal server error");
+      } else {
+        return res.status(parseInt(e.status)).json({error : e.error});
+      }
+     }
+     let createdResume;
+        try {
+            createdResume = await resumes.createResume(personalDetails.name,  personalDetails.address, personalDetails.linkedin, personalDetails.email, personalDetails.contact, skills)
+            //  console.log(createdResume);
+        } catch (e) {
+          if (typeof e !== "object" || !("status" in e)) {
+            console.log(e);
+           return res.status(500).json("Internal server error");
+          } else {
+           return res.status(parseInt(e.status)).json({error : e.error});
+          }
+        }
+        // console.log(education);
+        try {
+            for(let  i =0 ; i < education.length; i++){
+                education[i].school = helper.common.isValidString(education[i].school,'School');
+                education[i].address = helper.common.isValidString(education[i].address,'Address');
+                education[i].degree = helper.common.isValidString(education[i].degree,'Degree');
+                education[i].gpa = helper.common.isValidGpa(education[i].gpa);
+                education[i].startYear = helper.common.isValidYear(education[i].startYear);
+                education[i].endYear = helper.common.isValidYear(education[i].endYear);
+                helper.common.isValidStartEndYear(education[i].startYear,education[i].endYear);
+                let createdEducation = await educationData.createEducation(createdResume._id,education[i].school, education[i].address, education[i].degree, education[i].gpa, education[i].startYear, education[i].endYear);
+                //  console.log(createdEducation);
+            }
+        } catch (e) {
+          if (typeof e !== "object" || !("status" in e)) {
+            console.log(e);
+           return res.status(500).json("Internal server error");
+          } else {
+           return res.status(parseInt(e.status)).json({error : e.error});
+          }
+        }
 
   try {
     for (let i = 0; i < experience.length; i++) {
@@ -351,31 +324,24 @@ router.route("/create-resume").post(async (req, res) => {
       experience[i].endMonth = helper.common.isValidMonth(
         experience[i].endMonth
       );
-      experience[i].description = helper.common.isValidString(
-        experience[i].description
-      );
+      // experience[i].description = helper.common.isValidString(
+      //   experience[i].description
+      // );
+      for(let j = 0; j < experience[i].bulletPoints.length; j++){
+        experience[i].bulletPoints[j] = helper.common.isValidString(experience[i].bulletPoints[j]);
+      }
 
-      let createdExperience = await experienceData.createExperience(
-        createdResume._id,
-        experience[i].company,
-        experience[i].address,
-        experience[i].position,
-        experience[i].description,
-        experience[i].startYear,
-        experience[i].endYear,
-        experience[i].startMonth,
-        experience[i].endMonth
-      );
-      console.log(createdExperience);
-    }
-  } catch (e) {
-    if (typeof e !== "object" || !("status" in e)) {
-      console.log(e);
-      return res.status(500).json("Internal server error");
-    } else {
-      return res.status(parseInt(e.status)).json(e.error);
-    }
-  }
+                let createdExperience = await experienceData.createExperience(createdResume._id,experience[i].company, experience[i].address, experience[i].position, experience[i].bulletPoints, experience[i].startYear, experience[i].endYear, experience[i].startMonth, experience[i].endMonth);
+                 console.log(createdExperience);
+            }
+        } catch (e) {
+          if (typeof e !== "object" || !("status" in e)) {
+            console.log(e);
+           return res.status(500).json("Internal server error");
+          } else {
+            return res.status(parseInt(e.status)).json({error : e.error});
+          }
+        }
 
   try {
     for (let i = 0; i < projects.length; i++) {
@@ -388,26 +354,48 @@ router.route("/create-resume").post(async (req, res) => {
         "Project Description"
       );
 
-      let createdProject = await projectsData.createProject(
-        createdResume._id,
-        projects[i].name,
-        projects[i].description
-      );
-      // console.log(createdProject);
-    }
-  } catch (e) {
-    if (typeof e !== "object" || !("status" in e)) {
-      console.log(e);
-      return res.status(500).json("Internal server error");
-    } else {
-      return res.status(parseInt(e.status)).json(e.error);
-    }
-  }
-  console.log("here done");
-  let pdf = await pdfCreateResume.createResumePdf(resumeData);
-  // console.log(pdf);
-  return res.send(pdf);
-  // return;
-});
+                let createdProject = await projectsData.createProject(createdResume._id,projects[i].name, projects[i].description);
+                // console.log(createdProject);
+            }
+        } catch (e) {
+          if (typeof e !== "object" || !("status" in e)) {
+            console.log(e);
+            return res.status(500).json("Internal server error");
+          } else {
+            return res.status(parseInt(e.status)).json({error : e.error});
+          }
+        }
+        let pdf =  await pdfCreateResume.createResumePdf(resumeData);
+        // const pdfBlob = new Blob([pdf], { type: 'application/pdf' });
+        // saveAs(pdfBlob, 'myPDF.pdf');
+        // var file = fs.createReadStream('./resume.pdf');
+        // var stat = fs.statSync('./resume.pdf');
+        // res.setHeader('Content-Length', stat.size);
+        // res.setHeader('Content-Type', 'application/pdf');
+        // res.setHeader('Content-Disposition', 'attachment; filename=resume.pdf');
+        // file.pipe(res);
+        // res.send(pdf);
+        // const filePath = './resume.pdf';
+        // const fileSize = fs.statSync(filePath).size;
+      
+        // res.setHeader('Content-Type', 'application/pdf');
+        // res.setHeader('Content-Disposition', 'attachment; filename=resume.pdf');
+        // // res.setHeader('Content-Length', fileSize);
+      
+        // const stream = fs.createReadStream(filePath);
+        // stream.pipe(res);
+        // const pdfBase64 = Buffer.from(pdf).toString('base64');
+        streamToBuffer(pdf, (err, buffer) => {
+            if (err) {
+              console.error('Error converting stream to buffer:', err);
+              return res.status(500).send('Error generating PDF file');
+            } else {
+              res.set('Content-Type', 'application/pdf');
+              res.set('Content-Disposition', 'attachment; filename="resume.pdf"');
+              return res.send(buffer);
+            }
+          });
+
+    });
 
 module.exports = router;
