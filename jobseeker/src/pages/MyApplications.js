@@ -83,12 +83,13 @@ function MyApplications() {
             textDecoration: "none",
           }}
         >
+          {job.image ? <img src={`data:image/png;base64,${job.image}`}  style={{width: "151px"}}/> : 
           <CardMedia
             component="img"
             sx={{ width: 151 }}
-            image={job.companylogo ? job.companylogo : noImage}
+            image={noImage}
             alt="Live from space album cover"
-          />
+          />}
           <CardActionArea>
             <Link className="Link-for-eventcard" to={`/jobDetails/${job._id}`}>
               <CardContent>
@@ -96,6 +97,7 @@ function MyApplications() {
                   sx={{
                     fontWeight: "bold",
                     height: "40px",
+                    width: "200px"
                   }}
                   component="h3"
                 >

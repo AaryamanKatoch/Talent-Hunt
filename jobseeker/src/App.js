@@ -17,9 +17,9 @@ function App() {
             <CssBaseline />
             <pages.MyDrawer />
             <Routes>
-              {/* home */}
+              {/* dashboard */}
               <Route path="/" element={<PrivateRoute />}>
-                <Route path="/page/:page" element={<pages.Home />} />
+                <Route path="/dashboard" element={<pages.Dashboard />} />
               </Route>
               {/* apply */}
               <Route path="/apply/:jobId" element={<PrivateRoute />}>
@@ -32,9 +32,9 @@ function App() {
                   element={<components.JobDetailsPage />}
                 />
               </Route>
-              {/* dashboard */}
-              <Route path="/dashboard" element={<PrivateRoute />}>
-                <Route path="/dashboard" element={<pages.Dashboard />} />
+              {/* home */}
+              <Route path="/page/:page" element={<PrivateRoute />}>
+                <Route path="/page/:page" element={<pages.Home />} />
               </Route>
               {/* create resume */}
               <Route path="/create-resume" element={<PrivateRoute />}>

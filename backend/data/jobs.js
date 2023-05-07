@@ -9,7 +9,8 @@ const createJob = async (
   description,
   responsibilities,
   visaRequirements,
-  minimumQualification
+  minimumQualification,
+  image
 ) => {
   description = await jobhelper.checkifproperdescription(description);
   responsibilities = await jobhelper.checkifproperresponsibilities(
@@ -30,6 +31,7 @@ const createJob = async (
     visaRequirements: visaRequirements,
     minimumQualification: minimumQualification,
     applications: [], //array of application docs id
+    image: image,
   };
 
   const insertInfo = await jobsCollection.insertOne(job);
@@ -239,7 +241,8 @@ const createJobByCompanyEmail = async (companyEmail, data) => {
     responsibilities: data.responsibilities,
     visaRequirements: data.visaRequirements,
     minimumQualification: data.minimumQualification,
-    applications: [], //array of application docs id
+    applications: [], //array of application docs id,
+    image: data.image,
   };
 
   const insertInfo = await jobsCollection.insertOne(job);
