@@ -199,6 +199,12 @@ router
   })
   .post(async (req, res) => {
     let resumeData = req.body;
+    // console.log("before",resumeData);
+    let education = JSON.parse(resumeData.education);
+    let experience = JSON.parse(resumeData.experience);
+    let projects = JSON.parse(resumeData.projects);
+    let skills = JSON.parse(resumeData.skills);
+    // console.log("after", resumeData);
     for (let i in resumeData) resumeData[i] = xss(resumeData[i]);
     try {
       resumeData.name = helper.common.isValidString(
@@ -228,31 +234,32 @@ router
     }
 
     try {
-      for (let i = 0; i < resumeData.education.length; i++) {
-        resumeData.education[i].school = helper.common.isValidString(
-          resumeData.education[i].school,
+      console.log(education);
+      for (let i = 0; i < education.length; i++) {
+        education[i].school = helper.common.isValidString(
+          education[i].school,
           "School"
         );
-        resumeData.education[i].address = helper.common.isValidString(
-          resumeData.education[i].address,
+        education[i].address = helper.common.isValidString(
+          education[i].address,
           "Address"
         );
-        resumeData.education[i].degree = helper.common.isValidString(
-          resumeData.education[i].degree,
+        education[i].degree = helper.common.isValidString(
+          education[i].degree,
           "Degree"
         );
-        resumeData.education[i].gpa = helper.common.isValidGpa(
-          resumeData.education[i].gpa
+        education[i].gpa = helper.common.isValidGpa(
+          education[i].gpa
         );
-        resumeData.education[i].startYear = helper.common.isValidYear(
-          resumeData.education[i].startYear
+        education[i].startYear = helper.common.isValidYear(
+          education[i].startYear
         );
-        resumeData.education[i].endYear = helper.common.isValidYear(
-          resumeData.education[i].endYear
+        education[i].endYear = helper.common.isValidYear(
+          education[i].endYear
         );
         helper.common.isValidStartEndYear(
-          resumeData.education[i].startYear,
-          resumeData.education[i].endYear
+          education[i].startYear,
+          education[i].endYear
         );
         // let createdEducation = await educationData.createEducation(createdResume._id,education[i].school, education[i].address, education[i].degree, education[i].gpa, education[i].startYear, education[i].endYear);
         // console.log(createdEducation);
@@ -266,48 +273,45 @@ router
     }
 
     try {
-      for (let i = 0; i < resumeData.experience.length; i++) {
-        resumeData.experience[i].company = helper.common.isValidString(
-          resumeData.experience[i].company,
+      for (let i = 0; i < experience.length; i++) {
+        experience[i].company = helper.common.isValidString(
+          experience[i].company,
           "Company"
         );
-        resumeData.experience[i].address = helper.common.isValidString(
-          resumeData.experience[i].address,
+        experience[i].address = helper.common.isValidString(
+          experience[i].address,
           "Address"
         );
-        resumeData.experience[i].position = helper.common.isValidString(
-          resumeData.experience[i].position,
+        experience[i].position = helper.common.isValidString(
+          experience[i].position,
           "Position"
         );
-        resumeData.experience[i].startYear = helper.common.isValidYear(
-          resumeData.experience[i].startYear
+        experience[i].startYear = helper.common.isValidYear(
+          experience[i].startYear
         );
-        resumeData.experience[i].endYear = helper.common.isValidYear(
-          resumeData.experience[i].endYear
+        experience[i].endYear = helper.common.isValidYear(
+          experience[i].endYear
         );
         helper.common.isValidStartEndYear(
-          resumeData.experience[i].startYear,
-          resumeData.experience[i].endYear
+          experience[i].startYear,
+          experience[i].endYear
         );
-        resumeData.experience[i].startMonth = helper.common.isValidMonth(
-          resumeData.experience[i].startMonth
+        experience[i].startMonth = helper.common.isValidMonth(
+          experience[i].startMonth
         );
-        resumeData.experience[i].endMonth = helper.common.isValidMonth(
-          resumeData.experience[i].endMonth
+        experience[i].endMonth = helper.common.isValidMonth(
+          experience[i].endMonth
         );
-        // experience[i].description = helper.common.isValidString(experience[i].description);
 
-        for (let j = 0; j < resumeData.experience[i].bulletPoints.length; j++) {
-          resumeData.experience[i].bulletPoints[j] =
+        for (let j = 0; j < experience[i].bulletPoints.length; j++) {
+          experience[i].bulletPoints[j] =
             helper.common.isValidString(
-              resumeData.experience[i].bulletPoints[j]
+              experience[i].bulletPoints[j]
             );
         }
-
-        // let createdExperience = await experienceData.createExperience(createdResume._id,experience[i].company, experience[i].address, experience[i].position, experience[i].bulletPoints, experience[i].startYear, experience[i].endYear, experience[i].startMonth, experience[i].endMonth);
-        // console.log(createdExperience);
       }
     } catch (e) {
+      console.log(e);
       if (typeof e !== "object" || !("status" in e)) {
         return res.status(500).json({ error: "Internal server error" });
       } else {
@@ -316,21 +320,18 @@ router
     }
 
     try {
-      console.log(resumeData.projects.length);
-      for (let i = 0; i < resumeData.projects.length; i++) {
-        resumeData.projects[i].name = helper.common.isValidString(
-          resumeData.projects[i].name,
+      for (let i = 0; i < projects.length; i++) {
+        projects[i].name = helper.common.isValidString(
+          projects[i].name,
           "Project Name"
         );
-        resumeData.projects[i].description = helper.common.isValidString(
-          resumeData.projects[i].description,
+        projects[i].description = helper.common.isValidString(
+          projects[i].description,
           "Project Description"
         );
-
-        // let createdProject = await projectsData.createProject(createdResume._id,projects[i].name, projects[i].description);
-        // console.log(createdProject);
       }
     } catch (e) {
+      console.log(e);
       if (typeof e !== "object" || !("status" in e)) {
         return res.status(500).json({ error: "Internal server error" });
       } else {
@@ -346,11 +347,11 @@ router
     };
 
     let resumeObj = {
-      personalDetails: personalDetails,
-      education: resumeData.education,
-      experience: resumeData.experience,
-      projects: resumeData.projects,
-      skills: resumeData.skills,
+      personalDetails: JSON.stringify(personalDetails),
+      education: JSON.stringify(education),
+      experience: JSON.stringify(experience),
+      projects: JSON.stringify(projects),
+      skills: JSON.stringify(skills),
     };
 
     try {
@@ -366,6 +367,7 @@ router
         }
       });
     } catch (e) {
+      console.log(e);
       if (typeof e !== "object" || !("status" in e)) {
         return res.status(500).json({ error: "Internal server error" });
       } else {

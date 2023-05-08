@@ -227,25 +227,19 @@ router.get("/allJobSeekers", async (req, res) => {
 
 router.route("/create-resume").post(async (req, res) => {
   let resumeData = req.body;
-  //  console.log(resumeData.personalDetails);
   for (let i in resumeData) resumeData[i] = xss(resumeData[i]);
-  let personalDetails = resumeData.personalDetails;
-  let education = resumeData.education;
-  let experience = resumeData.experience;
-  let projects = resumeData.projects;
-  let skills = resumeData.skills;
+  let personalDetails = JSON.parse(resumeData.personalDetails);
+  let education = JSON.parse(resumeData.education);
+  let experience = JSON.parse(resumeData.experience);
+  let projects = JSON.parse(resumeData.projects);
+  let skills = JSON.parse(resumeData.skills);
   let userId;
   let createdResume;
   try {
-    // let id = "64406ecb4339df491dac4d4b";
-    // id = helper.common.checkIsProperId(id);
-    // const data = await jobSeekerData.getJobSeekerByID(id);
     let email = personalDetails.email;
-    console.log(email);
-
     email = helper.common.isValidEmail(email);
     const profileExists = await jobSeekerData.profileExists(email);
-    console.log(profileExists);
+    // console.log(profileExists);
     if (profileExists) {
       const data = await jobSeekerData.getJobSeekerByEmail(email);
       // console.log(data);
@@ -279,13 +273,12 @@ router.route("/create-resume").post(async (req, res) => {
     personalDetails.linkedin = helper.common.isValidURL(
       personalDetails.linkedin
     );
-    console.log("Route - " + personalDetails.email);
+    // console.log("Route - " + personalDetails.email);
     personalDetails.email = helper.common.isValidEmail(personalDetails.email);
     console.log("here");
     personalDetails.contact = helper.common.isValidContact(
       personalDetails.contact
     );
-    // console.log("here");
 
     for (let i = 0; i < skills.length; i++) {
       skills[i] = helper.common.isValidString(skills[i], "Skill");
@@ -393,6 +386,7 @@ router.route("/create-resume").post(async (req, res) => {
       // experience[i].description = helper.common.isValidString(
       //   experience[i].description
       // );
+      // console.log(experience, experience.bulletPoints);
       for (let j = 0; j < experience[i].bulletPoints.length; j++) {
         experience[i].bulletPoints[j] = helper.common.isValidString(
           experience[i].bulletPoints[j]

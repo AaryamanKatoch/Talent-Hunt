@@ -25,12 +25,12 @@ const fs = require('fs');
 
  
 async function createResumePdf(resumeData){
-  console.log(resumeData);
-  let personalDetails = resumeData.personalDetails;
-  let education = resumeData.education;
-  let experience = resumeData.experience;
-  let projects = resumeData.projects;
-  let skills = resumeData.skills;
+  // console.log(resumeData);
+  let personalDetails = JSON.parse(resumeData.personalDetails);
+  let education = JSON.parse(resumeData.education);
+  let experience = JSON.parse(resumeData.experience);
+  let projects = JSON.parse(resumeData.projects);
+  let skills = JSON.parse(resumeData.skills);
 
   let educationString = '';
 

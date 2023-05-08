@@ -1,7 +1,9 @@
 import isUrl from "is-url";
 
 export const isValidString = (string, parameter) => {
-  if (!string) throw new Error(`You must provide a ${parameter}`);
+  if (!string) {
+    throw new Error(`You must provide a ${parameter}`);
+  }
   if (typeof string !== "string")
     throw new Error(`${parameter} must be a string`);
   string = string.trim();
