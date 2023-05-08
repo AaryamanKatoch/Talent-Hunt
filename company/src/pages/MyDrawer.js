@@ -41,13 +41,15 @@ function MyDrawer() {
             justifyContent="center"
             sx={{ marginTop: "30px", marginBottom: "30px" }}
           >
-            <Avatar sx={{ width: 60, height: 60 }}>
+            <Avatar sx={{ width: 60, height: 60, backgroundColor: "#767676" }}>
               {currentUser && currentUser.displayName
                 ? currentUser.displayName[0]
                 : ""}
             </Avatar>
           </Stack>
-          <h6 className="makeCenter">{currentUser ? currentUser.email : ""}</h6>
+          <div className="makeCenter">
+            {currentUser ? currentUser.email : ""}
+          </div>
         </div>
       ) : null}
       <Divider />
