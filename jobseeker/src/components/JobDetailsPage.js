@@ -36,6 +36,7 @@ const JobDetailsPage = () => {
   };
 
   const titleStyle = {
+    fontSize: 30,
     marginBottom: 20,
   };
 
@@ -52,36 +53,44 @@ const JobDetailsPage = () => {
     <Card style={cardStyle}>
       {error ? (
         <div className="container">
-          <h4 className="text-danger">{error}</h4>
+          <div className="text-danger">{error}</div>
         </div>
-      ) : (data && 
-        <>
-          <CardContent>
-            <Typography variant="h4" color="textSecondary">
-              {data.companyName}
-            </Typography>
-            <Typography variant="subtitle1" style={contentStyle}>
-              Job Name: {data.name}
-            </Typography>
-            <Typography variant="subtitle1" style={titleStyle}>
-              Job Description: {data.description}
-            </Typography>            
-            <Typography variant="body1" style={contentStyle}>
-              Minimum Qulaification: {data.minimumQualification}
-            </Typography>
-            <Typography variant="body1" style={contentStyle}>
-              Visa Requirements: {data.visaRequirements}
-            </Typography>
-            <Typography variant="body1" style={contentStyle}>
-              Responsibilities: {data.responsibilities}
-            </Typography>
-          </CardContent>
-          <CardActions style={actionsStyle}>
-            <Link to={`/apply/${data._id}`}><Button size="small" color="primary">
-            Apply Now
-            </Button></Link>        
-          </CardActions>
-        </>
+      ) : (
+        data && (
+          <>
+            <CardContent>
+              <Typography
+                variant="div"
+                color="textSecondary"
+                style={titleStyle}
+              >
+                {data.companyName}
+              </Typography>
+              <Typography variant="body1" style={contentStyle}>
+                Job Name: {data.name}
+              </Typography>
+              <Typography variant="body1" style={contentStyle}>
+                Job Description: {data.description}
+              </Typography>
+              <Typography variant="body1" style={contentStyle}>
+                Minimum Qulaification: {data.minimumQualification}
+              </Typography>
+              <Typography variant="body1" style={contentStyle}>
+                Visa Requirements: {data.visaRequirements}
+              </Typography>
+              <Typography variant="body1" style={contentStyle}>
+                Responsibilities: {data.responsibilities}
+              </Typography>
+            </CardContent>
+            <CardActions style={actionsStyle}>
+              <Link to={`/apply/${data._id}`}>
+                <Button size="small" color="primary">
+                  Apply Now
+                </Button>
+              </Link>
+            </CardActions>
+          </>
+        )
       )}
     </Card>
   );

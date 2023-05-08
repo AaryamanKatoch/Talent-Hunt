@@ -84,7 +84,7 @@ function CreateProfile(props) {
     >
       {error && <Alert severity="error">{error}</Alert>}
       <div className="card-body">
-        <h5 className="card-title">Create Profile</h5>
+        <h1 className="card-title">Create Profile</h1>
         <br />
         <form onSubmit={handleSubmit} id="profile-form">
           <TextField

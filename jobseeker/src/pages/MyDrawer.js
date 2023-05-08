@@ -47,7 +47,9 @@ function MyDrawer() {
                 : ""}
             </Avatar>
           </Stack>
-          <h6 className="makeCenter">{currentUser ? currentUser.email : ""}</h6>
+          <div className="makeCenter">
+            {currentUser ? currentUser.email : ""}
+          </div>
         </div>
       ) : null}
       <Divider />
