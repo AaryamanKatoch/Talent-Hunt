@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { helper } from "../helper";
 import {
+  Alert,
   TextField,
   Button,
   Select,
@@ -16,6 +17,7 @@ function CreateProfile(props) {
     description: "",
     type: "",
   });
+  const [error, setError] = useState(undefined);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,7 +34,7 @@ function CreateProfile(props) {
         "Type of company"
       );
     } catch (e) {
-      alert(e);
+      setError(e.message);
       return;
     }
     props.onSubmit(data);
@@ -49,7 +51,7 @@ function CreateProfile(props) {
         marginTop: "3rem",
       }}
     >
-      {/* {error ? <h5 className="card-header error">{error}</h5> : ""} */}
+      {error && <Alert severity="error">{error}</Alert>}
       <div className="card-body">
         <h5 className="card-title">Create Company Profile</h5>
         <br />

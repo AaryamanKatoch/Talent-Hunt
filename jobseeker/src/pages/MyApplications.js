@@ -13,13 +13,13 @@ import {
   ButtonBase,
   Button,
   Snackbar,
-  Stack 
+  Stack,
 } from "@mui/material";
 import noImage from "../assets/css/download.jpeg";
-import MuiAlert from '@mui/material/Alert';
+import MuiAlert from "@mui/material/Alert";
 import { AuthContext } from "../firebase/Auth";
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 const Img = styled("img")({
   margin: "auto",
@@ -52,8 +52,8 @@ function MyApplications() {
           "http://localhost:3000/jobseeker/HistoryOfApplications",
           { params: { email: currentUser.email } }
         );
-        if(data==null || data.length<1){
-          setErrorMessage('something went wrong! \n please Try Again!');
+        if (data == null || data.length < 1) {
+          setErrorMessage("something went wrong! \n please Try Again!");
           setError(true);
           setLoading(false);
         }
@@ -83,12 +83,19 @@ function MyApplications() {
             textDecoration: "none",
           }}
         >
-          <CardMedia
-            component="img"
-            sx={{ width: 151 }}
-            image={job.companylogo ? job.companylogo : noImage}
-            alt="Live from space album cover"
-          />
+          {job.image ? (
+            <img
+              src={`data:image/png;base64,${job.image}`}
+              style={{ width: "151px" }}
+            />
+          ) : (
+            <CardMedia
+              component="img"
+              sx={{ width: 151 }}
+              image={noImage}
+              alt="Live from space album cover"
+            />
+          )}
           <CardActionArea>
             <Link className="Link-for-eventcard" to={`/jobDetails/${job._id}`}>
               <CardContent>
@@ -96,8 +103,9 @@ function MyApplications() {
                   sx={{
                     fontWeight: "bold",
                     height: "40px",
+                    width: "200px",
                   }}
-                  component="h3"
+                  component="p"
                 >
                   {job.name}
                 </Typography>
@@ -106,7 +114,7 @@ function MyApplications() {
                     fontWeight: "bold",
                     height: "40px",
                   }}
-                  component="h3"
+                  component="p"
                 >
                   {job.description
                     .replace(regex, "")
@@ -127,34 +135,41 @@ function MyApplications() {
       return buildCard(job);
     });
 
-    if (loading) {
-      return (
-        <Box sx={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-          <CircularProgress />
-        </Box>
-      );
-    } else if (hasError) {
-      return (
-        <div className="makeCenter">
-          <Alert severity="error">{errorMessage}</Alert>
-        </div>
-      );
-    } else {
-      return (
-        <div className="main-div">
-          <Grid
-            container
-            spacing={1}
-            sx={{
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {card}
-          </Grid>
-        </div>
-      );
-    }
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  } else if (hasError) {
+    return (
+      <div className="makeCenter">
+        <Alert severity="error">{errorMessage}</Alert>
+      </div>
+    );
+  } else {
+    return (
+      <div className="main-div">
+        <Grid
+          container
+          spacing={1}
+          sx={{
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {card}
+        </Grid>
+      </div>
+    );
+  }
 }
 
-export default MyApplications
+export default MyApplications;
