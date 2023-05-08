@@ -10,7 +10,9 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import { useResume } from '../ContextResume';
 
@@ -31,7 +33,7 @@ function Experience(){
           bulletPoints: [""],
           position: "",
           startYear: "",
-          starMonth:"",
+          startMonth:"",
           endYear: "",
           endMonth:""
           
@@ -128,11 +130,36 @@ console.log(experience);
                   </FormControl> */}
                 
                 <Stack direction={{ xs: 'column', sm: 'row' }}  spacing={{ xs: 1, sm: 2, md: 4 }}>
-                <FormControl>
+                <FormControl variant="filled" sx={{ m: 1, minWidth : 178 }} size='small'>
                     {/* <InputLabel htmlFor="bootstrap-input">
                         Start Month
                       </InputLabel> */}
-                      <Textarea name='startMonth' value={experience[index].startMonth || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='Start Month' placeholder='Start Month'></Textarea>
+                      <InputLabel id="startMonth">Start Month</InputLabel>
+                            <Select
+                            name='startMonth'
+                              labelId="startMonth"
+                              id="startMonth"
+                              value={experience[index].startMonth || ''}
+                              onChange={(e,i)=>{onExperienceChange(e,index)}}
+                              label="Start Month"
+                            >
+    
+                              <MenuItem value="January">January</MenuItem>
+                              <MenuItem value="February">February</MenuItem>
+                              <MenuItem value="March">March</MenuItem>
+                              <MenuItem value="April">April</MenuItem>
+                              <MenuItem value="May">May</MenuItem>
+                              <MenuItem value="June">June</MenuItem>
+                              <MenuItem value="July">July</MenuItem>
+                              <MenuItem value="August">August</MenuItem>
+                              <MenuItem value="September">September</MenuItem>
+                              <MenuItem value="October">October</MenuItem>
+                              <MenuItem value="November">November</MenuItem>
+                              <MenuItem value="December">December</MenuItem>
+                            </Select>
+
+
+                      {/* <Textarea name='startMonth' value={experience[index].startMonth || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='Start Month' placeholder='Start Month'></Textarea> */}
                        {/* <BootstrapInput label='Start Month'/>  */}
                   </FormControl>
                   <FormControl>
@@ -145,11 +172,34 @@ console.log(experience);
                   </FormControl>
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }}  spacing={{ xs: 1, sm: 2, md: 4 }}>
-                <FormControl>
+                <FormControl variant="filled" sx={{ m: 1, minWidth : 178 }} size='small'>
                     {/* <InputLabel htmlFor="bootstrap-input">
                         End Month
                       </InputLabel> */}
-                      <Textarea name='endMonth' value={experience[index].endMonth || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='End Month' placeholder='End Month'></Textarea>
+                      <InputLabel id="endMonth">End Month</InputLabel>
+                            <Select
+                            name='endMonth'
+                              labelId="endMonth"
+                              id="endMonth"
+                              value={experience[index].endMonth || ''}
+                              onChange={(e,i)=>{onExperienceChange(e,index)}}
+                              label="End Month"
+                            >
+    
+                              <MenuItem value="January">January</MenuItem>
+                              <MenuItem value="February">February</MenuItem>
+                              <MenuItem value="March">March</MenuItem>
+                              <MenuItem value="April">April</MenuItem>
+                              <MenuItem value="May">May</MenuItem>
+                              <MenuItem value="June">June</MenuItem>
+                              <MenuItem value="July">July</MenuItem>
+                              <MenuItem value="August">August</MenuItem>
+                              <MenuItem value="September">September</MenuItem>
+                              <MenuItem value="October">October</MenuItem>
+                              <MenuItem value="November">November</MenuItem>
+                              <MenuItem value="December">December</MenuItem>
+                            </Select>
+                      {/* <Textarea name='endMonth' value={experience[index].endMonth || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='End Month' placeholder='End Month'></Textarea> */}
                        {/* <BootstrapInput label='End Month'/>  */}
                   </FormControl>
                   <FormControl>

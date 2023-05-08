@@ -34,10 +34,10 @@ async function createExperience(resumeId, company, address,position,bulletPoints
         address : address,
         position : position,
         bulletPoints : bulletPoints,
-        start_year : start_year,
-        start_month : start_month,        
-        end_year : end_year,
-        end_month : end_month
+        startYear : start_year,
+        startMonth : start_month,        
+        endYear : end_year,
+        endMonth : end_month
     }
     
 
