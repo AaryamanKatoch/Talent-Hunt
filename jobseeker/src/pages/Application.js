@@ -86,8 +86,8 @@ function Application() {
           application.visaStatus
         );
     } catch (error) {
-      console.log(error);
-      setError(error);
+      console.log("frontend", error.message);
+      setError(error.message);
     }
 
     try {
@@ -97,7 +97,7 @@ function Application() {
       // navigate to my applications
       navigate("/myApplications");
     } catch (error) {
-      console.log(error.response.data);
+      console.log("backend", error.response.data);
       setError(error.response.data);
     }
   };

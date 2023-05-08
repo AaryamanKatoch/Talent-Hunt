@@ -60,7 +60,7 @@ function FindPeople() {
     //if field
     if (field) {
       temp = temp.filter((person) => {
-        if (person.field === field) {
+        if (person.field_of_employment === field) {
           return person;
         }
       });
@@ -103,7 +103,7 @@ function FindPeople() {
               type="text"
               size="small"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
               variant="outlined"
               color="secondary"
               className="col-3"
@@ -129,9 +129,13 @@ function FindPeople() {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value={"DBA"}>DBA</MenuItem>
-                <MenuItem value={"SDE"}>SDE</MenuItem>
-                <MenuItem value={"Cloud Engineer"}>Cloud Engineer</MenuItem>
+                <MenuItem value={"JavaScript"}>JavaScript</MenuItem>
+                <MenuItem value={"React"}>React</MenuItem>
+                <MenuItem value={"Node"}>Node</MenuItem>
+                <MenuItem value={"Angular"}>Angular</MenuItem>
+                <MenuItem value={"Vue"}>Vue</MenuItem>
+                <MenuItem value={"Python"}>Python</MenuItem>
+                <MenuItem value={"Java"}>Java</MenuItem>
               </Select>
             </FormControl>
             <div className="col-1"></div>
