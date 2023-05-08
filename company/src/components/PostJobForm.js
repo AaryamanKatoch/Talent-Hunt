@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { helper } from "../helper";
 import {
+  Alert,
   TextField,
   Button,
   Select,
@@ -17,10 +18,10 @@ function PostJobForm(props) {
     visaRequirements: "",
     minimumQualification: "",
   });
+  const [error, setError] = useState(undefined);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(data);
     try {
       data.name = helper.common.checkIsProperString(data.name, "Name");
       data.description = helper.common.checkIsProperString(
@@ -38,7 +39,7 @@ function PostJobForm(props) {
         data.minimumQualification
       );
     } catch (e) {
-      alert(e);
+      setError(e.message);
       return;
     }
     props.onSubmit(data);
@@ -62,7 +63,7 @@ function PostJobForm(props) {
         marginTop: "3rem",
       }}
     >
-      {/* {error ? <h5 className="card-header error">{error}</h5> : ""} */}
+      {error && <Alert severity="error">{error}</Alert>}
       <div className="card-body">
         <h5 className="card-title">Create Job Posting</h5>
         <br />
