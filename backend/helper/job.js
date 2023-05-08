@@ -73,6 +73,9 @@ const isValidJobData = (data) => {
       case "image":
         data.image = data.image;
         break;
+      case "companyName":
+        data.companyName = common.checkIsProperString(data.companyName, "Company Name");
+        break;
       default:
         throw { status: "400", error: `Invalid key - ${key}` };
     }

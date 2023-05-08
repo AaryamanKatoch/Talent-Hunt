@@ -4,6 +4,7 @@ const xss = require("xss");
 const data = require("../data");
 const companyData = data.company;
 const jobseekerData = data.jobSeeker;
+const jobData = data.jobs;
 const helper = require("../helper");
 const axios = require("axios");
 var im = require("imagemagick");
@@ -15,9 +16,6 @@ router
   .route("/dashboard")
   .get(async (req, res) => {
     try {
-      // let id = "64406ecb4339df491dac4d4b";
-      // id = helper.common.checkIsProperId(id);
-      // const data = await jobSeekerData.getJobSeekerByID(id);
       let email = req.query.email;
       email = helper.common.isValidEmail(email);
       const profileExists = await companyData.profileExists(email);
@@ -100,6 +98,13 @@ router
         email,
         data
       );
+      let allJobs = await jobData.getAllJobsByCompanyEmail(email);
+      allJobs = await Promise.all(allJobs.map(async job => {
+        if(job.companyEmail === email && (data.profile_picture || data.name)){          
+            const updatedJob = await jobData.updateJobByCompanyEmail(job._id,email, {image: updatedCompany.image, companyName: updatedCompany.name});
+          }        
+        }
+      ));
       return res.json(updatedCompany);
     } catch (e) {
       if (typeof e !== "object" || !("status" in e)) {

@@ -118,7 +118,7 @@ const updateJob = async (
   description,
   responsibilities,
   visaRequirements,
-  minimumQualification
+  minimumQualification,
 ) => {
   if (!id) throw { status: "400", error: "No job id exists" };
   if (typeof id !== "string")
@@ -300,13 +300,14 @@ const updateJobByCompanyEmail = async (jobId, companyEmail, data) => {
 
   let updatedJob = {
     companyEmail: job.companyEmail,
-    companyName: job.companyName,
+    companyName: data.companyName || job.companyName,
     name: data.name || job.name,
     description: data.description || job.description,
     responsibilities: data.responsibilities || job.responsibilities,
     visaRequirements: data.visaRequirements || job.visaRequirements,
     minimumQualification: data.minimumQualification || job.minimumQualification,
     applications: job.applications, //array of application docs id
+    image: data.image || job.image,
   };
 
   const updatedInfo = await jobsCollection.updateOne(
