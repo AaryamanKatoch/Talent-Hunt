@@ -28,7 +28,8 @@ async function deleteResumeById(id){
     return deletedResume;
 }
 
-async function createResume(name, address, linkedin, email, contact, skills){
+async function createResume(userId,name, address, linkedin, email, contact, skills){
+    userId = helper.common.isValidId(userId);
     name = helper.common.isValidString(name, 'Name');
     address = helper.common.isValidString(address, 'Address');
     linkedin = helper.common.isValidURL(linkedin);
@@ -42,7 +43,7 @@ async function createResume(name, address, linkedin, email, contact, skills){
     let experience = [];
     let project = [];
     const resumeCollection = await resumes();
-    let resumeObj = {
+    let resumeObj = {        
         name : name,
         address : address,
         linkedin : linkedin,
@@ -52,6 +53,7 @@ async function createResume(name, address, linkedin, email, contact, skills){
         education : education,
         experience: experience,
         project : project,
+        jobSeekerId : userId
     };
     
     const insertInfo = await resumeCollection.insertOne(resumeObj);

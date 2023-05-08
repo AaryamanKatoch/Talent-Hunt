@@ -16,3 +16,7 @@ export const getSingleJobSeeker = (id) => {
     return axiosAuth.get(`/jobseeker/singleJobSeeker/${id}`);
 }
 
+export const getResume = (id) => {
+    return axiosAuth.get(`/jobseeker/resumeData/${id}`);
+}
+

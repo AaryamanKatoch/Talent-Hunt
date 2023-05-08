@@ -4,6 +4,8 @@ const router = express.Router();
 const xss = require("xss");
 const data = require("../data");
 const jobSeekerData = data.jobSeeker;
+const mongoCollections = require("../config/mongoCollections");
+const jobSeekers = mongoCollections.jobSeekers;
 const helper = require("../helper");
 const pdfCreateResume = require("../data/pdfCreateResume");
 const resumes = require("../data/resumes");
@@ -14,6 +16,7 @@ const common_helper = require("../helper/common");
 const fs = require("fs");
 var im = require("imagemagick");
 const streamToBuffer = require('stream-to-buffer');
+const { ObjectId } = require("mongodb");
 const redis = require("redis");
 const client = redis.createClient();
 client.connect().then(() => {});
@@ -227,28 +230,48 @@ router.route("/create-resume").post(async (req, res) => {
   let experience = resumeData.experience;
   let projects = resumeData.projects;
   let skills = resumeData.skills;
-
+  let userId;
+  let createdResume;
   try {
-    personalDetails.name = helper.common.isValidString(
-      personalDetails.name,
-      "Name"
-    );
+    // let id = "64406ecb4339df491dac4d4b";
+    // id = helper.common.checkIsProperId(id);
+    // const data = await jobSeekerData.getJobSeekerByID(id);
+    let email = personalDetails.email;
+    console.log(email);
+    
+    email = helper.common.isValidEmail(email);
+    const profileExists = await jobSeekerData.profileExists(email);
+    console.log(profileExists);
+    if (profileExists) {
+      const data = await jobSeekerData.getJobSeekerByEmail(email);
+      // console.log(data);
+      userId = data._id;
+    } else {
+     return  res.json({
+        noProfileExists: true,
+        message: "No profile is created for the user",
+        error : "No Profile is created for the user"
+      });
+    }
+  } catch (e) {
+    if (typeof e !== "object" || !("status" in e)) {
+      return res.status(500).json({error : "Internal server error"});
+    } else {
+      return res.status(parseInt(e.status)).json({error : e.error});
+    }
+  }
 
-    personalDetails.address = helper.common.isValidString(
-      personalDetails.address,
-      "Address"
-    );
-
-    personalDetails.linkedin = helper.common.isValidURL(
-      personalDetails.linkedin
-    );
-
-    personalDetails.email = helper.common.isValidEmail(personalDetails.email);
-    // console.log("here");
-    personalDetails.contact = helper.common.isValidContact(
-      personalDetails.contact
-    );
-    // console.log("here");
+     try {
+        personalDetails.name = helper.common.isValidString(personalDetails.name, 'Name');
+        
+        personalDetails.address = helper.common.isValidString(personalDetails.address, 'Address');
+       
+        personalDetails.linkedin = helper.common.isValidURL(personalDetails.linkedin);
+        console.log("Route - " + personalDetails.email)
+        personalDetails.email = helper.common.isValidEmail(personalDetails.email);
+         console.log("here");
+        personalDetails.contact = helper.common.isValidContact(personalDetails.contact);
+        // console.log("here");
 
         for(let i = 0; i < skills.length; i++){
             skills[i] = helper.common.isValidString(skills[i], 'Skill');
@@ -257,19 +280,19 @@ router.route("/create-resume").post(async (req, res) => {
      } catch (e) {
       if (typeof e !== "object" || !("status" in e)) {
         console.log(e);
-        return res.status(500).json("Internal server error");
+        return res.status(500).json({error : "Internal server error"});
       } else {
         return res.status(parseInt(e.status)).json({error : e.error});
       }
      }
-     let createdResume;
+     
         try {
-            createdResume = await resumes.createResume(personalDetails.name,  personalDetails.address, personalDetails.linkedin, personalDetails.email, personalDetails.contact, skills)
+            createdResume = await resumes.createResume(userId,personalDetails.name,  personalDetails.address, personalDetails.linkedin, personalDetails.email, personalDetails.contact, skills)
             //  console.log(createdResume);
         } catch (e) {
           if (typeof e !== "object" || !("status" in e)) {
             console.log(e);
-           return res.status(500).json("Internal server error");
+           return res.status(500).json({error : "Internal server error"});
           } else {
            return res.status(parseInt(e.status)).json({error : e.error});
           }
@@ -290,7 +313,7 @@ router.route("/create-resume").post(async (req, res) => {
         } catch (e) {
           if (typeof e !== "object" || !("status" in e)) {
             console.log(e);
-           return res.status(500).json("Internal server error");
+           return res.status(500).json({error : "Internal server error"});
           } else {
            return res.status(parseInt(e.status)).json({error : e.error});
           }
@@ -337,7 +360,7 @@ router.route("/create-resume").post(async (req, res) => {
         } catch (e) {
           if (typeof e !== "object" || !("status" in e)) {
             console.log(e);
-           return res.status(500).json("Internal server error");
+           return res.status(500).json({error : "Internal server error"});
           } else {
             return res.status(parseInt(e.status)).json({error : e.error});
           }
@@ -360,31 +383,64 @@ router.route("/create-resume").post(async (req, res) => {
         } catch (e) {
           if (typeof e !== "object" || !("status" in e)) {
             console.log(e);
-            return res.status(500).json("Internal server error");
+            return res.status(500).json({error : "Internal server error"});
+          } else {
+            return res.status(parseInt(e.status)).json({error : e.error});
+          }
+        }
+
+        try {
+          let email = personalDetails.email;
+          console.log(email);
+          let data;
+          email = helper.common.isValidEmail(email);
+          const profileExists = await jobSeekerData.profileExists(email);
+          console.log(profileExists);
+          if (profileExists) {
+             data = await jobSeekerData.getJobSeekerByEmail(email);
+            // console.log(data);
+            userId = data._id;
+          } else {
+          return  res.json({
+              noProfileExists: true,
+              message: "No profile is created for the user",
+              error : "No Profile is created for the user"
+            });
+          }
+          const jobSeekerCollection = await jobSeekers();
+          const updatedJobSeeker = {
+            name: data.name,
+            email: email,
+            address: data.address,
+            education: data.education,
+            field_of_employment: data.field_of_employment,
+            profile_picture: data.profile_picture,
+            skills: data.skills,
+            years_of_experience: data.years_of_experience,
+            resumeId: createdResume._id,
+            jobs_applied: data.jobs_applied,
+          };
+        
+          const updatedInfo = await jobSeekerCollection.updateOne(
+            { _id: new ObjectId(data._id) },
+            { $set: updatedJobSeeker }
+          );
+          if (updatedInfo.modifiedCount === 0) {
+            throw {
+              status: "400",
+              error: "All new details exactly match the old details",
+            };
+          }
+        } catch (e) {
+          if (typeof e !== "object" || !("status" in e)) {
+            console.log(e);
+            return res.status(500).json({error : "Internal server error"});
           } else {
             return res.status(parseInt(e.status)).json({error : e.error});
           }
         }
         let pdf =  await pdfCreateResume.createResumePdf(resumeData);
-        // const pdfBlob = new Blob([pdf], { type: 'application/pdf' });
-        // saveAs(pdfBlob, 'myPDF.pdf');
-        // var file = fs.createReadStream('./resume.pdf');
-        // var stat = fs.statSync('./resume.pdf');
-        // res.setHeader('Content-Length', stat.size);
-        // res.setHeader('Content-Type', 'application/pdf');
-        // res.setHeader('Content-Disposition', 'attachment; filename=resume.pdf');
-        // file.pipe(res);
-        // res.send(pdf);
-        // const filePath = './resume.pdf';
-        // const fileSize = fs.statSync(filePath).size;
-      
-        // res.setHeader('Content-Type', 'application/pdf');
-        // res.setHeader('Content-Disposition', 'attachment; filename=resume.pdf');
-        // // res.setHeader('Content-Length', fileSize);
-      
-        // const stream = fs.createReadStream(filePath);
-        // stream.pipe(res);
-        // const pdfBase64 = Buffer.from(pdf).toString('base64');
+        
         streamToBuffer(pdf, (err, buffer) => {
             if (err) {
               console.error('Error converting stream to buffer:', err);
@@ -397,5 +453,23 @@ router.route("/create-resume").post(async (req, res) => {
           });
 
     });
+
+router
+  .route("/resumeData/:id")
+  .get(async (req, res) => {
+    let id = req.params.id;
+    try {
+      id = helper.common.checkIsProperId(id);
+      const data = await resumes.getResumeById(id);
+      return res.json(data);
+    } catch (e) {
+      if (typeof e !== "object" || !("status" in e)) {
+        // console.log(e);
+        return res.status(500).json({error : "Internal server error"});
+      } else {
+        return res.status(parseInt(e.status)).json({error : e.error});
+      }
+    }
+  });
 
 module.exports = router;

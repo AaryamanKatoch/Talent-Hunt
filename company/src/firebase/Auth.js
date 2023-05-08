@@ -1,5 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import firebaseApp from './Firebase';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({children}) => {
@@ -15,9 +18,9 @@ export const AuthProvider = ({children}) => {
 
   if (loadingUser) {
     return (
-      <div>
-        <h1>Loading....Loading....Loading....Loading....Loading....</h1>
-      </div>
+      <Box sx={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+        <CircularProgress />
+      </Box>
     );
   }
 

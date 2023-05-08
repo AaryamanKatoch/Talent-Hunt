@@ -6,12 +6,19 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import { Button, Divider } from "@mui/material";
 import Typography from "@mui/material/Typography";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import axios from 'axios';
+import {helper} from "../helper";
+
 
 function SinglePerson() {
   const params = useParams();
   const id = params.id;
   const [error, setError] = useState(null);
   const [jobSeeker, setJobSeeker] = useState(null);
+  const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
+const [errorSnackbarMessage, setErrorSnackbarMessage] = useState('');
 
   useEffect(() => {
     const fetch = async () => {
@@ -24,6 +31,169 @@ function SinglePerson() {
     };
     fetch();
   }, []);
+
+  async function getResume(){
+    let resumeData;
+
+    try {
+      if(jobSeeker && jobSeeker.resumeId){
+      const  {data} =await api.routes.getResume(jobSeeker.resumeId);
+      resumeData = data;
+      }
+      console.log(resumeData);
+
+    } catch (e) {
+      setErrorSnackbarOpen(true);
+      setErrorSnackbarMessage(e.toString());
+      return;
+    }
+
+    try {
+      resumeData.name = helper.common.isValidString2(resumeData.name, 'Name');
+      
+      resumeData.address = helper.common.isValidString2(resumeData.address, 'Address');
+     
+      resumeData.linkedin = helper.common.isValidLinkedinURL(resumeData.linkedin);
+      
+      resumeData.email = helper.common.isValidEmail2(resumeData.email);
+      // console.log("Project : " + personalDetails.email)
+      // console.log("here");
+      resumeData.contact = helper.common.isValidContact(resumeData.contact);
+      // console.log("here");
+  
+      for(let i = 0; i < resumeData.skills.length; i++){
+        resumeData.skills[i] = helper.common.isValidString2(resumeData.skills[i], 'Skill');
+      }
+      setErrorSnackbarOpen(false);
+     
+   } catch (e) {
+    // console.log(e.toString());
+    setErrorSnackbarOpen(true);
+    setErrorSnackbarMessage(e.toString());
+    return;
+   }
+  
+   try {
+    for(let  i = 0 ; i < resumeData.education.length; i++){
+      resumeData.education[i].school = helper.common.isValidString2(resumeData.education[i].school,'School');
+      resumeData.education[i].address = helper.common.isValidString2(resumeData.education[i].address,'Address');
+      resumeData.education[i].degree = helper.common.isValidString2(resumeData.education[i].degree,'Degree');
+      resumeData.education[i].gpa = helper.common.isValidGpa(resumeData.education[i].gpa);
+      resumeData.education[i].startYear = helper.common.isValidYear(resumeData.education[i].startYear);
+      resumeData.education[i].endYear = helper.common.isValidYear(resumeData.education[i].endYear);
+      helper.common.isValidStartEndYear(resumeData.education[i].startYear,resumeData.education[i].endYear);
+     
+  }
+  setErrorSnackbarOpen(false);
+   } catch (e) {
+    // console.log(e.toString());
+    setErrorSnackbarOpen(true);
+     setErrorSnackbarMessage(e.toString());
+     return;
+   }
+  
+   try {
+    for (let i = 0; i < resumeData.experience.length; i++) {
+      resumeData.experience[i].company = helper.common.isValidString2(
+        resumeData.experience[i].company,
+        "Company"
+      );
+      resumeData.experience[i].address = helper.common.isValidString2(
+        resumeData.experience[i].address,
+        "Address"
+      );
+      resumeData.experience[i].position = helper.common.isValidString2(
+        resumeData.experience[i].position,
+        "Position"
+      );
+      resumeData.experience[i].startYear = helper.common.isValidYear(
+        resumeData.experience[i].startYear
+      );
+      resumeData.experience[i].endYear = helper.common.isValidYear(resumeData.experience[i].endYear);
+      helper.common.isValidStartEndYear(
+        resumeData.experience[i].startYear,
+        resumeData.experience[i].endYear
+      );
+      resumeData.experience[i].startMonth = helper.common.isValidMonth(
+        resumeData.experience[i].startMonth
+      );
+      resumeData.experience[i].endMonth = helper.common.isValidMonth(
+        resumeData.experience[i].endMonth
+      );
+      for(let j = 0; j < resumeData.experience[i].bulletPoints.length; j++){
+        resumeData.experience[i].bulletPoints[j] = helper.common.isValidString2(resumeData.experience[i].bulletPoints[j]);
+      }
+    }
+    setErrorSnackbarOpen(false);
+   } catch (e) {
+    // console.log(e.toString());
+    setErrorSnackbarOpen(true);
+    setErrorSnackbarMessage(e.toString());
+    return;
+   }
+  
+   try {
+    
+    for (let i = 0; i < resumeData.projects.length; i++) {
+      
+      resumeData.projects[i].name = helper.common.isValidString2(
+        resumeData.projects[i].name,
+        "Project Name"
+      );
+      resumeData.projects[i].description = helper.common.isValidString2(
+        resumeData.projects[i].description,
+        "Project Description"
+      );          
+    }
+    setErrorSnackbarOpen(false);
+   } catch (e) {
+    // console.log(e.toString());
+    setErrorSnackbarOpen(true);
+     setErrorSnackbarMessage(e.toString());
+     return;
+   }
+   try {
+    // console.log(errorSnackbarOpen);
+    if(errorSnackbarOpen === false){
+      // console.log(resumeData);
+      // console.log(jobSeeker._id);
+    const postResumeData = await axios.post(`http://localhost:3000/company/jobseeker/${jobSeeker._id}`, resumeData,  { responseType: 'arraybuffer' });
+    
+    const blob = new Blob([postResumeData.data], { type: 'application/pdf' });
+    // const blob = new Blob([buffer], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+    // toast.success('Your resume has been created!');
+    console.log(postResumeData.status);
+    // if (postResumeData.status === 200) {
+    //   console.log('here');
+    //   setSnackbarMessage("Your resume has been created!");
+    // }
+    setErrorSnackbarOpen(false);
+    // setOpenSnackbar(true);
+    // setSnackbarMessage('Your resume has been created!');
+    }
+    
+  } catch (e) {
+    // console.log(e);
+     // console.log(e);
+     const buffer = e.response.data;
+     // console.log(buffer);
+   const decoder = new TextDecoder('utf-8');
+   // console.log(decoder);
+   // console.log(decoder.decode(buffer));
+   const errorResponse = JSON.parse(decoder.decode(buffer));
+    //  console.log(errorResponse.error);
+     setErrorSnackbarOpen(true);
+     setErrorSnackbarMessage(errorResponse.error);
+  }
+  } 
 
   return (
     <div className="container">
@@ -112,7 +282,7 @@ function SinglePerson() {
             </div>
           </CardContent>
           <CardActions>
-            <Button size="normal" color="info">
+            <Button size="normal" color="info" onClick={getResume}>
               Get Resume
             </Button>
             <Link to="/">
@@ -123,6 +293,13 @@ function SinglePerson() {
           </CardActions>
         </Card>
       )}
+      <div>
+        {<Snackbar open={errorSnackbarOpen} autoHideDuration={8000} onClose={()=> setErrorSnackbarOpen(false)}>
+                <MuiAlert elevation={6} variant="filled" onClose={()=> setErrorSnackbarOpen(false)} severity="error">
+                  {errorSnackbarMessage}
+                </MuiAlert>
+             </Snackbar>}
+      </div>
     </div>
   );
 }

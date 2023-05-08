@@ -34,7 +34,7 @@ const getAllJobs = async (page, search, visaReq, minQual) => {
     query.minimumQualification = minQual;
   }
 
-  console.log(query);
+  // console.log(query);
 
   const allJobs = await jobsCollection
     .find(query)
@@ -62,7 +62,7 @@ const getAllJobs = async (page, search, visaReq, minQual) => {
     moreJobsExist = true;
   }
 
-  console.log(moreJobsExist);
+  // console.log(moreJobsExist);
 
   return { jobs: allJobs, moreJobsExist };
 };
