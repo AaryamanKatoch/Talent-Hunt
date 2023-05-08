@@ -5,7 +5,9 @@ const data = require("../data");
 const companyData = data.company;
 const jobseekerData = data.jobSeeker;
 const helper = require("../helper");
-const { ObjectId } = require("mongodb");
+const axios = require("axios");
+var im = require("imagemagick");
+const fs = require("fs");
 const streamToBuffer = require('stream-to-buffer');
 const pdfCreateResume = require("../data/pdfCreateResume");
 
@@ -40,17 +42,25 @@ router
   .post(async (req, res) => {
     try {
       let data = req.body;
-      // let id = "64406ecb4339df491dac4d4b";
-      // id = helper.common.checkIsProperId(id);
-      // data = helper.jobseeker.isValidJobseekerData(data);
-      // const updatedJobSeeker = await jobSeekerData.updateJobSeeker(
-      //   id,
-      //   data
-      // );
       console.log(data);
       let email = data.email;
       email = helper.common.isValidEmail(email);
       data = helper.company.isValidCompanyData(data);
+      const response = await axios.get(data.profile_picture, {
+        responseType: "arraybuffer",
+      });
+      const buffer = Buffer.from(response.data, "utf-8");
+      im.resize(
+        {
+          srcData: buffer,
+          widht: 150,
+          height: 150,
+        },
+        function (err, stdout, stderr) {
+          if (err) return console.error(err.stack || err);
+          fs.writeFileSync("image.jpg", stdout, "binary");
+        }
+      );
       const newCompany = await companyData.createCompany(data, email);
       return res.json(newCompany);
     } catch (e) {
@@ -66,16 +76,26 @@ router
   .patch(async (req, res) => {
     try {
       let data = req.body;
-      // let id = "64406ecb4339df491dac4d4b";
-      // id = helper.common.checkIsProperId(id);
-      // data = helper.jobseeker.isValidJobseekerData(data);
-      // const updatedJobSeeker = await jobSeekerData.updateJobSeeker(
-      //   id,
-      //   data
-      // );
       let email = data.email;
       email = helper.common.isValidEmail(email);
       data = helper.company.isValidCompanyData(data);
+      if (data.profile_picture) {
+        const response = await axios.get(data.profile_picture, {
+          responseType: "arraybuffer",
+        });
+        const buffer = Buffer.from(response.data, "utf-8");
+        im.resize(
+          {
+            srcData: buffer,
+            widht: 150,
+            height: 150,
+          },
+          function (err, stdout, stderr) {
+            if (err) return console.error(err.stack || err);
+            fs.writeFileSync("image.jpg", stdout, "binary");
+          }
+        );
+      }
       const updatedCompany = await companyData.updateCompanyByEmail(
         email,
         data
@@ -95,8 +115,6 @@ router
   .route("/")
   .get(async (req, res) => {
     try {
-      // let id = req.session.id;
-      let id = "643485c32aa19be61c88787b"; //temp id. In the future it'll be taken from the session/token/redis whatever we decide.
       id = helper.common.isValidId(id);
       const data = await companyData.getCompanyDataById(id);
       res.json(data);

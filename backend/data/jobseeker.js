@@ -5,9 +5,10 @@ const resumes = mongoCollections.resumes;
 const helper = require("../helper");
 const applications = mongoCollections.applications;
 const { ObjectId } = require("mongodb");
-const jobsFuns=require('./jobs');
+const path = require("path");
+const fs = require("fs");
 
-const getAllJobs = async (page,search,visaReq,minQual) => {
+const getAllJobs = async (page, search, visaReq, minQual) => {
   if (!page) throw "please provide page number for the data function!";
   if (isNaN(page)) throw "page number should be valid number";
   if (page < 1) throw "page number should be greater than 1";
@@ -18,7 +19,7 @@ const getAllJobs = async (page,search,visaReq,minQual) => {
 
   const each_page = 20;
   const skip = (page - 1) * each_page;
-  let moreJobsExist=false;
+  let moreJobsExist = false;
 
   const jobsCollection = await jobs();
 
@@ -33,7 +34,7 @@ const getAllJobs = async (page,search,visaReq,minQual) => {
     query.minimumQualification = minQual;
   }
 
-  console.log(query)
+  console.log(query);
 
   const allJobs = await jobsCollection
     .find(query)
@@ -42,7 +43,7 @@ const getAllJobs = async (page,search,visaReq,minQual) => {
     .toArray();
 
   if (!allJobs) throw { status: "400", error: "Could not get all Jobs" };
-  if(allJobs.length<1) throw { status: "404", error: "No More Jobs" };
+  if (allJobs.length < 1) throw { status: "404", error: "No More Jobs" };
 
   for (let i = 0; i < allJobs.length; i++)
     allJobs[i]._id = allJobs[i]._id.toString();
@@ -52,13 +53,13 @@ const getAllJobs = async (page,search,visaReq,minQual) => {
   // const moreJobsExist = totalJobsCount > skip + each_page;
 
   const allJobsnext = await jobsCollection
-  .find(query)
-  .skip(skip + each_page)
-  .limit(each_page)
-  .toArray();
+    .find(query)
+    .skip(skip + each_page)
+    .limit(each_page)
+    .toArray();
 
-  if(allJobsnext.length>1){
-    moreJobsExist=true;
+  if (allJobsnext.length > 1) {
+    moreJobsExist = true;
   }
 
   console.log(moreJobsExist);
@@ -141,6 +142,8 @@ const createJobSeeker = async (data, email) => {
     resumeId: "",
     jobs_applied: [],
   };
+  newJobSeeker.image = fs.readFileSync(path.resolve(__dirname, "../image.jpg"));
+  newJobSeeker.image = newJobSeeker.image.toString("base64");
   const insertInfo = await jobSeekerCollection.insertOne(newJobSeeker);
   if (!insertInfo.insertedId || !insertInfo.acknowledged) {
     throw {
@@ -180,7 +183,12 @@ const updateJobSeeker = async (jobSeekerId, data) => {
     resumeId: jobSeeker.resumeId,
     jobs_applied: jobSeeker.jobs_applied,
   };
-
+  if (profile_picture) {
+    updatedJobSeeker.image = fs.readFileSync(
+      path.resolve(__dirname, "../image.jpg")
+    );
+    updatedJobSeeker.image = updatedJobSeeker.image.toString("base64");
+  }
   const updatedInfo = await jobSeekerCollection.updateOne(
     { _id: new ObjectId(jobSeekerId) },
     { $set: updatedJobSeeker }
@@ -219,7 +227,12 @@ const updateJobSeekerByEmail = async (email, data) => {
     resumeId: jobSeeker.resumeId,
     jobs_applied: jobSeeker.jobs_applied,
   };
-
+  if (updatedJobSeeker.profile_picture) {
+    updatedJobSeeker.image = fs.readFileSync(
+      path.resolve(__dirname, "../image.jpg")
+    );
+    updatedJobSeeker.image = updatedJobSeeker.image.toString("base64");
+  }
   const updatedInfo = await jobSeekerCollection.updateOne(
     { email: email },
     { $set: updatedJobSeeker }
@@ -297,8 +310,8 @@ const get_history_of_applications_by_email = async (email) => {
   const jobSeekersCollection = await jobSeekers();
   const applicationsCollection = await applications();
   const jobsCollection = await jobs();
-  let jobids=[];
-  let data=[];
+  let jobids = [];
+  let data = [];
   const jobseeker = await jobSeekersCollection.findOne({
     email: email,
   });
@@ -308,7 +321,7 @@ const get_history_of_applications_by_email = async (email) => {
   }
 
   let applications_IDs = jobseeker.jobs_applied;
-  applications_IDs = applications_IDs.map(element => ObjectId(element));
+  applications_IDs = applications_IDs.map((element) => ObjectId(element));
 
   const all_applications = await applicationsCollection
     .find({ _id: { $in: applications_IDs } })
@@ -318,8 +331,11 @@ const get_history_of_applications_by_email = async (email) => {
     throw { status: "404", error: "Could not get applications" };
   }
 
-  if(all_applications.length <1){
-    throw { status: "404", error: "There's no any applications found in your profile" };
+  if (all_applications.length < 1) {
+    throw {
+      status: "404",
+      error: "There's no any applications found in your profile",
+    };
   }
 
   all_applications.forEach((element) => {
@@ -328,11 +344,14 @@ const get_history_of_applications_by_email = async (email) => {
   });
 
   const F_applications = await jobsCollection
-  .find({ _id: { $in: jobids } })
-  .toArray();
+    .find({ _id: { $in: jobids } })
+    .toArray();
 
-  if(F_applications.length <1 || F_applications===null){
-    throw { status: "404", error: "There's no any applications found in your profile" };
+  if (F_applications.length < 1 || F_applications === null) {
+    throw {
+      status: "404",
+      error: "There's no any applications found in your profile",
+    };
   }
   return F_applications;
 };
@@ -351,7 +370,7 @@ const getAllJobSeekers = async () => {
   return allJobSeekers;
 };
 
-const addApplicationToJobseeker = async (jobSeekerId,applicationId) => {
+const addApplicationToJobseeker = async (jobSeekerId, applicationId) => {
   if (!jobSeekerId) throw { status: "400", error: "No job seeker id exists" };
   if (typeof jobSeekerId !== "string")
     throw { status: "400", error: "Type of job seeker id is not a string" };
@@ -365,44 +384,49 @@ const addApplicationToJobseeker = async (jobSeekerId,applicationId) => {
   if (!ObjectId.isValid(jobSeekerId))
     throw { status: "400", error: "Job seeker id is not valid" };
 
-    if (!applicationId) throw { status: "400", error: "No application id exists" };
-    if (typeof applicationId !== "string")
-      throw { status: "400", error: "Type of application id is not a string" };
-    if (applicationId.trim().length === 0)
-      throw {
-        status: "400",
-        error: "application id cannot be empty or all white spaces",
-      };
-  
-    applicationId = applicationId.trim();
-    if (!ObjectId.isValid(applicationId))
-      throw { status: "400", error: "application id is not valid" };
+  if (!applicationId)
+    throw { status: "400", error: "No application id exists" };
+  if (typeof applicationId !== "string")
+    throw { status: "400", error: "Type of application id is not a string" };
+  if (applicationId.trim().length === 0)
+    throw {
+      status: "400",
+      error: "application id cannot be empty or all white spaces",
+    };
 
+  applicationId = applicationId.trim();
+  if (!ObjectId.isValid(applicationId))
+    throw { status: "400", error: "application id is not valid" };
 
-  const jobSeekersCollection = await jobSeekers()
+  const jobSeekersCollection = await jobSeekers();
 
-  const jobseekerbyid = await jobSeekersCollection.findOne({ _id: ObjectId(jobSeekerId) });
+  const jobseekerbyid = await jobSeekersCollection.findOne({
+    _id: ObjectId(jobSeekerId),
+  });
   if (jobseekerbyid === null)
     throw { status: "400", error: "No job seeker found with that id" };
 
   jobseekerbyid._id = jobseekerbyid._id.toString();
-  
 
-  updatedJobsApplied=[]
-  for(i=0;i<jobseekerbyid.jobs_applied.length;i++){
-    updatedJobsApplied.push(jobseekerbyid.jobs_applied[i])
+  updatedJobsApplied = [];
+  for (i = 0; i < jobseekerbyid.jobs_applied.length; i++) {
+    updatedJobsApplied.push(jobseekerbyid.jobs_applied[i]);
   }
-updatedJobsApplied.push(applicationId)
+  updatedJobsApplied.push(applicationId);
 
-  let updated = await jobSeekersCollection.updateOne({_id : ObjectId(jobSeekerId)},{$set : {"jobs_applied" : updatedJobsApplied}});
+  let updated = await jobSeekersCollection.updateOne(
+    { _id: ObjectId(jobSeekerId) },
+    { $set: { jobs_applied: updatedJobsApplied } }
+  );
   // console.log(updateFlightClass);
-  if(updated.modifiedCount === 0) throw 'Cannot add application id to jobseeker collection';
-   
-  const jobseekerbyidd = await jobSeekersCollection.findOne({ _id: ObjectId(jobSeekerId) });
-return jobseekerbyidd
+  if (updated.modifiedCount === 0)
+    throw "Cannot add application id to jobseeker collection";
+
+  const jobseekerbyidd = await jobSeekersCollection.findOne({
+    _id: ObjectId(jobSeekerId),
+  });
+  return jobseekerbyidd;
 };
-
-
 
 module.exports = {
   getAllJobs,
@@ -417,5 +441,5 @@ module.exports = {
   get_history_of_applications,
   getAllJobSeekers,
   addApplicationToJobseeker,
-  get_history_of_applications_by_email
+  get_history_of_applications_by_email,
 };

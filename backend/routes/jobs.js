@@ -3,8 +3,12 @@ const router = express.Router();
 const xss = require("xss");
 const jobsData = require("../data/jobs");
 const applicationData = require("../data/application");
+const companyData = require("../data/company");
 const helper = require("../helper");
-const { ObjectId } = require("mongodb");
+// const { ObjectId } = require("mongodb");
+const redis = require("redis");
+const client = redis.createClient();
+client.connect().then(() => {});
 
 router.route("/jobDetails/:id").get(async (req, res) => {
   try {
@@ -72,7 +76,14 @@ router.route("/postJobByEmail").post(async (req, res) => {
     let companyEmail = data.email;
     companyEmail = helper.common.isValidEmail(companyEmail);
     data = helper.job.isValidJobData(data);
+    const company = await companyData.getCompanyByEmail(companyEmail);
+    data.image = company.image;
     const job = await jobsData.createJobByCompanyEmail(companyEmail, data);
+    if (job) {
+      const allJobs = await jobsData.getAllJobsByCompanyEmail(companyEmail);
+      await client.set("companyEmail", companyEmail);
+      await client.set("companyJobs", JSON.stringify(allJobs));
+    }
     return res.status(200).json(job);
   } catch (e) {
     if (typeof e !== "object" || !("status" in e)) {
@@ -121,6 +132,11 @@ router
         companyEmail,
         data
       );
+      if (updatedJob) {
+        const allJobs = await jobsData.getAllJobsByCompanyEmail(companyEmail);
+        await client.set("companyEmail", companyEmail);
+        await client.set("companyJobs", JSON.stringify(allJobs));
+      }
       return res.status(200).json(updatedJob);
     } catch (e) {
       if (typeof e !== "object" || !("status" in e)) {
@@ -142,6 +158,11 @@ router
         jobId,
         companyEmail
       );
+      if (response) {
+        const allJobs = await jobsData.getAllJobsByCompanyEmail(companyEmail);
+        await client.set("companyEmail", companyEmail);
+        await client.set("companyJobs", JSON.stringify(allJobs));
+      }
       return res.status(200).json(response);
     } catch (e) {
       if (typeof e !== "object" || !("status" in e)) {
@@ -182,6 +203,10 @@ router.route("/getJobByEmail").get(async (req, res) => {
     let companyEmail = req.query.email;
     companyEmail = helper.common.isValidEmail(companyEmail);
     const jobs = await jobsData.getAllJobsByCompanyEmail(companyEmail);
+    if (jobs) {
+      await client.set("companyEmail", companyEmail);
+      await client.set("companyJobs", JSON.stringify(jobs));
+    }
     return res.status(200).json(jobs);
   } catch (e) {
     if (typeof e !== "object" || !("status" in e)) {

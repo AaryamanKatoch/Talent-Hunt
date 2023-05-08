@@ -26,12 +26,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import MuiAlert from '@mui/material/Alert';
 
-// const Img = styled("img")({
-//   margin: "auto",
-//   display: "block",
-//   maxWidth: "100%",
-//   maxHeight: "100%",
-// });
+const Img = styled("img")({
+  margin: "auto",
+  display: "block",
+  maxWidth: "100%",
+  maxHeight: "100%",
+});
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -120,12 +120,19 @@ const Home = () => {
             textDecoration: "none",
           }}
         >
+          {/* <CardMedia
+            component="img"
+            sx={{ width: 151 }}
+            image={job.image ? job.image : noImage}
+            alt="Live from space album cover"
+          /> */}
+          {job.image ? <img src={`data:image/png;base64,${job.image}`}  /> : 
           <CardMedia
             component="img"
             sx={{ width: 151 }}
-            image={job.companylogo ? job.companylogo : noImage}
+            image={noImage}
             alt="Live from space album cover"
-          />
+          />}
           <CardActionArea>
             <Link className="Link-for-eventcard" to={`/jobDetails/${job._id}`}>
               <CardContent>

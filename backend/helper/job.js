@@ -70,6 +70,9 @@ const isValidJobData = (data) => {
           data.minimumQualification
         );
         break;
+      case "image":
+        data.image = data.image;
+        break;
       default:
         throw { status: "400", error: `Invalid key - ${key}` };
     }

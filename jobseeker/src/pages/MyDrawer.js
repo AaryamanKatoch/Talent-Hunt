@@ -22,9 +22,6 @@ import Stack from "@mui/material/Stack";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import {
   BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
   Link,
 } from "react-router-dom";
 import { pages } from ".";
