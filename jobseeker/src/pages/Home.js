@@ -206,14 +206,22 @@ const Home = () => {
           <form id="search-form" onSubmit={handleSearch}>
             <div className="row">
               <TextField
-                label="Search"
+                label={
+                  <span
+                    style={{
+                      color: "#767676",
+                    }}
+                  >
+                    Search
+                  </span>
+                }
                 type="text"
                 size="small"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 variant="outlined"
-                color="secondary"
                 className="col-3"
+                color="secondary"
               />
               <div className="col-1"></div>
               <FormControl className="col-2">
@@ -227,7 +235,15 @@ const Home = () => {
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
                   value={visaReq}
-                  label="Type"
+                  label={
+                    <span
+                      style={{
+                        color: "#767676",
+                      }}
+                    >
+                      Visa Requirements
+                    </span>
+                  }
                   color="secondary"
                   size="small"
                   onChange={(e) => setVisaReq(e.target.value)}
@@ -254,7 +270,15 @@ const Home = () => {
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
                   value={minQual}
-                  label="Type"
+                  label={
+                    <span
+                      style={{
+                        color: "#767676",
+                      }}
+                    >
+                      Minimum Qualification
+                    </span>
+                  }
                   color="secondary"
                   size="small"
                   onChange={(e) => setMinQual(e.target.value)}

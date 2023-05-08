@@ -140,7 +140,6 @@ function Application() {
                   }
                   required
                   variant="outlined"
-                  color="secondary"
                   type="text"
                   sx={{ mb: 3 }}
                   fullWidth
