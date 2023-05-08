@@ -41,7 +41,7 @@ function MyDrawer() {
             justifyContent="center"
             sx={{ marginTop: "30px", marginBottom: "30px" }}
           >
-            <Avatar sx={{ width: 60, height: 60 }}>
+            <Avatar sx={{ width: 60, height: 60, backgroundColor: "#767676" }}>
               {currentUser && currentUser.displayName
                 ? currentUser.displayName[0]
                 : ""}
