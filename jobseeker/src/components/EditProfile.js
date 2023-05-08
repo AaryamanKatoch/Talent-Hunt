@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { helper } from "../helper";
 import {
+  Alert,
   TextField,
   Button,
   Select,
@@ -21,6 +22,7 @@ function EditProfile(props) {
     skills: props.data.skills,
     education: props.data.education,
   });
+  const [error, setError] = useState(undefined);
 
   const options = [
     { value: "JavaScript", label: "JavaScript" },
@@ -68,8 +70,9 @@ function EditProfile(props) {
         "Field of employment"
       );
       data.education = helper.common.checkIsProperString(data.education);
+      setError(undefined);
     } catch (e) {
-      alert(e);
+      setError(e.message);
       return;
     }
     props.onSubmit(data);
@@ -86,7 +89,7 @@ function EditProfile(props) {
         marginTop: "3rem",
       }}
     >
-      {/* {error ? <h5 className="card-header error">{error}</h5> : ""} */}
+      {error && <Alert severity="error">{error}</Alert>}
       <div className="card-body">
         <h5 className="card-title">Edit Profile</h5>
         <br />

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { helper } from "../helper";
 import {
+  Alert,
   TextField,
   Button,
   Select,
@@ -17,6 +18,8 @@ function EditProfile(props) {
     type: props.data.type,
   });
 
+  const [error, setError] = useState(undefined);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(data);
@@ -32,7 +35,7 @@ function EditProfile(props) {
         "Type of company"
       );
     } catch (e) {
-      alert(e);
+      setError(e.message);
       return;
     }
     props.onSubmit(data);
@@ -49,7 +52,7 @@ function EditProfile(props) {
         marginTop: "3rem",
       }}
     >
-      {/* {error ? <h5 className="card-header error">{error}</h5> : ""} */}
+      {error && <Alert severity="error">{error}</Alert>}
       <div className="card-body">
         <h5 className="card-title">Edit Company Profile</h5>
         <br />
