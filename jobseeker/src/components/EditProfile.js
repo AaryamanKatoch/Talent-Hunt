@@ -91,7 +91,7 @@ function EditProfile(props) {
     >
       {error && <Alert severity="error">{error}</Alert>}
       <div className="card-body">
-        <h5 className="card-title">Edit Profile</h5>
+        <h1 className="card-title">Edit Profile</h1>
         <br />
         <form onSubmit={handleSubmit} id="profile-form">
           <TextField

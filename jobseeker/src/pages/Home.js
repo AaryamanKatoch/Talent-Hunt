@@ -147,7 +147,7 @@ const Home = () => {
                     fontWeight: "bold",
                     height: "40px",
                   }}
-                  component="h3"
+                  component="p"
                 >
                   {job.name}
                 </Typography>
@@ -156,7 +156,7 @@ const Home = () => {
                     fontWeight: "bold",
                     height: "40px",
                   }}
-                  component="h3"
+                  component="p"
                 >
                   {job.description
                     .replace(regex, "")
@@ -303,7 +303,7 @@ const Home = () => {
                   </Button>
                 </Link>
               )}
-              <h4 className="page_indicator">{page_player}</h4>
+              <div className="page_indicator">{page_player}</div>
               {jobsData.moreJobsExist && (
                 <Link to={`/page/${Number(page_player) + 1}`}>
                   <Button
