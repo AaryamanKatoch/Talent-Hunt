@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { helper } from "../helper";
 import {
+  Alert,
   TextField,
   Button,
   Select,
@@ -21,7 +22,6 @@ function EditJobForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(data);
     try {
       data.name = helper.common.checkIsProperString(data.name, "Name");
       data.description = helper.common.checkIsProperString(
@@ -39,7 +39,7 @@ function EditJobForm(props) {
         data.minimumQualification
       );
     } catch (e) {
-      setError(e);
+      setError(e.message);
       return;
     }
     props.onSubmit(data);
@@ -56,7 +56,7 @@ function EditJobForm(props) {
         marginTop: "3rem",
       }}
     >
-      {error ? <h5 className="card-header error">{error}</h5> : ""}
+      {error && <Alert severity="error">{error}</Alert>}
       <div className="card-body">
         <h5 className="card-title">Edit Job Posting</h5>
         <br />

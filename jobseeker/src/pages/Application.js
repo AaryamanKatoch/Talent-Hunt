@@ -122,12 +122,12 @@ function Application() {
             }}
           >
             {error ? (
-              <h5 className="card-header error text-danger">{error}</h5>
+              <div className="card-header error text-danger">{error}</div>
             ) : (
               ""
             )}
             <div className="card-body">
-              <h5 className="card-title">Apply</h5>
+              <h1 className="card-title">Apply</h1>
               <br />
               <form onSubmit={validateApplication} id="register-form">
                 <TextField

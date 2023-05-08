@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { helper } from "../helper";
 import {
+  Alert,
   Autocomplete,
   TextField,
   Button,
@@ -21,6 +22,7 @@ function CreateProfile(props) {
     skills: [],
     education: "",
   });
+  const [error, setError] = useState(undefined);
   const options = [
     { value: "JavaScript", label: "JavaScript" },
     { value: "React", label: "React" },
@@ -46,7 +48,6 @@ function CreateProfile(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(data);
     try {
       data.name = helper.common.checkIsProperString(data.name, "Name");
       data.name = helper.common.isValidName(data.name);
@@ -64,7 +65,7 @@ function CreateProfile(props) {
       );
       data.education = helper.common.checkIsProperString(data.education);
     } catch (e) {
-      alert(e);
+      setError(e.message);
       return;
     }
     props.onSubmit(data);
@@ -81,9 +82,9 @@ function CreateProfile(props) {
         marginTop: "3rem",
       }}
     >
-      {/* {error ? <h5 className="card-header error">{error}</h5> : ""} */}
+      {error && <Alert severity="error">{error}</Alert>}
       <div className="card-body">
-        <h5 className="card-title">Create Profile</h5>
+        <h1 className="card-title">Create Profile</h1>
         <br />
         <form onSubmit={handleSubmit} id="profile-form">
           <TextField

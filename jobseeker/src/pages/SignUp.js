@@ -1,4 +1,4 @@
-import React, { useState, useEffect , useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   TextField,
   Button,
@@ -11,14 +11,14 @@ import {
 import { Link } from "react-router-dom";
 import { Navigate, useNavigate } from "react-router-dom";
 import { helper } from "../helper";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 import { api } from "../api";
 import { doCreateUserWithEmailAndPassword } from "../firebase/functions";
 import { AuthContext } from "../firebase/Auth";
 import { components } from "../components";
 
 function SignUp() {
-  const {currentUser} = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -47,11 +47,10 @@ function SignUp() {
       // helper.common.isValidURL(data.profilePicture);
       // data.skills.map(s => {
       //   helper.common.isValidString(s, "skills");
-      // });      
+      // });
       // helper.common.isValidString(data.experience, "Experience");
       helper.common.isValidString(data.name, "Full Name");
-      console.log('after checking stuff!!')
-
+      console.log("after checking stuff!!");
     } catch (e) {
       setError(e);
       return;
@@ -64,7 +63,7 @@ function SignUp() {
         data.password,
         data.name
       );
-      console.log('in second trycatch');
+      console.log("in second trycatch");
       // localStorage.setItem("token_data", JSON.stringify(response.data.token));
       // localStorage.setItem("id", JSON.stringify(response.data._id));
       // navigate("/dashboard");
@@ -90,22 +89,34 @@ function SignUp() {
           marginTop: "10rem",
         }}
       >
-        {error ? <Alert severity="error" onClose={() => {console.log('here'); setError(null);}}><h5>{error.message}</h5></Alert> : ""}
+        {error ? (
+          <Alert
+            severity="error"
+            onClose={() => {
+              console.log("here");
+              setError(null);
+            }}
+          >
+            <div>{error.message}</div>
+          </Alert>
+        ) : (
+          ""
+        )}
         <div className="card-body">
-          <h5 className="card-title">Sign Up</h5>
+          <h1 className="card-title">Sign Up</h1>
           <br />
           <form onSubmit={validateRegister} id="register-form">
             <TextField
-                label="Full Name"
-                onChange={(e) =>setData({ ...data, name: e.target.value })}
-                required
-                variant="outlined"
-                color="secondary"
-                type="text"
-                value={data.name}
-                fullWidth
-                sx={{ mb: 3 }}
-              />
+              label="Full Name"
+              onChange={(e) => setData({ ...data, name: e.target.value })}
+              required
+              variant="outlined"
+              color="secondary"
+              type="text"
+              value={data.name}
+              fullWidth
+              sx={{ mb: 3 }}
+            />
             <TextField
               label="Email"
               onChange={(e) => setData({ ...data, email: e.target.value })}

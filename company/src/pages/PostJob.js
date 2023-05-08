@@ -3,10 +3,12 @@ import axios from "axios";
 import { AuthContext } from "../firebase/Auth";
 import PostJobForm from "../components/PostJobForm";
 import { useNavigate } from "react-router-dom";
+import { Alert, Typography, CircularProgress } from "@mui/material";
 
 function PostJob() {
   const [hasProfile, setHasProfile] = useState(false);
   const [error, setError] = useState(undefined);
+  const [loading, setLoading] = useState(true);
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -16,7 +18,7 @@ function PostJob() {
   }, []);
 
   const checkuser = async () => {
-    // Send formData to server to create profile
+    setLoading(true);
     await axios
       .get("http://localhost:3000/company/dashboard", {
         params: {
@@ -35,12 +37,15 @@ function PostJob() {
         // handle error
         setHasProfile(false);
         setError(error.response.data);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
   const handlePostJob = async (formData) => {
     formData.email = currentUser.email;
-    // console.log(formData);
+    setLoading(true);
     await axios
       .post("http://localhost:3000/jobs/postJobByEmail", formData)
       .then((response) => {
@@ -52,16 +57,28 @@ function PostJob() {
       .catch((error) => {
         // handle error
         setError(error.response.data);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
-
-  if (error) {
-    alert(error);
-  }
 
   return (
     <div>
       <h1>Job Post Page</h1>
+      {loading && (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <CircularProgress size={40} color="secondary" />
+          <Typography variant="body1" style={{ marginLeft: 10 }}>
+            Loading...
+          </Typography>
+        </div>
+      )}
+      {error && (
+        <Alert severity="error" onClose={() => setError(undefined)}>
+          {error}
+        </Alert>
+      )}
       {hasProfile ? (
         <PostJobForm onSubmit={handlePostJob} />
       ) : (
