@@ -86,8 +86,8 @@ function Application() {
           application.visaStatus
         );
     } catch (error) {
-      console.log(error);
-      setError(error);
+      console.log("frontend", error.message);
+      setError(error.message);
     }
 
     try {
@@ -97,7 +97,7 @@ function Application() {
       // navigate to my applications
       navigate("/myApplications");
     } catch (error) {
-      console.log(error.response.data);
+      console.log("backend", error.response.data);
       setError(error.response.data);
     }
   };
@@ -122,12 +122,12 @@ function Application() {
             }}
           >
             {error ? (
-              <h5 className="card-header error text-danger">{error}</h5>
+              <div className="card-header error text-danger">{error}</div>
             ) : (
               ""
             )}
             <div className="card-body">
-              <h5 className="card-title">Apply</h5>
+              <h1 className="card-title">Apply</h1>
               <br />
               <form onSubmit={validateApplication} id="register-form">
                 <TextField
@@ -140,7 +140,6 @@ function Application() {
                   }
                   required
                   variant="outlined"
-                  color="secondary"
                   type="text"
                   sx={{ mb: 3 }}
                   fullWidth

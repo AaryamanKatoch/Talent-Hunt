@@ -134,8 +134,8 @@ async function checkifpropersex(vari){
     throw {status: '400', error : "gender cant be empty or all white spaces"};
     vari=vari.trim()
     vari=vari.toLowerCase()
-    if(vari!=="male" && vari!=="female")
-    throw {status: '400', error : 'kindly select from: male,female'};
+    if(vari!=="male" && vari!=="female" && vari!== "Choose not to specify")
+    throw {status: '400', error : 'sex invalid'};
 
 return vari
 }

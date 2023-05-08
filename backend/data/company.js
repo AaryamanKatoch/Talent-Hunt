@@ -4,6 +4,8 @@ const { ObjectId } = require("mongodb");
 const helper = require("../helper");
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
+const path = require("path");
+const fs = require("fs");
 
 const getCompanyDataById = async (id) => {
   id = helper.common.isValidId(id);
@@ -51,6 +53,8 @@ const createCompany = async (data, email) => {
     profile_picture: data.profile_picture,
     jobs_posted: [],
   };
+  newCompany.image = fs.readFileSync(path.resolve(__dirname, "../image.jpg"));
+  newCompany.image = newCompany.image.toString("base64");
   const insertInfo = await companyCollection.insertOne(newCompany);
   if (!insertInfo.insertedId || !insertInfo.acknowledged) {
     throw {
@@ -86,7 +90,12 @@ const updateCompanyByEmail = async (email, data) => {
     profile_picture: data.profile_picture || company.profile_picture,
     jobs_posted: company.jobs_posted,
   };
-
+  if (updatedCompany.profile_picture) {
+    updatedCompany.image = fs.readFileSync(
+      path.resolve(__dirname, "../image.jpg")
+    );
+    updatedCompany.image = updatedCompany.image.toString("base64");
+  }
   const updatedInfo = await companyCollection.updateOne(
     { email: email },
     { $set: updatedCompany }

@@ -25,12 +25,12 @@ const fs = require('fs');
 
  
 async function createResumePdf(resumeData){
-
-  let personalDetails = resumeData.personalDetails;
-  let education = resumeData.education;
-  let experience = resumeData.experience;
-  let projects = resumeData.projects;
-  let skills = resumeData.skills;
+  // console.log(resumeData);
+  let personalDetails = JSON.parse(resumeData.personalDetails);
+  let education = JSON.parse(resumeData.education);
+  let experience = JSON.parse(resumeData.experience);
+  let projects = JSON.parse(resumeData.projects);
+  let skills = JSON.parse(resumeData.skills);
 
   let educationString = '';
 
@@ -44,13 +44,19 @@ async function createResumePdf(resumeData){
   let experienceString = '';
 
   for(let i = 0; i < experience.length; i++){
+    let bulletString = '';
+    for(let j = 0; j < experience[i].bulletPoints.length; j++){
+      bulletString = bulletString +
+      `\\resumeItem{}
+    {${experience[i].bulletPoints[j]}}\n`
+    }
+
     experienceString = experienceString +
     `\\resumeSubheading
     {${experience[i].company}}{${experience[i].address}}
     {${experience[i].position}}{${experience[i].startMonth} ${experience[i].startYear} - ${experience[i].endMonth} ${experience[i].endYear}}
     \\resumeItemListStart
-      \\resumeItem{}
-        {${experience[i].description}}
+      ${bulletString}
     \\resumeItemListEnd`
   }
 
@@ -117,6 +123,12 @@ async function createResumePdf(resumeData){
 % Custom commands
 \\newcommand{\\resumeItem}[2]{
   \\item\\small{
+    \\textbf{#1}{ #2 \\vspace{-2pt}}
+  }
+}
+
+\\newcommand{\\resumeProjectItem}[2]{
+  \\item\\small{
     \\textbf{#1}{: #2 \\vspace{-2pt}}
   }
 }
@@ -129,7 +141,7 @@ async function createResumePdf(resumeData){
     \\end{tabular*}\\vspace{-5pt}
 }
 
-\\newcommand{\\resumeSubItem}[2]{\\resumeItem{#1}{#2}\\vspace{-4pt}}
+\\newcommand{\\resumeSubItem}[2]{\\resumeProjectItem{#1}{#2}\\vspace{-4pt}}
 
 \\renewcommand{\\labelitemii}{$\\circ$}
 

@@ -9,7 +9,8 @@ const createJob = async (
   description,
   responsibilities,
   visaRequirements,
-  minimumQualification
+  minimumQualification,
+  image
 ) => {
   description = await jobhelper.checkifproperdescription(description);
   responsibilities = await jobhelper.checkifproperresponsibilities(
@@ -30,6 +31,7 @@ const createJob = async (
     visaRequirements: visaRequirements,
     minimumQualification: minimumQualification,
     applications: [], //array of application docs id
+    image: image,
   };
 
   const insertInfo = await jobsCollection.insertOne(job);
@@ -116,7 +118,7 @@ const updateJob = async (
   description,
   responsibilities,
   visaRequirements,
-  minimumQualification
+  minimumQualification,
 ) => {
   if (!id) throw { status: "400", error: "No job id exists" };
   if (typeof id !== "string")
@@ -239,7 +241,8 @@ const createJobByCompanyEmail = async (companyEmail, data) => {
     responsibilities: data.responsibilities,
     visaRequirements: data.visaRequirements,
     minimumQualification: data.minimumQualification,
-    applications: [], //array of application docs id
+    applications: [], //array of application docs id,
+    image: data.image,
   };
 
   const insertInfo = await jobsCollection.insertOne(job);
@@ -297,13 +300,14 @@ const updateJobByCompanyEmail = async (jobId, companyEmail, data) => {
 
   let updatedJob = {
     companyEmail: job.companyEmail,
-    companyName: job.companyName,
+    companyName: data.companyName || job.companyName,
     name: data.name || job.name,
     description: data.description || job.description,
     responsibilities: data.responsibilities || job.responsibilities,
     visaRequirements: data.visaRequirements || job.visaRequirements,
     minimumQualification: data.minimumQualification || job.minimumQualification,
     applications: job.applications, //array of application docs id
+    image: data.image || job.image,
   };
 
   const updatedInfo = await jobsCollection.updateOne(

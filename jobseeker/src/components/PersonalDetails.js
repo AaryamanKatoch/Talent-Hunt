@@ -19,7 +19,7 @@ function PersonalDetails() {
     setPersonalDetails({ ...personalDetails, [e.target.name]: e.target.value });
   };
 
-  // console.log(personalDetails);
+   console.log(personalDetails);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -60,7 +60,7 @@ function PersonalDetails() {
               label="Email"
               placeholder="Email"
               value={currentUser.email}
-              disable
+              disable='true'
             ></Textarea>
             {/* <FormLabel htmlFor="name">Email</FormLabel> */}
             {/* <BootstrapInput fullWidth label='Email'/> */}

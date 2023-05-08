@@ -4,7 +4,7 @@ const resume = require('./resumes')
 const { ObjectId } = require("mongodb");
 const helper = require("../helper");
 
-async function createExperience(resumeId, company, address,position,description, start_year, end_year, start_month, end_month){
+async function createExperience(resumeId, company, address,position,bulletPoints, start_year, end_year, start_month, end_month){
     resumeId = helper.common.isValidId(resumeId);
     
     company = helper.common.isValidString(company,'Company');
@@ -21,8 +21,11 @@ async function createExperience(resumeId, company, address,position,description,
    
     end_month = helper.common.isValidMonth(end_month);
     
-    description = helper.common.isValidString(description);
+    // description = helper.common.isValidString(description);
     // console.log("here");
+    for(let i = 0; i < bulletPoints.length; i++){
+        bulletPoints[i] = helper.common.isValidString(bulletPoints[i], 'Bullet Point');
+    }
 
     const resumeCollection = await resumes();
     let experienceData = {
@@ -30,11 +33,11 @@ async function createExperience(resumeId, company, address,position,description,
         company : company,
         address : address,
         position : position,
-        description : description,
-        start_year : start_year,
-        start_month : start_month,        
-        end_year : end_year,
-        end_month : end_month
+        bulletPoints : bulletPoints,
+        startYear : start_year,
+        startMonth : start_month,        
+        endYear : end_year,
+        endMonth : end_month
     }
     
 

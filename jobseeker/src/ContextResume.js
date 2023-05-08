@@ -35,10 +35,10 @@ export const ResumeProvider = ({ children }) => {
          
             company: "",
             address: "",
-            description: "",
+            bulletPoints: [""],
             position: "",
             startYear: "",
-            starMonth:"",
+            startMonth:"",
             endYear: "",
             endMonth:""
             

@@ -1,11 +1,11 @@
 const { ObjectId } = require("mongodb");
-const isUrl = require("is-url");
+const isURL = require('isurl');
 
 const isValidString = (string, parameter) => {
   if (!string)
     throw {
       status: "400",
-      error: `You must provide an ${parameter} to search for`,
+      error: `You must provide a ${parameter}`,
     };
   if (typeof string !== "string")
     throw { status: "400", error: `${parameter} must be a string` };
@@ -120,7 +120,7 @@ function isValidInteger(n) {
 }
 
 function isValidWebImage(url) {
-  if (isUrl(url)) {
+  if (isURL(new URL(url))) {
     if (/\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url)) {
       return url;
     } else {
@@ -139,6 +139,12 @@ const isValidURL = (url) => {
 }
 
 const isValidContact = (contact) => {
+  // (123) 456-7890
+// 123-456-7890
+// 123.456.7890
+// 1234567890
+// +1 123 456 7890
+// +1 (123) 456-7890
 contact = isValidString(contact, "Contact Number");
 if(!contact.match(/^\+?1?\s*[-.\s]?\(?\d{3}\)?\s*[-.\s]?\d{3}\s*[-.\s]?\d{4}$/))
   throw {status: '400', error : 'Invalid Contact Number'}
