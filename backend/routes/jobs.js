@@ -33,17 +33,20 @@ router.route("/postJob").post(async (req, res) => {
     minimumQualification,
   } = req.body;
   try {
-    description = await helper.jobhelper.checkifproperdescription(description);
-    responsibilities = await helper.jobhelper.checkifproperresponsibilities(
-      responsibilities
+    description = xss(
+      await helper.jobhelper.checkifproperdescription(description)
     );
-    visaRequirements = await helper.jobhelper.checkifpropervisarequirements(
-      visaRequirements
+    responsibilities = xss(
+      await helper.jobhelper.checkifproperresponsibilities(responsibilities)
     );
-    minimumQualification =
+    visaRequirements = xss(
+      await helper.jobhelper.checkifpropervisarequirements(visaRequirements)
+    );
+    minimumQualification = xss(
       await helper.jobhelper.checkifproperminimumqualification(
         minimumQualification
-      );
+      )
+    );
   } catch (e) {
     if (typeof e !== "object" || !("status" in e)) {
       console.log(e);
@@ -73,6 +76,7 @@ router.route("/postJob").post(async (req, res) => {
 router.route("/postJobByEmail").post(async (req, res) => {
   try {
     let data = req.body;
+    for (let i in data) data[i] = xss(data[i]);
     let companyEmail = data.email;
     companyEmail = helper.common.isValidEmail(companyEmail);
     data = helper.job.isValidJobData(data);
@@ -124,6 +128,7 @@ router
       const jobId = helper.common.isValidId(req.params.jobId);
       const job = await jobsData.getJobById(jobId);
       let data = req.body;
+      for (let i in data) data[i] = xss(data[i]);
       let companyEmail = data.email;
       companyEmail = helper.common.isValidEmail(companyEmail);
       data = helper.job.isValidJobData(data);

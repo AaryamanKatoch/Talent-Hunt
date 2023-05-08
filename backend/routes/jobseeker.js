@@ -15,7 +15,7 @@ const projectsData = require("../data/projects");
 const common_helper = require("../helper/common");
 const fs = require("fs");
 var im = require("imagemagick");
-const streamToBuffer = require('stream-to-buffer');
+const streamToBuffer = require("stream-to-buffer");
 const { ObjectId } = require("mongodb");
 const redis = require("redis");
 const client = redis.createClient();
@@ -48,6 +48,7 @@ router
   .post(async (req, res) => {
     try {
       let data = req.body;
+      for (let i in data) data[i] = xss(data[i]);
       let email = data.email;
       email = helper.common.isValidEmail(email);
       data = helper.jobseeker.isValidJobseekerData(data);
@@ -81,6 +82,7 @@ router
   .patch(async (req, res) => {
     try {
       let data = req.body;
+      for (let i in data) data[i] = xss(data[i]);
       let email = data.email;
       email = helper.common.isValidEmail(email);
       data = helper.jobseeker.isValidJobseekerData(data);
@@ -137,6 +139,7 @@ router
   .patch(async (req, res) => {
     try {
       let data = req.body;
+      for (let i in data) data[i] = xss(data[i]);
       let id = req.params.id;
       id = helper.common.checkIsProperId(id);
       data = helper.jobseeker.isValidJobseekerData(data);
@@ -225,6 +228,7 @@ router.get("/allJobSeekers", async (req, res) => {
 router.route("/create-resume").post(async (req, res) => {
   let resumeData = req.body;
   //  console.log(resumeData.personalDetails);
+  for (let i in resumeData) resumeData[i] = xss(resumeData[i]);
   let personalDetails = resumeData.personalDetails;
   let education = resumeData.education;
   let experience = resumeData.experience;
@@ -238,7 +242,7 @@ router.route("/create-resume").post(async (req, res) => {
     // const data = await jobSeekerData.getJobSeekerByID(id);
     let email = personalDetails.email;
     console.log(email);
-    
+
     email = helper.common.isValidEmail(email);
     const profileExists = await jobSeekerData.profileExists(email);
     console.log(profileExists);
@@ -247,77 +251,116 @@ router.route("/create-resume").post(async (req, res) => {
       // console.log(data);
       userId = data._id;
     } else {
-     return  res.json({
+      return res.json({
         noProfileExists: true,
         message: "No profile is created for the user",
-        error : "No Profile is created for the user"
+        error: "No Profile is created for the user",
       });
     }
   } catch (e) {
     if (typeof e !== "object" || !("status" in e)) {
-      return res.status(500).json({error : "Internal server error"});
+      return res.status(500).json({ error: "Internal server error" });
     } else {
-      return res.status(parseInt(e.status)).json({error : e.error});
+      return res.status(parseInt(e.status)).json({ error: e.error });
     }
   }
 
-     try {
-        personalDetails.name = helper.common.isValidString(personalDetails.name, 'Name');
-        
-        personalDetails.address = helper.common.isValidString(personalDetails.address, 'Address');
-       
-        personalDetails.linkedin = helper.common.isValidURL(personalDetails.linkedin);
-        console.log("Route - " + personalDetails.email)
-        personalDetails.email = helper.common.isValidEmail(personalDetails.email);
-         console.log("here");
-        personalDetails.contact = helper.common.isValidContact(personalDetails.contact);
-        // console.log("here");
+  try {
+    personalDetails.name = helper.common.isValidString(
+      personalDetails.name,
+      "Name"
+    );
 
-        for(let i = 0; i < skills.length; i++){
-            skills[i] = helper.common.isValidString(skills[i], 'Skill');
-        }
-       
-     } catch (e) {
-      if (typeof e !== "object" || !("status" in e)) {
-        console.log(e);
-        return res.status(500).json({error : "Internal server error"});
-      } else {
-        return res.status(parseInt(e.status)).json({error : e.error});
-      }
-     }
-     
-        try {
-            createdResume = await resumes.createResume(userId,personalDetails.name,  personalDetails.address, personalDetails.linkedin, personalDetails.email, personalDetails.contact, skills)
-            //  console.log(createdResume);
-        } catch (e) {
-          if (typeof e !== "object" || !("status" in e)) {
-            console.log(e);
-           return res.status(500).json({error : "Internal server error"});
-          } else {
-           return res.status(parseInt(e.status)).json({error : e.error});
-          }
-        }
-        // console.log(education);
-        try {
-            for(let  i =0 ; i < education.length; i++){
-                education[i].school = helper.common.isValidString(education[i].school,'School');
-                education[i].address = helper.common.isValidString(education[i].address,'Address');
-                education[i].degree = helper.common.isValidString(education[i].degree,'Degree');
-                education[i].gpa = helper.common.isValidGpa(education[i].gpa);
-                education[i].startYear = helper.common.isValidYear(education[i].startYear);
-                education[i].endYear = helper.common.isValidYear(education[i].endYear);
-                helper.common.isValidStartEndYear(education[i].startYear,education[i].endYear);
-                let createdEducation = await educationData.createEducation(createdResume._id,education[i].school, education[i].address, education[i].degree, education[i].gpa, education[i].startYear, education[i].endYear);
-                //  console.log(createdEducation);
-            }
-        } catch (e) {
-          if (typeof e !== "object" || !("status" in e)) {
-            console.log(e);
-           return res.status(500).json({error : "Internal server error"});
-          } else {
-           return res.status(parseInt(e.status)).json({error : e.error});
-          }
-        }
+    personalDetails.address = helper.common.isValidString(
+      personalDetails.address,
+      "Address"
+    );
+
+    personalDetails.linkedin = helper.common.isValidURL(
+      personalDetails.linkedin
+    );
+    console.log("Route - " + personalDetails.email);
+    personalDetails.email = helper.common.isValidEmail(personalDetails.email);
+    console.log("here");
+    personalDetails.contact = helper.common.isValidContact(
+      personalDetails.contact
+    );
+    // console.log("here");
+
+    for (let i = 0; i < skills.length; i++) {
+      skills[i] = helper.common.isValidString(skills[i], "Skill");
+    }
+  } catch (e) {
+    if (typeof e !== "object" || !("status" in e)) {
+      console.log(e);
+      return res.status(500).json({ error: "Internal server error" });
+    } else {
+      return res.status(parseInt(e.status)).json({ error: e.error });
+    }
+  }
+
+  try {
+    createdResume = await resumes.createResume(
+      userId,
+      personalDetails.name,
+      personalDetails.address,
+      personalDetails.linkedin,
+      personalDetails.email,
+      personalDetails.contact,
+      skills
+    );
+    //  console.log(createdResume);
+  } catch (e) {
+    if (typeof e !== "object" || !("status" in e)) {
+      console.log(e);
+      return res.status(500).json({ error: "Internal server error" });
+    } else {
+      return res.status(parseInt(e.status)).json({ error: e.error });
+    }
+  }
+  // console.log(education);
+  try {
+    for (let i = 0; i < education.length; i++) {
+      education[i].school = helper.common.isValidString(
+        education[i].school,
+        "School"
+      );
+      education[i].address = helper.common.isValidString(
+        education[i].address,
+        "Address"
+      );
+      education[i].degree = helper.common.isValidString(
+        education[i].degree,
+        "Degree"
+      );
+      education[i].gpa = helper.common.isValidGpa(education[i].gpa);
+      education[i].startYear = helper.common.isValidYear(
+        education[i].startYear
+      );
+      education[i].endYear = helper.common.isValidYear(education[i].endYear);
+      helper.common.isValidStartEndYear(
+        education[i].startYear,
+        education[i].endYear
+      );
+      let createdEducation = await educationData.createEducation(
+        createdResume._id,
+        education[i].school,
+        education[i].address,
+        education[i].degree,
+        education[i].gpa,
+        education[i].startYear,
+        education[i].endYear
+      );
+      //  console.log(createdEducation);
+    }
+  } catch (e) {
+    if (typeof e !== "object" || !("status" in e)) {
+      console.log(e);
+      return res.status(500).json({ error: "Internal server error" });
+    } else {
+      return res.status(parseInt(e.status)).json({ error: e.error });
+    }
+  }
 
   try {
     for (let i = 0; i < experience.length; i++) {
@@ -350,21 +393,33 @@ router.route("/create-resume").post(async (req, res) => {
       // experience[i].description = helper.common.isValidString(
       //   experience[i].description
       // );
-      for(let j = 0; j < experience[i].bulletPoints.length; j++){
-        experience[i].bulletPoints[j] = helper.common.isValidString(experience[i].bulletPoints[j]);
+      for (let j = 0; j < experience[i].bulletPoints.length; j++) {
+        experience[i].bulletPoints[j] = helper.common.isValidString(
+          experience[i].bulletPoints[j]
+        );
       }
 
-                let createdExperience = await experienceData.createExperience(createdResume._id,experience[i].company, experience[i].address, experience[i].position, experience[i].bulletPoints, experience[i].startYear, experience[i].endYear, experience[i].startMonth, experience[i].endMonth);
-                 console.log(createdExperience);
-            }
-        } catch (e) {
-          if (typeof e !== "object" || !("status" in e)) {
-            console.log(e);
-           return res.status(500).json({error : "Internal server error"});
-          } else {
-            return res.status(parseInt(e.status)).json({error : e.error});
-          }
-        }
+      let createdExperience = await experienceData.createExperience(
+        createdResume._id,
+        experience[i].company,
+        experience[i].address,
+        experience[i].position,
+        experience[i].bulletPoints,
+        experience[i].startYear,
+        experience[i].endYear,
+        experience[i].startMonth,
+        experience[i].endMonth
+      );
+      console.log(createdExperience);
+    }
+  } catch (e) {
+    if (typeof e !== "object" || !("status" in e)) {
+      console.log(e);
+      return res.status(500).json({ error: "Internal server error" });
+    } else {
+      return res.status(parseInt(e.status)).json({ error: e.error });
+    }
+  }
 
   try {
     for (let i = 0; i < projects.length; i++) {
@@ -377,99 +432,100 @@ router.route("/create-resume").post(async (req, res) => {
         "Project Description"
       );
 
-                let createdProject = await projectsData.createProject(createdResume._id,projects[i].name, projects[i].description);
-                // console.log(createdProject);
-            }
-        } catch (e) {
-          if (typeof e !== "object" || !("status" in e)) {
-            console.log(e);
-            return res.status(500).json({error : "Internal server error"});
-          } else {
-            return res.status(parseInt(e.status)).json({error : e.error});
-          }
-        }
+      let createdProject = await projectsData.createProject(
+        createdResume._id,
+        projects[i].name,
+        projects[i].description
+      );
+      // console.log(createdProject);
+    }
+  } catch (e) {
+    if (typeof e !== "object" || !("status" in e)) {
+      console.log(e);
+      return res.status(500).json({ error: "Internal server error" });
+    } else {
+      return res.status(parseInt(e.status)).json({ error: e.error });
+    }
+  }
 
-        try {
-          let email = personalDetails.email;
-          console.log(email);
-          let data;
-          email = helper.common.isValidEmail(email);
-          const profileExists = await jobSeekerData.profileExists(email);
-          console.log(profileExists);
-          if (profileExists) {
-             data = await jobSeekerData.getJobSeekerByEmail(email);
-            // console.log(data);
-            userId = data._id;
-          } else {
-          return  res.json({
-              noProfileExists: true,
-              message: "No profile is created for the user",
-              error : "No Profile is created for the user"
-            });
-          }
-          const jobSeekerCollection = await jobSeekers();
-          const updatedJobSeeker = {
-            name: data.name,
-            email: email,
-            address: data.address,
-            education: data.education,
-            field_of_employment: data.field_of_employment,
-            profile_picture: data.profile_picture,
-            skills: data.skills,
-            years_of_experience: data.years_of_experience,
-            resumeId: createdResume._id,
-            jobs_applied: data.jobs_applied,
-          };
-        
-          const updatedInfo = await jobSeekerCollection.updateOne(
-            { _id: new ObjectId(data._id) },
-            { $set: updatedJobSeeker }
-          );
-          if (updatedInfo.modifiedCount === 0) {
-            throw {
-              status: "400",
-              error: "All new details exactly match the old details",
-            };
-          }
-        } catch (e) {
-          if (typeof e !== "object" || !("status" in e)) {
-            console.log(e);
-            return res.status(500).json({error : "Internal server error"});
-          } else {
-            return res.status(parseInt(e.status)).json({error : e.error});
-          }
-        }
-        let pdf =  await pdfCreateResume.createResumePdf(resumeData);
-        
-        streamToBuffer(pdf, (err, buffer) => {
-            if (err) {
-              console.error('Error converting stream to buffer:', err);
-              return res.status(500).send('Error generating PDF file');
-            } else {
-              res.set('Content-Type', 'application/pdf');
-              res.set('Content-Disposition', 'attachment; filename="resume.pdf"');
-              return res.send(buffer);
-            }
-          });
+  try {
+    let email = personalDetails.email;
+    console.log(email);
+    let data;
+    email = helper.common.isValidEmail(email);
+    const profileExists = await jobSeekerData.profileExists(email);
+    console.log(profileExists);
+    if (profileExists) {
+      data = await jobSeekerData.getJobSeekerByEmail(email);
+      // console.log(data);
+      userId = data._id;
+    } else {
+      return res.json({
+        noProfileExists: true,
+        message: "No profile is created for the user",
+        error: "No Profile is created for the user",
+      });
+    }
+    const jobSeekerCollection = await jobSeekers();
+    const updatedJobSeeker = {
+      name: data.name,
+      email: email,
+      address: data.address,
+      education: data.education,
+      field_of_employment: data.field_of_employment,
+      profile_picture: data.profile_picture,
+      skills: data.skills,
+      years_of_experience: data.years_of_experience,
+      resumeId: createdResume._id,
+      jobs_applied: data.jobs_applied,
+    };
 
-    });
+    const updatedInfo = await jobSeekerCollection.updateOne(
+      { _id: new ObjectId(data._id) },
+      { $set: updatedJobSeeker }
+    );
+    if (updatedInfo.modifiedCount === 0) {
+      throw {
+        status: "400",
+        error: "All new details exactly match the old details",
+      };
+    }
+  } catch (e) {
+    if (typeof e !== "object" || !("status" in e)) {
+      console.log(e);
+      return res.status(500).json({ error: "Internal server error" });
+    } else {
+      return res.status(parseInt(e.status)).json({ error: e.error });
+    }
+  }
+  let pdf = await pdfCreateResume.createResumePdf(resumeData);
 
-router
-  .route("/resumeData/:id")
-  .get(async (req, res) => {
-    let id = req.params.id;
-    try {
-      id = helper.common.checkIsProperId(id);
-      const data = await resumes.getResumeById(id);
-      return res.json(data);
-    } catch (e) {
-      if (typeof e !== "object" || !("status" in e)) {
-        // console.log(e);
-        return res.status(500).json({error : "Internal server error"});
-      } else {
-        return res.status(parseInt(e.status)).json({error : e.error});
-      }
+  streamToBuffer(pdf, (err, buffer) => {
+    if (err) {
+      console.error("Error converting stream to buffer:", err);
+      return res.status(500).send("Error generating PDF file");
+    } else {
+      res.set("Content-Type", "application/pdf");
+      res.set("Content-Disposition", 'attachment; filename="resume.pdf"');
+      return res.send(buffer);
     }
   });
+});
+
+router.route("/resumeData/:id").get(async (req, res) => {
+  let id = req.params.id;
+  try {
+    id = helper.common.checkIsProperId(id);
+    const data = await resumes.getResumeById(id);
+    return res.json(data);
+  } catch (e) {
+    if (typeof e !== "object" || !("status" in e)) {
+      // console.log(e);
+      return res.status(500).json({ error: "Internal server error" });
+    } else {
+      return res.status(parseInt(e.status)).json({ error: e.error });
+    }
+  }
+});
 
 module.exports = router;

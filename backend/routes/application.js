@@ -24,6 +24,11 @@ router.route("/apply").post(async (req, res) => {
     lastName = req.body.lastName;
     email = req.body.email;
     visaStatus = req.body.visaStatus;
+    //xss checking
+    firstName = xss(firstName);
+    lastName = xss(lastName);
+    email = xss(email);
+    visaStatus = xss(visaStatus);
 
     if (!jobSeekerId) throw { status: "400", error: "No jobSeeker Id exists" };
     if (typeof jobSeekerId !== "string")
@@ -94,10 +99,14 @@ router.route("/apply").post(async (req, res) => {
       jobSeekerId,
       application._id.toString()
     );
-    const allApplications = await jobseekerData.get_history_of_applications_by_email(email);
-    if(allApplications){
+    const allApplications =
+      await jobseekerData.get_history_of_applications_by_email(email);
+    if (allApplications) {
       await client.set("jobSeekerEmail", email);
-      await client.set("jobSeekerApplications", JSON.stringify(allApplications));
+      await client.set(
+        "jobSeekerApplications",
+        JSON.stringify(allApplications)
+      );
     }
     return res.status(200).json(application);
   } catch (e) {
