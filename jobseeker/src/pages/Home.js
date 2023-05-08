@@ -201,7 +201,6 @@ const Home = () => {
                       variant="outlined"
                       color="secondary"
                       className="col-3"
-                      autoFocus
                     />
                     <div className="col-1"></div>
                     <FormControl className="col-2">

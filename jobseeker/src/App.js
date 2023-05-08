@@ -17,8 +17,12 @@ function App() {
             <CssBaseline />
             <pages.MyDrawer />
             <Routes>
-              {/* dashboard */}
+              {/* landing */}
               <Route path="/" element={<PrivateRoute />}>
+                <Route path="/" element={<pages.Landing />} />
+              </Route>
+              {/* dashboard */}
+              <Route path="/dashboard" element={<PrivateRoute />}>
                 <Route path="/dashboard" element={<pages.Dashboard />} />
               </Route>
               {/* apply */}
