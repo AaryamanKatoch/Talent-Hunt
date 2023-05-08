@@ -19,7 +19,7 @@ async function createProject(resumeId,name,description){
     const checkResume = await resumeCollection.findOne({_id: ObjectId(resumeId)});
     if (checkResume === null) throw {status : "500",error : 'Resume not found with that id!'};
 
-    let create = await resumeCollection.updateOne({_id : ObjectId(resumeId)}, {$push : {project : projectData}});
+    let create = await resumeCollection.updateOne({_id : ObjectId(resumeId)}, {$push : {projects : projectData}});
 
     if(create.modifiedCount === 0)
     {
@@ -34,20 +34,20 @@ async function getProjectById(projectId){
     projectId = helper.common.isValidId(projectId);
     const resumeCollection = await resumes();
     const findProjectId = await resumeCollection
-  .findOne({'project._id': ObjectId(projectId)},
-  {projection: {_id: 0,  project: { $elemMatch: { _id: ObjectId(projectId)}}}});
+  .findOne({'projects._id': ObjectId(projectId)},
+  {projection: {_id: 0,  projects: { $elemMatch: { _id: ObjectId(projectId)}}}});
 
   if(findProjectId == null) throw {status : "500" , error : "Could not found the Resume with that resume id!"};
 
-  findProjectId.project[0]._id = findProjectId.project[0]._id.toString();
-  return findProjectId.project[0];
+  findProjectId.projects[0]._id = findProjectId.projects[0]._id.toString();
+  return findProjectId.projects[0];
 }
 
 async function getAllProject(resumeId){
     resumeId = helper.common.isValidId(resumeId);
     const resumeCollection = await resumes();
     let resumeById = await resume.getResumeById(resumeId);
-    let allProject = await resumeCollection.find({_id: ObjectId(resumeId)},{projection :{project:1}}).toArray();
+    let allProject = await resumeCollection.find({_id: ObjectId(resumeId)},{projection :{projects:1}}).toArray();
     if(allProject === null || allProject.length == 0)
     {
         throw {status : "500" , error : "Project not Found!"};
@@ -62,12 +62,12 @@ async function getAllProject(resumeId){
 async function removeProject(projectId){
     projectId = helper.common.isValidId(projectId);
     const resumeCollection = await resumes();
-    const findResumeId = await resumeCollection.findOne({'project._id': ObjectId(projectId)});
+    const findResumeId = await resumeCollection.findOne({'projects._id': ObjectId(projectId)});
     if(findResumeId == null) throw {status : "500" , error : "Resume not Found!"};
     let resumeId = findResumeId._id.toString();
     let removeProjectById = await resumeCollection.updateOne(
         {_id: ObjectId(resumeId)},
-        {$pull: {project : {_id: ObjectId(projectId)}}}
+        {$pull: {projects : {_id: ObjectId(projectId)}}}
       );
 
     if(removeProjectById.modifiedCount == 0) throw {status : "500", error : "Project Deletion failed!"};

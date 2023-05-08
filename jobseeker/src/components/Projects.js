@@ -2,7 +2,7 @@
 import Box from '@mui/material/Box';
 import React, {useState} from 'react';
 import Stack from '@mui/material/Stack';
-
+import { helper } from "../helper";
 import { FormControl } from '@mui/material';
 
 import Accordion from '@mui/material/Accordion';
@@ -54,15 +54,120 @@ const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
 const [errorSnackbarMessage, setErrorSnackbarMessage] = useState('');
 
 async function postData(){
+  let resumeData = {
+    personalDetails : personalDetails,
+    education : education,
+    skills : skills,
+    experience : experience,
+    projects : projects
+  };
+
   try {
-    let resumeData = {
-      personalDetails : personalDetails,
-      education : education,
-      skills : skills,
-      experience : experience,
-      projects : projects
-    };
-    // console.log(resumeData);
+    personalDetails.name = helper.common.isValidString2(personalDetails.name, 'Name');
+    
+    personalDetails.address = helper.common.isValidString2(personalDetails.address, 'Address');
+   
+    personalDetails.linkedin = helper.common.isValidLinkedinURL(personalDetails.linkedin);
+    
+    personalDetails.email = helper.common.isValidEmail2(personalDetails.email);
+    console.log("Project : " + personalDetails.email)
+    // console.log("here");
+    personalDetails.contact = helper.common.isValidContact(personalDetails.contact);
+    // console.log("here");
+
+    for(let i = 0; i < skills.length; i++){
+        skills[i] = helper.common.isValidString2(skills[i], 'Skill');
+    }
+    setErrorSnackbarOpen(false);
+   
+ } catch (e) {
+  // console.log(e.toString());
+  setErrorSnackbarOpen(true);
+  setErrorSnackbarMessage(e.toString());
+  return;
+ }
+
+ try {
+  for(let  i =0 ; i < education.length; i++){
+    education[i].school = helper.common.isValidString2(education[i].school,'School');
+    education[i].address = helper.common.isValidString2(education[i].address,'Address');
+    education[i].degree = helper.common.isValidString2(education[i].degree,'Degree');
+    education[i].gpa = helper.common.isValidGpa(education[i].gpa);
+    education[i].startYear = helper.common.isValidYear(education[i].startYear);
+    education[i].endYear = helper.common.isValidYear(education[i].endYear);
+    helper.common.isValidStartEndYear(education[i].startYear,education[i].endYear);
+   
+}
+setErrorSnackbarOpen(false);
+ } catch (e) {
+  // console.log(e.toString());
+  setErrorSnackbarOpen(true);
+   setErrorSnackbarMessage(e.toString());
+   return;
+ }
+
+ try {
+  for (let i = 0; i < experience.length; i++) {
+    experience[i].company = helper.common.isValidString2(
+      experience[i].company,
+      "Company"
+    );
+    experience[i].address = helper.common.isValidString2(
+      experience[i].address,
+      "Address"
+    );
+    experience[i].position = helper.common.isValidString2(
+      experience[i].position,
+      "Position"
+    );
+    experience[i].startYear = helper.common.isValidYear(
+      experience[i].startYear
+    );
+    experience[i].endYear = helper.common.isValidYear(experience[i].endYear);
+    helper.common.isValidStartEndYear(
+      experience[i].startYear,
+      experience[i].endYear
+    );
+    experience[i].startMonth = helper.common.isValidMonth(
+      experience[i].startMonth
+    );
+    experience[i].endMonth = helper.common.isValidMonth(
+      experience[i].endMonth
+    );
+    for(let j = 0; j < experience[i].bulletPoints.length; j++){
+      experience[i].bulletPoints[j] = helper.common.isValidString2(experience[i].bulletPoints[j]);
+    }
+  }
+  setErrorSnackbarOpen(false);
+ } catch (e) {
+  // console.log(e.toString());
+  setErrorSnackbarOpen(true);
+  setErrorSnackbarMessage(e.toString());
+  return;
+ }
+
+ try {
+  for (let i = 0; i < projects.length; i++) {
+    projects[i].name = helper.common.isValidString2(
+      projects[i].name,
+      "Project Name"
+    );
+    projects[i].description = helper.common.isValidString2(
+      projects[i].description,
+      "Project Description"
+    );          
+  }
+  setErrorSnackbarOpen(false);
+ } catch (e) {
+  // console.log(e.toString());
+  setErrorSnackbarOpen(true);
+   setErrorSnackbarMessage(e.toString());
+   return;
+ }
+  try {
+    console.log(errorSnackbarOpen);
+    if(errorSnackbarOpen === false){
+      // console.log(resumeData);
     const postResumeData = await axios.post(`http://localhost:3000/jobseeker/create-resume`, resumeData,  { responseType: 'arraybuffer' });
     // const binaryData = atob(response.data);
     // const buffer = new ArrayBuffer(binaryData.length);
@@ -87,10 +192,13 @@ async function postData(){
     //   console.log('here');
     //   setSnackbarMessage("Your resume has been created!");
     // }
+    setErrorSnackbarOpen(false);
     setOpenSnackbar(true);
     setSnackbarMessage('Your resume has been created!');
+    }
+    
   } catch (e) {
-    console.log(e);
+    // console.log(e);
      // console.log(e);
      const buffer = e.response.data;
      // console.log(buffer);
@@ -98,7 +206,7 @@ async function postData(){
    // console.log(decoder);
    // console.log(decoder.decode(buffer));
    const errorResponse = JSON.parse(decoder.decode(buffer));
-     console.log(errorResponse.error);
+    //  console.log(errorResponse.error);
      setErrorSnackbarOpen(true);
      setErrorSnackbarMessage(errorResponse.error);
   }

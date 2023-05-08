@@ -38,7 +38,7 @@ export const ResumeProvider = ({ children }) => {
             bulletPoints: [""],
             position: "",
             startYear: "",
-            starMonth:"",
+            startMonth:"",
             endYear: "",
             endMonth:""
             

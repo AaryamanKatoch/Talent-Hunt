@@ -25,7 +25,7 @@ const fs = require('fs');
 
  
 async function createResumePdf(resumeData){
-
+  console.log(resumeData);
   let personalDetails = resumeData.personalDetails;
   let education = resumeData.education;
   let experience = resumeData.experience;

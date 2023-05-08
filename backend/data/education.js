@@ -21,8 +21,8 @@ async function createEducation(resumeId, school, address,degree, gpa, start_year
         address : address,
         degree : degree,
         gpa : gpa,
-        start_year : start_year,
-        end_year : end_year
+        startYear : start_year,
+        endYear : end_year
     }
 
     const checkResume = await resumeCollection.findOne({_id: ObjectId(resumeId)});
