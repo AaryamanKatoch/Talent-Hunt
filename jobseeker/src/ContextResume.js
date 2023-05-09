@@ -31,18 +31,18 @@ export const ResumeProvider = ({ children }) => {
     const [skills, setSkills] = useState([]);
 
     const [experience, setExperience] = useState([
-        {
+        // {
          
-            company: "",
-            address: "",
-            bulletPoints: [""],
-            position: "",
-            startYear: "",
-            startMonth:"",
-            endYear: "",
-            endMonth:""
+        //     company: "",
+        //     address: "",
+        //     bulletPoints: [""],
+        //     position: "",
+        //     startYear: "",
+        //     startMonth:"",
+        //     endYear: "",
+        //     endMonth:""
             
-        },
+        // },
     ]);
 
     const [projects, setProjects] = useState([

@@ -176,7 +176,7 @@ function Education(){
                   </FormControl>
                 </Stack>
                 <Stack direction="row" spacing={2}>
-                  <Button variant="contained" size="small" color='error' onClick={() => deleteEducation(index)}>Delete</Button>
+                { education.length > 1 && ( <Button variant="contained" size="small" color='error' onClick={() => deleteEducation(index)}>Delete</Button>) }
                 </Stack>
               </Stack>
             </AccordionDetails>
