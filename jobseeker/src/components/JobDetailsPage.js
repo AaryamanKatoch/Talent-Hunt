@@ -6,7 +6,7 @@ import {
   CardContent,
   CardActions,
 } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { api } from "../api";
 
 const JobDetailsPage = () => {
@@ -14,6 +14,7 @@ const JobDetailsPage = () => {
   const id = params.jobId;
   const [data, setData] = useState();
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetch = async () => {
@@ -29,19 +30,23 @@ const JobDetailsPage = () => {
     fetch();
   }, []);
 
+  const handleClick = () => {
+    navigate(`/apply/${data._id}`);
+  };
+
   const cardStyle = {
-    maxWidth: 600,
+    maxWidth: "600px",
     margin: "auto",
-    marginTop: 50,
+    marginTop: "50px",
   };
 
   const titleStyle = {
-    fontSize: 30,
-    marginBottom: 20,
+    fontSize: "30px",
+    marginBottom: "20px",
   };
 
   const contentStyle = {
-    marginBottom: 20,
+    marginBottom: "20px",
   };
 
   const actionsStyle = {
@@ -83,11 +88,9 @@ const JobDetailsPage = () => {
               </Typography>
             </CardContent>
             <CardActions style={actionsStyle}>
-              <Link to={`/apply/${data._id}`}>
-                <Button size="small" color="primary">
-                  Apply Now
-                </Button>
-              </Link>
+              <Button size="small" color="primary" onClick={handleClick}>
+                Apply Now
+              </Button>
             </CardActions>
           </>
         )

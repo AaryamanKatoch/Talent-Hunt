@@ -96,34 +96,30 @@ function MyApplications() {
               alt="Live from space album cover"
             />
           )}
-          <CardActionArea>
-            <Link className="Link-for-eventcard" to={`/jobDetails/${job._id}`}>
-              <CardContent>
-                <Typography
-                  sx={{
-                    fontWeight: "bold",
-                    height: "40px",
-                    width: "200px",
-                  }}
-                  component="p"
-                >
-                  {job.name}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontWeight: "bold",
-                    height: "40px",
-                  }}
-                  component="p"
-                >
-                  {job.description
-                    .replace(regex, "")
-                    .substring(0, 35)
-                    .toString()}
-                </Typography>
-              </CardContent>
-            </Link>
-          </CardActionArea>
+
+          <Link className="Link-for-eventcard" to={`/jobDetails/${job._id}`}>
+            <CardContent>
+              <Typography
+                sx={{
+                  fontWeight: "bold",
+                  height: "40px",
+                  width: "200px",
+                }}
+                component="p"
+              >
+                {job.name}
+              </Typography>
+              <Typography
+                sx={{
+                  fontWeight: "bold",
+                  height: "40px",
+                }}
+                component="p"
+              >
+                {job.description.replace(regex, "").substring(0, 35).toString()}
+              </Typography>
+            </CardContent>
+          </Link>
         </Card>
       </Grid>
     );

@@ -171,7 +171,6 @@ function EditProfile(props) {
               onChange={(e) =>
                 setData({ ...data, field_of_employment: e.target.value })
               }
-              required
             >
               <MenuItem value="">
                 <em>None</em>

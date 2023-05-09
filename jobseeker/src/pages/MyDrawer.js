@@ -80,10 +80,6 @@ function MyDrawer() {
                 <ListItemText primary={"My Applications"} />
               </Link>
             </ListItem>
-            <ListItem>
-              <Divider />
-            </ListItem>
-
             <ListItem disablePadding>
               <ListItemIcon>
                 <HomeIcon />
