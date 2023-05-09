@@ -32,6 +32,17 @@ function EditProfile(props) {
     { value: "Vue", label: "Vue" },
     { value: "Python", label: "Python" },
     { value: "Java", label: "Java" },
+    { value: "Nursing", label: "Nursing" },
+    { value: "Doctor", label: "Doctor" },
+    { value: "Clinical", label: "Clinical" },
+    { value: "Teaching", label: "Teaching" },
+    { value: "Administrative", label: "Administrative" },
+    { value: "Marketing", label: "Marketing" },
+    { value: "Sales", label: "Sales" },
+    { value: "Leadership", label: "Leadership" },
+    { value: "Autocad", label: "Autocad" },
+    { value: "Design", label: "Design" },
+    { value: "Construction", label: "Construction" },
   ];
   const preselectedValues = props.data.skills;
 
