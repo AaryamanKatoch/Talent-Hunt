@@ -65,14 +65,14 @@ function PostJobForm(props) {
     >
       {error && <Alert severity="error">{error}</Alert>}
       <div className="card-body">
-        <h5 className="card-title">Create Job Posting</h5>
+        <h2 className="card-title">Create Job Posting</h2>
         <br />
         <form onSubmit={handleSubmit} id="job-form">
           <TextField
             label="Name"
             value={data.name || ""}
             onChange={(e) => setData({ ...data, name: e.target.value })}
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -84,7 +84,7 @@ function PostJobForm(props) {
             value={data.description || ""}
             onChange={(e) => setData({ ...data, description: e.target.value })}
             required
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -96,7 +96,7 @@ function PostJobForm(props) {
             onChange={(e) =>
               setData({ ...data, responsibilities: e.target.value })
             }
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -110,6 +110,7 @@ function PostJobForm(props) {
             <Select
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
+              variant="filled"
               label="Visa Requirements"
               value={data.visaRequirements || ""}
               onChange={(e) =>
@@ -135,6 +136,7 @@ function PostJobForm(props) {
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
               label="Minimum Qualification"
+              variant="filled"
               value={data.minimumQualification || ""}
               onChange={(e) =>
                 setData({ ...data, minimumQualification: e.target.value })

@@ -104,14 +104,14 @@ function SignUp() {
           ""
         )}
         <div className="card-body">
-          <h5 className="card-title">Sign Up</h5>
+          <h1 className="card-title">Sign Up</h1>
           <br />
           <form onSubmit={validateRegister} id="register-form">
             <TextField
               label="Full Name"
               onChange={(e) => setData({ ...data, name: e.target.value })}
               required
-              variant="outlined"
+              variant="filled"
               color="secondary"
               type="text"
               value={data.name}
@@ -122,7 +122,7 @@ function SignUp() {
               label="Email"
               onChange={(e) => setData({ ...data, email: e.target.value })}
               required
-              variant="outlined"
+              variant="filled"
               color="secondary"
               type="email"
               sx={{ mb: 3 }}
@@ -133,7 +133,7 @@ function SignUp() {
               label="Password"
               onChange={(e) => setData({ ...data, password: e.target.value })}
               required
-              variant="outlined"
+              variant="filled"
               color="secondary"
               type="password"
               value={data.password}
@@ -146,7 +146,7 @@ function SignUp() {
                 setData({ ...data, confirmPassword: e.target.value })
               }
               required
-              variant="outlined"
+              variant="filled"
               color="secondary"
               type="password"
               value={data.confirmPassword}
