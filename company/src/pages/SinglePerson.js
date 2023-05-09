@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../api";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -18,7 +18,7 @@ function SinglePerson() {
   const [jobSeeker, setJobSeeker] = useState(null);
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
   const [errorSnackbarMessage, setErrorSnackbarMessage] = useState("");
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -59,7 +59,9 @@ function SinglePerson() {
       resumeData.email = helper.resumeHelper.isValidEmail(resumeData.email);
       // console.log("Project : " + personalDetails.email)
       // console.log("here");
-      resumeData.contact = helper.resumeHelper.isValidContact(resumeData.contact);
+      resumeData.contact = helper.resumeHelper.isValidContact(
+        resumeData.contact
+      );
       // console.log("here");
 
       for (let i = 0; i < resumeData.skills.length; i++) {
@@ -77,15 +79,18 @@ function SinglePerson() {
 
     try {
       for (let i = 0; i < resumeData.education.length; i++) {
-        resumeData.education[i].school = helper.resumeHelper.checkifproperschool(
-          resumeData.education[i].school
-        );
-        resumeData.education[i].address = helper.resumeHelper.checkifproperaddress(
-          resumeData.education[i].address
-        );
-        resumeData.education[i].degree = helper.resumeHelper.checkifproperdegree(
-          resumeData.education[i].degree
-        );
+        resumeData.education[i].school =
+          helper.resumeHelper.checkifproperschool(
+            resumeData.education[i].school
+          );
+        resumeData.education[i].address =
+          helper.resumeHelper.checkifproperaddress(
+            resumeData.education[i].address
+          );
+        resumeData.education[i].degree =
+          helper.resumeHelper.checkifproperdegree(
+            resumeData.education[i].degree
+          );
         resumeData.education[i].gpa = helper.resumeHelper.isValidGpa(
           resumeData.education[i].gpa
         );
@@ -110,22 +115,25 @@ function SinglePerson() {
 
     try {
       for (let i = 0; i < resumeData.experience.length; i++) {
-        resumeData.experience[i].company = helper.resumeHelper.checkifpropercompany(
-          resumeData.experience[i].company
-        );
-        resumeData.experience[i].address = helper.resumeHelper.checkifproperaddress(
-          resumeData.experience[i].address
-        );
-        resumeData.experience[i].position = helper.resumeHelper.checkifproperposition(
-          resumeData.experience[i].position
-        );
+        resumeData.experience[i].company =
+          helper.resumeHelper.checkifpropercompany(
+            resumeData.experience[i].company
+          );
+        resumeData.experience[i].address =
+          helper.resumeHelper.checkifproperaddress(
+            resumeData.experience[i].address
+          );
+        resumeData.experience[i].position =
+          helper.resumeHelper.checkifproperposition(
+            resumeData.experience[i].position
+          );
         resumeData.experience[i].startYear = helper.resumeHelper.isValidYear(
           resumeData.experience[i].startYear
         );
         resumeData.experience[i].endYear = helper.resumeHelper.isValidYear(
           resumeData.experience[i].endYear
         );
-        
+
         resumeData.experience[i].startMonth = helper.resumeHelper.isValidMonth(
           resumeData.experience[i].startMonth
         );
@@ -155,12 +163,14 @@ function SinglePerson() {
 
     try {
       for (let i = 0; i < resumeData.projects.length; i++) {
-        resumeData.projects[i].name = helper.resumeHelper.checkifproperprojectname(
-          resumeData.projects[i].name
-        );
-        resumeData.projects[i].description = helper.resumeHelper.checkifproperprojectdescription(
-          resumeData.projects[i].description
-        );
+        resumeData.projects[i].name =
+          helper.resumeHelper.checkifproperprojectname(
+            resumeData.projects[i].name
+          );
+        resumeData.projects[i].description =
+          helper.resumeHelper.checkifproperprojectdescription(
+            resumeData.projects[i].description
+          );
       }
       setErrorSnackbarOpen(false);
     } catch (e) {
@@ -235,12 +245,12 @@ function SinglePerson() {
             <br />
             <div className="row">
               <div className="col-2">
-                <Typography variant="h6" color="text.secondary" gutterBottom>
+                <Typography variant="body1" color="text.secondary" gutterBottom>
                   NAME
                 </Typography>
               </div>
               <div className="col-3">
-                <Typography variant="h6" color="text.secondary" gutterBottom>
+                <Typography variant="body1" color="text.secondary" gutterBottom>
                   {jobSeeker.name}
                 </Typography>
               </div>
@@ -269,11 +279,11 @@ function SinglePerson() {
               </div>
               <div className="col-3">
                 <Typography variant="body1" color="text.secondary" gutterBottom>
-                  <ul style={{ listStyle: "none" }}>
+                  <span>
                     {jobSeeker.skills.map((skill) => {
-                      return <li key={Math.random()}>{skill}</li>;
+                      return <span key={Math.random()}>{skill}, </span>;
                     })}
-                  </ul>
+                  </span>
                 </Typography>
               </div>
             </div>
@@ -307,14 +317,23 @@ function SinglePerson() {
             </div>
           </CardContent>
           <CardActions>
-            <Button size="normal" color="info" onClick={getResume}>
+            <Button
+              size="normal"
+              onClick={getResume}
+              style={{ color: "black" }}
+            >
               Get Resume
             </Button>
-            <Link to="/">
-              <Button size="normal" color="info" style={{ marginLeft: "5px" }}>
-                Go Back
-              </Button>
-            </Link>
+
+            <Button
+              size="normal"
+              onClick={() => {
+                navigate("/");
+              }}
+              style={{ marginLeft: "5px", color: "black" }}
+            >
+              Go Back to Home
+            </Button>
           </CardActions>
         </Card>
       )}

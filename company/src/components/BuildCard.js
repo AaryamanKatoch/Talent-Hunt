@@ -19,37 +19,34 @@ function BuildCard({ data }) {
           marginTop: "15px",
         }}
       >
-        <Link
-          to={`/jobSeeker/${data._id}`}
-          style={{ textDecoration: "none" }}
+        <div
+          className="card bg-dark"
+          style={{
+            width: "15rem",
+            height: "19rem",
+            marginLeft: "10px",
+            marginRight: "10px",
+            borderRadius: 5,
+            border: "2px groove #1e8678",
+            color: "white",
+          }}
         >
-          <div
-            className="card bg-dark"
-            style={{
-              width: "15rem",
-              height: "19rem",
-              marginLeft: "10px",
-              marginRight: "10px",
-              borderRadius: 5,
-              border: "2px groove #1e8678",
-              color: "white"
-            }}
-          >
-            <div className="card-body">
-              <h1 className="card-title-2">
-                {data.name}
-              </h1>
-              <hr />
-              <p className="card-text">{data["email"]}</p>
-              <hr />
-              <p className="card-text">{data["years_of_experience"]} years of experience</p>
-              <hr />
-              <p className="card-text">{data["field_of_employment"]}</p>
-              <hr />
-              <Link to={`/jobSeeker/${data._id}`}><p className="card-text btn btn-info">Know More</p></Link>
-            </div>
+          <div className="card-body">
+            <h1 className="card-title-2">{data.name}</h1>
+            <hr />
+            <p className="card-text">{data["email"]}</p>
+            <hr />
+            <p className="card-text">
+              {data["years_of_experience"]} years of experience
+            </p>
+            <hr />
+            <p className="card-text">{data["field_of_employment"]}</p>
+            <hr />
+            <Link to={`/jobSeeker/${data._id}`}>
+              <p className="card-text btn btn-info">Know More</p>
+            </Link>
           </div>
-        </Link>
+        </div>
       </Grid>
     </div>
   );

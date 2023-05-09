@@ -104,19 +104,14 @@ function PostJobForm(props) {
             required
           />
           <FormControl sx={{ m: 1, minWidth: 200 }}>
-            <InputLabel id="demo-simple-select-helper-label">
-              Visa Requirements
-            </InputLabel>
+            <InputLabel>Visa Requirements*</InputLabel>
             <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
               variant="filled"
               label="Visa Requirements"
               value={data.visaRequirements || ""}
               onChange={(e) =>
                 setData({ ...data, visaRequirements: e.target.value })
               }
-              required
             >
               <MenuItem value="">
                 <em>None</em>
@@ -129,19 +124,14 @@ function PostJobForm(props) {
             </Select>
           </FormControl>
           <FormControl sx={{ m: 1, minWidth: 200 }}>
-            <InputLabel id="demo-simple-select-helper-label">
-              Minimum Qualification
-            </InputLabel>
+            <InputLabel>Minimum Qualification*</InputLabel>
             <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
               label="Minimum Qualification"
               variant="filled"
               value={data.minimumQualification || ""}
               onChange={(e) =>
                 setData({ ...data, minimumQualification: e.target.value })
               }
-              required
             >
               <MenuItem value="">
                 <em>None</em>

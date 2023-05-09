@@ -91,15 +91,12 @@ function CreateProfile(props) {
             sx={{ mb: 3 }}
           />
           <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel id="demo-simple-select-helper-label">Type</InputLabel>
+            <InputLabel>Type</InputLabel>
             <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
               label="Type"
               variant="filled"
               value={data.type || ""}
               onChange={(e) => setData({ ...data, type: e.target.value })}
-              required
             >
               <MenuItem value="">
                 <em>None</em>

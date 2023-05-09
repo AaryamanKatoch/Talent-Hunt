@@ -68,14 +68,13 @@ function FindPeople() {
       temp = [...temp];
     }
     setFilteredPeople(temp);
-    if(temp.length < 1){
-      setError("No matches Found")
-    }
-    else{
+    if (temp.length < 1) {
+      setError("No matches Found");
+    } else {
       setError(null);
-    }    
+    }
   };
-  
+
   if (filteredPeople.length > 0) {
     card =
       filteredPeople &&
@@ -111,15 +110,8 @@ function FindPeople() {
             />
             <div className="col-1"></div>
             <FormControl className="col-2">
-              <InputLabel
-                id="demo-simple-select-helper-label"
-                color="secondary"
-              >
-                Skill
-              </InputLabel>
+              <InputLabel color="secondary">Skill</InputLabel>
               <Select
-                labelId="demo-simple-select-helper-label"
-                id="demo-simple-select-helper"
                 value={skill}
                 label="Type"
                 variant="filled"
@@ -141,15 +133,8 @@ function FindPeople() {
             </FormControl>
             <div className="col-1"></div>
             <FormControl className="col-2">
-              <InputLabel
-                id="demo-simple-select-helper-label"
-                color="secondary"
-              >
-                Field
-              </InputLabel>
+              <InputLabel color="secondary">Field</InputLabel>
               <Select
-                labelId="demo-simple-select-helper-label"
-                id="demo-simple-select-helper"
                 value={field}
                 label="Type"
                 variant="filled"
@@ -179,20 +164,20 @@ function FindPeople() {
         </form>
       </div>
       <div className="container">
-        <div className="container" style={{marginTop: "2em", color: "red"}}>
-          {error && <h3>{error}</h3>}
-        </div>        
+        <div className="container" style={{ marginTop: "2em", color: "red" }}>
+          {error && <div>{error}</div>}
+        </div>
         <br /> <br />
-          <Grid
-            container
-            spacing={2}
-            sx={{
-              flexGrow: 1,
-              flexDirection: "row",
-            }}
-          >
-            {card}
-          </Grid>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            flexGrow: 1,
+            flexDirection: "row",
+          }}
+        >
+          {card}
+        </Grid>
       </div>
     </div>
   );
