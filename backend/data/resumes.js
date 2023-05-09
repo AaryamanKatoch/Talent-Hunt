@@ -41,7 +41,7 @@ async function createResume(userId,name, address, linkedin, email, contact, skil
     // achievements = helper.common.isValidString(achievements,'Achievements');
     let education = [];
     let experience = [];
-    let project = [];
+    let projects = [];
     const resumeCollection = await resumes();
     let resumeObj = {        
         name : name,
@@ -52,7 +52,7 @@ async function createResume(userId,name, address, linkedin, email, contact, skil
         skills : skills,
         education : education,
         experience: experience,
-        project : project,
+        projects : projects,
         jobSeekerId : userId
     };
     
