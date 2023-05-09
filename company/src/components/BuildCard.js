@@ -36,9 +36,9 @@ function BuildCard({ data }) {
             }}
           >
             <div className="card-body">
-              <h5 className="card-title">
+              <h1 className="card-title-2">
                 {data.name}
-              </h5>
+              </h1>
               <hr />
               <p className="card-text">{data["email"]}</p>
               <hr />

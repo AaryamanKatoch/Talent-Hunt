@@ -55,7 +55,7 @@ const Home = () => {
               "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
           }}
         >
-          <div className="eventcard" to={`/editJob/${job._id}`}>
+          <Link className="eventcard" to={`/editJob/${job._id}`}>
             <CardContent>
               <Typography variant="h5" component="h2" gutterBottom>
                 Role: {job.name}
@@ -83,7 +83,7 @@ const Home = () => {
             >
               View Applications
             </Button>
-          </div>
+          </Link>
         </Card>
       </Grid>
     );

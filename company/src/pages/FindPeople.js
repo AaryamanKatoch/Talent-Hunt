@@ -93,7 +93,7 @@ function FindPeople() {
 
   return (
     <div className="container">
-      <h1>Find Job Seekers For Your Roles</h1>
+      {/* <h4>Find Job Seekers For Your Roles</h4> */}
       <br />
       <div className="container form-container">
         <form onSubmit={handleSearch} id="search-form">
@@ -104,7 +104,7 @@ function FindPeople() {
               size="small"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
-              variant="outlined"
+              variant="filled"
               color="secondary"
               className="col-3"
               autoFocus
@@ -122,6 +122,7 @@ function FindPeople() {
                 id="demo-simple-select-helper"
                 value={skill}
                 label="Type"
+                variant="filled"
                 color="secondary"
                 size="small"
                 onChange={(e) => setSkill(e.target.value)}
@@ -151,6 +152,7 @@ function FindPeople() {
                 id="demo-simple-select-helper"
                 value={field}
                 label="Type"
+                variant="filled"
                 color="secondary"
                 size="small"
                 onChange={(e) => setField(e.target.value)}
