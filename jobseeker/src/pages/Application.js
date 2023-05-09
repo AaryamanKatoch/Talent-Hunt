@@ -58,6 +58,25 @@ function Application() {
         //checking for resume
         const resume = await api.routes.getResume(jobSeeker.data.resumeId);
 
+        
+      } catch (error) {
+        if (error.message === "You have already applied for this job") {
+          setError(error.message);
+          setFlag(true);
+          return;
+        } else if (error.message) {
+          console.log(error);
+          if (error.message === "Request failed with status code 404") {
+            setError("Create Resume before applying");
+            setFlag(true);
+          }
+        } else if (error.response.data) {
+          console.log(error.response.data);
+          setError(error.response.data);
+        }
+      }
+
+      try {
         //checking for past application if any.
         const jobSeekerApplications = await api.routes.getJobSeekerApplications(
           currentUser.email
@@ -70,19 +89,9 @@ function Application() {
           return application;
         });
       } catch (error) {
-        if (error.message === "You have already applied for this job") {
-          setError(error.message);
+        if(error.message === "You have already applied for this job"){
+          setError("You have already applied for this job");
           setFlag(true);
-          return;
-        } else if (error.message) {
-          console.log(error.message);
-          if (error.message === "Request failed with status code 404") {
-            setError("Create a profile and Resume before applying");
-            setFlag(true);
-          }
-        } else if (error.response.data) {
-          console.log(error.response.data);
-          setError(error.response.data);
         }
       }
     };

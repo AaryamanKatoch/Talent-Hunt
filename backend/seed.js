@@ -1,5 +1,5 @@
 const job = require("./data/jobs");
-const application = require("./data/application");
+const data = require("./data");
 const jobseekerData = require("./data/jobseeker");
 const companyData = require("./data/company");
 const jobData = require("./data/jobs");
@@ -13,7 +13,7 @@ const { jobseeker } = require("./helper");
 
 async function main() {
   const db = await connection.dbConnection();
-  let alljobs = undefined;
+  let alljobs = [];
   let jobseeker1, jobseeker2, jobseeker3, jobseeker4;
   let company1, company2, company3, company4;
   let job1;
@@ -93,69 +93,6 @@ async function main() {
 
   try {
     let data = {
-      name: "Ujas Italia",
-      address: "51 Hancock Avenue",
-      education: "Masters",
-      field_of_employment: "IT",
-      profile_picture:
-        "http://getwallpapers.com/wallpaper/full/8/d/1/798741-download-free-awesome-nature-backgrounds-1920x1080-for-tablet.jpg",
-      skills: ["Python", "React"],
-      years_of_experience: 3,
-    };
-    const updatedJobseeker2 = await jobseekerData.updateJobSeeker(
-      jobseeker2._id,
-      data
-    );
-    // console.log(updatedJobseeker2);
-  } catch (e) {
-    console.log(e);
-  }
-
-  // try {
-  //   const find = await jobseekerData.getJobSeekerByEmail("ak34@gmail.com");
-  //   // console.log(find);
-  //   job1 = await job.createJob(
-  //     "Testyyy job",
-  //     "backend stuff",
-  //     "will sponsor",
-  //     "undersgrad in cs"
-  //   );
-  //   //console.log(fli1)
-  // } catch (e) {
-  //   console.log(e);
-  // }
-
-  try {
-    let data = {
-      name: "Dhavan Kanakia",
-      address: "51 Hancock Avenue",
-      education: "Bachelors",
-      field_of_employment: "IT",
-      profile_picture:
-        "http://getwallpapers.com/wallpaper/full/8/d/1/798741-download-free-awesome-nature-backgrounds-1920x1080-for-tablet.jpg",
-      skills: ["Node", "Python", "React"],
-      years_of_experience: 3,
-    };
-    const updatedJobseeker1 = await jobseekerData.updateJobSeekerByEmail(
-      "dkanakia34@gmail.com",
-      data
-    );
-    // console.log(updatedJobseeker1);
-  } catch (e) {
-    console.log(e);
-  }
-
-  // try {
-  //   const removeJobseeker2 = await jobseekerData.removeJobSeeker(
-  //     jobseeker2._id
-  //   );
-  //   console.log(removeJobseeker2);
-  // } catch (e) {
-  //   console.log(e);
-  // }
-
-  try {
-    let data = {
       name: "Apple",
       description: "Well you know what Apple is",
       type: "IT",
@@ -214,231 +151,137 @@ async function main() {
     console.log(e);
   }
 
-  try {
-    let data = {
-      name: "Boresquare but bad",
-      description: "Foursquare adaptation",
-      type: "IT",
-      profile_picture:
-        "http://getwallpapers.com/wallpaper/full/8/d/1/798741-download-free-awesome-nature-backgrounds-1920x1080-for-tablet.jpg",
-    };
-    let email = "gk34@apple.com";
-    const updatedCompany4 = await companyData.updateCompanyByEmail(email, data);
-    console.log(updatedCompany4);
-  } catch (e) {
-    console.log(e);
-  }
-
-  for (let i = 0; i < 50; i++) {
-    try{
-      let data={
+  for (let i = 0; i < 2; i++) {
+    try {
+      let data = {
         name: `SDE${i}`,
         description: "This is job for SDE",
         responsibilities: "working on react and node",
         visaRequirements: "f1",
         minimumQualification: "masters",
-      }
-      let email="gk34@apple.com";
-      const addedjob= await jobData.createJobByCompanyEmail(email,data)
-      console.log('*****************************',addedjob)
-    }catch(e){
+      };
+      let email = "tc34@apple.com";
+      const addedjob = await jobData.createJobByCompanyEmail(email, data);
+      alljobs.push(addedjob._id);
+      console.log("*****************************", addedjob);
+    } catch (e) {
       console.log(e);
     }
   }
 
-  try{
-    const anything=await jobseekerData.get_history_of_applications_by_email('rd34@gmail.com');
-    console.log(anything)
-  }catch(e){
-    console.log(e);
-  }
-
-/*
-  
- //////////////////
-// let job1=undefined
-  //  try {
-  //  job1 = await job.createJob(
-  //    "Testyyy job",
-  //    "backend stuff",
-  //   "will sponsor",
-  //  "undersgrad in cs"
-  //    );
-  //    console.log(job1)
-  //  } catch (e) {
-  //    console.log(e);
-  //  }
-
-  
-   try {
-
-    app1 = await application.createApplication("644ca5c8f5adb13b130287b9","644ca5c8f5adb13b130287ba","Aaryaman","Katoch","email@test.com","64456e7c0b6aca78c6b3ee2c","male","F1 allowed");
-    //console.log(flight1)
-    } catch (e) {
-        console.log(e);
-    }
-*/
-  try {
-    let companyEmail = "gk34@apple.com";
-    let data = {
-      name: "Backend Dev",
-      description: "Backend Developer",
-      responsibilities: "You know what is needed",
-      visaRequirements: "Citizen",
-      minimumQualification: "bachelors",
-    };
-    job1 = await jobData.createJobByCompanyEmail(companyEmail, data);
-    console.log(job1);
-  } catch (e) {
-    console.log(e);
-  }
-
-  try {
-    let companyEmail = "gk34@apple.com";
-    let data = {
-      name: "Frontend Dev",
-      description: "Frontend Developer",
-      responsibilities: "You know what is needed",
-      visaRequirements: "h1b",
-      minimumQualification: "masters",
-    };
-    const job2 = await jobData.createJobByCompanyEmail(companyEmail, data);
-    console.log(job2);
-  } catch (e) {
-    console.log(e);
-  }
-
-  try {
-    let companyEmail = "ab34@outlook.com";
-    let data = {
-      name: "Backend Dev",
-      description: "Backend Developer",
-      responsibilities: "You know what is needed",
-      visaRequirements: "h4ead",
-      minimumQualification: "phd",
-    };
-    const job3 = await jobData.createJobByCompanyEmail(companyEmail, data);
-    console.log(job3);
-  } catch (e) {
-    console.log(e);
-  }
-
-  try {
-    let companyEmail = "gk34@apple.com";
-    let data = {
-      name: "Backend Dev 2",
-      description: "Backend Developer",
-      responsibilities: "You know what is needed",
-      visaRequirements: "Citizen",
-      minimumQualification: "bachelors",
-    };
-    const updatedJob1 = await jobData.updateJobByCompanyEmail(
-      job1._id,
-      companyEmail,
-      data
-    );
-    console.log(updatedJob1);
-  } catch (e) {
-    console.log(e);
-  }
-
-  try {
-    let companyEmail = "gk314@apple.com";
-    const apple = await jobData.getAllJobsByCompanyEmail(companyEmail);
-    console.log(apple);
-  } catch (e) {
-    console.log(e);
-  }
-  /*
-  // try {
-  // job1 = await job.createJob(
-  //   "Testyyy job",
-  //   "backend stuff",
-  //   "will sponsor",
-  //   "undersgrad in cs"
-  // );
-  //   //console.log(fli1)
-  // } catch (e) {
-  //   console.log(e);
-  // }
-
-/*
-try {
-
-    job2 = await job.createJob("Test job2 ","backend stuff 2","will sponsor2","undersgrad in ece");
-    //console.log(flight1)
-    } catch (e) {
-        console.log(e);
-    }
-
-try {
-        alljobs = await job.getAllJobs();
-        console.log(alljobs)
-        } catch (e) {
-            console.log(e);
-    }
-
+  for (let i = 0; i < 2; i++) {
     try {
-        jobbyid = await job.getJobById("64456e7c0b6aca78c6b3ee2c");
-        console.log(jobbyid)
-        } catch (e) {
-            console.log(e);
+      let data = {
+        name: `DA${i}`,
+        description: "This is job for Data Analyst",
+        responsibilities: "working on SQL and R",
+        visaRequirements: "f1",
+        minimumQualification: "masters",
+      };
+      let email = "gk34@apple.com";
+      const addedjob = await jobData.createJobByCompanyEmail(email, data);
+      alljobs.push(addedjob._id);
+      console.log("*****************************", addedjob);
+    } catch (e) {
+      console.log(e);
     }
+  }
 
-
-try {
-    jobbyid = await job.removeJob("64456e7c0b6aca78c6b3ee2c");
-    } catch (e) {
-        console.log(e);
-}
-try {
-    alljobs = await job.getAllJobs();
-    console.log(alljobs)
-    } catch (e) {
-        console.log(e);
-}
-
-try {
-
-    app1 = await application.createApplication("jobseekerid","jobid","Aaryaman","Katoch","email@test.com","resume","male","F1");
-    //console.log(flight1)
-    } catch (e) {
-        console.log(e);
-    }
-
+  for (let i = 0; i < 2; i++) {
     try {
-        allapps = await application.getAllApplications();
-        console.log(allapps)
-        } catch (e) {
-            console.log(e);
+      let data = {
+        name: `Automobile designer ${i}`,
+        description: "This is job for Automobile designer",
+        responsibilities: "working on CAD",
+        visaRequirements: "H1B",
+        minimumQualification: "masters",
+      };
+      let email = "ab34@outlook.com";
+      const addedjob = await jobData.createJobByCompanyEmail(email, data);
+      alljobs.push(addedjob._id);
+      console.log("*****************************", addedjob);
+    } catch (e) {
+      console.log(e);
     }
+  }
 
+  let jobSeekers = [jobseeker1, jobseeker2, jobseeker3, jobseeker4];
 
-try {
-    appbyid = await application.getApplicationById("64457066672df3082335c0e0");
-    console.log(appbyid)
+  for (let i = 0; i < 3; i += 1) {
+    try {
+      let jobSeekerId = jobSeekers[i]._id;
+      let jobId = alljobs[0];
+      let firstName = jobSeekers[i].name.split(" ")[0];
+      let lastName = jobSeekers[i].name.split(" ")[1];
+      let email = jobSeekers[i].email;
+      let resumeId = jobSeekers[i].resumeId;
+      let sex = "Male";
+      let visaStatus = "H1B";
+      let application = await data.application.createApplication(
+        jobSeekerId,
+        jobId,
+        firstName,
+        lastName,
+        email,
+        resumeId,
+        sex,
+        visaStatus
+      );
     } catch (e) {
-        console.log(e);
-}
-
-
-try {
-    ap = await application.removeApplication("64457066672df3082335c0e0");
-  
-    } catch (e) {
-        console.log(e);
-}
-
-
-  try {
-
-    s2 = await jobseekerData.addApplicationToJobseeker("644ca5c8f5adb13b130287b9","644ca700951b480e31fa966c");
-    console.log(s2)
-    } catch (e) {
-        console.log(e);
+      console.log(e);
     }
+  }
 
-*/
+  for (let i = 0; i < 3; i += 1) {
+    try {
+      let jobSeekerId = jobSeekers[i]._id;
+      let jobId = alljobs[2];
+      let firstName = jobSeekers[i].name.split(" ")[0];
+      let lastName = jobSeekers[i].name.split(" ")[1];
+      let email = jobSeekers[i].email;
+      let resumeId = jobSeekers[i].resumeId;
+      let sex = "Male";
+      let visaStatus = "H1B";
+      let application = await data.application.createApplication(
+        jobSeekerId,
+        jobId,
+        firstName,
+        lastName,
+        email,
+        resumeId,
+        sex,
+        visaStatus
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  for (let i = 0; i < 3; i += 1) {
+    try {
+      let jobSeekerId = jobSeekers[i]._id;
+      let jobId = alljobs[4];
+      let firstName = jobSeekers[i].name.split(" ")[0];
+      let lastName = jobSeekers[i].name.split(" ")[1];
+      let email = jobSeekers[i].email;
+      let resumeId = jobSeekers[i].resumeId;
+      let sex = "Male";
+      let visaStatus = "H1B";
+      let application = await data.application.createApplication(
+        jobSeekerId,
+        jobId,
+        firstName,
+        lastName,
+        email,
+        resumeId,
+        sex,
+        visaStatus
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   connection.closeConnection();
   console.log("Done!");
 }
