@@ -522,4 +522,5 @@ router.route("/resumeData/:id").get(async (req, res) => {
   }
 });
 
+
 module.exports = router;

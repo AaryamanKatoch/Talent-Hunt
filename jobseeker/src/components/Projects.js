@@ -288,7 +288,13 @@ function Projects() {
                         Address
                       </InputLabel> */}
                   {/* <FormLabel htmlFor="name">Contact</FormLabel> */}
-                  <Textarea
+                  <label htmlFor="name">Project Name</label>
+                      <Textarea
+                       slotProps={{
+                        textarea: {
+                          id: 'name',
+                        }
+                      }}
                     name="name"
                     value={projects[index].name || ""}
                     onChange={(e) => {
@@ -307,7 +313,13 @@ function Projects() {
                   {/* <InputLabel htmlFor="bootstrap-input">
                         Description
                       </InputLabel> */}
-                  <Textarea
+                  <label htmlFor="description">Project Description</label>
+                      <Textarea
+                       slotProps={{
+                        textarea: {
+                          id: 'description',
+                        }
+                      }}
                     name="description"
                     value={projects[index].description || ""}
                     onChange={(e) => {
