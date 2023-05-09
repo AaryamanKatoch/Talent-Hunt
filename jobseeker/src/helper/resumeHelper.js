@@ -177,6 +177,10 @@ const isValidStartEndYear=(start_year, end_year,start_month,end_month)=>{
     end_year = isValidYear(end_year);
     start_year = Number(start_year);
     end_year = Number(end_year);
+    let current_year = new Date().getFullYear();
+    if(start_year > current_year){
+      throw new Error("Start year should be less than equal to current year");
+    }
     let d={"January":1,"February":2,"March":3,"April":4,"May":5,"June":6,"July":7,"August":8,"September":9,"October":10,"November":11,"December":12}
     if(start_year>end_year){
       throw new Error("Start year should be less than end year");
