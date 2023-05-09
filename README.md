@@ -41,14 +41,27 @@ Latex - Make sure your system variables are updated and restart the machine afte
 - MAC - Install MacTex from https://www.tug.org/mactex/
 - Windows - Install MiKTeX from https://miktex.org/
 
+make sure you have set this path as system environment varibles:- 
+path:- C:\Users\{your pc name}\AppData\Local\Programs\MiKTeX\miktex\bin
+
+after that you need to download the file from this link and then run it.
+file link:- https://drive.google.com/file/d/1ZbyJW8Pjvl7MSBoZo37cgh2D6XUe7ZMY/view?usp=sharing
+
+
+run this file and then click on the run button in the upper left ccorner. So after clicking it many popups will show up so in all those pop ups you need to click on install and repeat that until one sample resume will show up on the screen. So after that latex installation for our website is complete.
+
 ImageMagick - Make sure your system variables are updated and restart the machine after installation.
 - Any OS - Install binary files for ImageMagick from https://imagemagick.org/script/download.php and follow the steps provided after.
+
+make sure you have set path as system environment varibles and ImageMagick is running on your device.
 
 Redis
 - Mac OS/Ubuntu - Install Redis Stack from https://redis.io/download/ and follow the steps.
 - Windows - Install Redis for windows as show here https://redis.io/docs/getting-started/installation/install-redis-on-windows/
 
+make sure you have set path as system environment varibles and Redis is running on your device.
 
+please restart your device for the sake of surity that all required softwares are installed correctly.
 
 # TalentHunt-Company-Frontend
 ## Features
