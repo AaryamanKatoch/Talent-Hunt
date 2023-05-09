@@ -486,18 +486,27 @@ router.route("/create-resume").post(async (req, res) => {
       return res.status(parseInt(e.status)).json({ error: e.error });
     }
   }
-  let pdf = await pdfCreateResume.createResumePdf(resumeData);
+  try {
+    let pdf = await pdfCreateResume.createResumePdf(resumeData);
 
   streamToBuffer(pdf, (err, buffer) => {
     if (err) {
-      console.error("Error converting stream to buffer:", err);
-      return res.status(500).send("Error generating PDF file");
+      // console.error("Error converting stream to buffer:", err);
+      throw {status : 500 , error : "Error generating PDF file"};
     } else {
       res.set("Content-Type", "application/pdf");
       res.set("Content-Disposition", 'attachment; filename="resume.pdf"');
       return res.send(buffer);
     }
   });
+  } catch (e) {
+    if (typeof e !== "object" || !("status" in e)) {
+      console.log(e);
+      return res.status(500).json({ error: "Internal server error" });
+    } else {
+      return res.status(parseInt(e.status)).json({ error: e.error });
+    }
+  }
 });
 
 router.route("/resumeData/:id").get(async (req, res) => {
