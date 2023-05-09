@@ -101,7 +101,30 @@ npm start
 
 ## Credentials to access and view data in application
 
-TalentHunt-Company-Frontend Credentials
+## TalentHunt-Company-Frontend Credentials
+### id:- tc34@apple.com
+### pass:- Test@123
+
+### id:- bg34@microsoft.com
+### pass:- Test@123
+
+### id:- ab34@outlook.com
+### pass:- Test@123
+
+### id:- gk34@apple.com
+### pass:- Test@123
+
+## TalentHunt-JobSeeker-Frontend Credentials
+### id:- dkanakia34@gmail.com
+### pass:- Test@123
+
+### id:- ui34@gmail.com
+### pass:- Test@123
+
+### id:- ak34@gmail.com
+### pass:- Test@123
+
+### id:- rd34@gmail.com
+### pass:- Test@123
 
 
-TalentHunt-JobSeeker-Frontend Credentials
