@@ -129,6 +129,18 @@ function FindPeople() {
                 <MenuItem value={"Vue"}>Vue</MenuItem>
                 <MenuItem value={"Python"}>Python</MenuItem>
                 <MenuItem value={"Java"}>Java</MenuItem>
+                <MenuItem value={"Nursing"}>Nursing</MenuItem>
+                <MenuItem value={"Doctor"}>Doctor</MenuItem>
+                <MenuItem value={"Clinical"}>Clinical</MenuItem>
+                <MenuItem value={"Teaching"}>Teaching</MenuItem>
+                <MenuItem value={"Administrative"}>Administrative</MenuItem>
+                <MenuItem value={"Marketing"}>Marketing</MenuItem>
+                <MenuItem value={"Sales"}>Sales</MenuItem>
+                <MenuItem value={"Leadership"}>Leadership</MenuItem>
+                <MenuItem value={"Autocad"}>Autocad</MenuItem>
+                <MenuItem value={"Marketing"}>Marketing</MenuItem>
+                <MenuItem value={"Design"}>Design</MenuItem>
+                <MenuItem value={"Construction"}>Construction</MenuItem>
               </Select>
             </FormControl>
             <div className="col-1"></div>
@@ -148,6 +160,9 @@ function FindPeople() {
                 <MenuItem value={"IT"}>IT</MenuItem>
                 <MenuItem value={"Automobile"}>Automobile</MenuItem>
                 <MenuItem value={"Civil"}>Civil</MenuItem>
+                <MenuItem value={"Healthcare"}>Healthcare</MenuItem>
+                <MenuItem value={"Education"}>Education</MenuItem>
+                <MenuItem value={"Law"}>Law</MenuItem>
               </Select>
             </FormControl>
             <div className="col-1"></div>

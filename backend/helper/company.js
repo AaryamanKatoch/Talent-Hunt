@@ -1,5 +1,16 @@
 const common = require("./common");
 
+function checkFoe(string, variableName) {
+  let foe = ["it", "automobile", "civil", "healthcare", "education", "law"];
+  if (!foe.includes(string.toLowerCase())) {
+    throw {
+      status: 400,
+      error: `${variableName} is not from the specified values`,
+    };
+  }
+  return string;
+}
+
 const isValidCompanyData = (data) => {
   for (key in data) {
     switch (key) {
@@ -11,6 +22,7 @@ const isValidCompanyData = (data) => {
         break;
       case "type":
         data.type = common.isValidString(data.type, "Type of Company");
+        data.type = checkFoe(data.type, "Type of Company");
         break;
       case "description":
         data.description = common.isValidString(
