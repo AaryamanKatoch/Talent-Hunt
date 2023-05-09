@@ -177,13 +177,16 @@ function Projects() {
     }
 
     try {
+      // console.log( " Here Project" + projects.length);
       for (let i = 0; i < projects.length; i++) {
         projects[i].name = helper.resumeHelper.checkifproperprojectname(
           projects[i].name
         );
+        // console.log(typeof projects[i].name);
         projects[i].description = helper.resumeHelper.checkifproperprojectdescription(
           projects[i].description
         );
+        console.log(projects[i].description);
       }
       setErrorSnackbarOpen(false);
     } catch (e) {
@@ -328,14 +331,14 @@ function Projects() {
                 </FormControl>
               </Stack>
               <Stack direction="row" spacing={2}>
-                <Button
+                {projects.length > 1 && <Button
                   variant="contained"
                   size="small"
                   color="error"
                   onClick={() => deleteProject(index)}
                 >
                   Delete
-                </Button>
+                </Button>}
               </Stack>
             </Stack>
           </AccordionDetails>

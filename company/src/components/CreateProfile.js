@@ -53,14 +53,14 @@ function CreateProfile(props) {
     >
       {error && <Alert severity="error">{error}</Alert>}
       <div className="card-body">
-        <h5 className="card-title">Create Company Profile</h5>
+        <h2 className="card-title">Create Company Profile</h2>
         <br />
         <form onSubmit={handleSubmit} id="profile-form">
           <TextField
             label="Name"
             value={data.name || ""}
             onChange={(e) => setData({ ...data, name: e.target.value })}
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -73,7 +73,7 @@ function CreateProfile(props) {
             onChange={(e) =>
               setData({ ...data, profile_picture: e.target.value })
             }
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="url"
             fullWidth
@@ -84,21 +84,19 @@ function CreateProfile(props) {
             value={data.description || ""}
             onChange={(e) => setData({ ...data, description: e.target.value })}
             required
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
             sx={{ mb: 3 }}
           />
           <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel id="demo-simple-select-helper-label">Type</InputLabel>
+            <InputLabel>Type</InputLabel>
             <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
               label="Type"
+              variant="filled"
               value={data.type || ""}
               onChange={(e) => setData({ ...data, type: e.target.value })}
-              required
             >
               <MenuItem value="">
                 <em>None</em>

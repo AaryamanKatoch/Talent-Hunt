@@ -68,14 +68,13 @@ function FindPeople() {
       temp = [...temp];
     }
     setFilteredPeople(temp);
-    if(temp.length < 1){
-      setError("No matches Found")
-    }
-    else{
+    if (temp.length < 1) {
+      setError("No matches Found");
+    } else {
       setError(null);
-    }    
+    }
   };
-  
+
   if (filteredPeople.length > 0) {
     card =
       filteredPeople &&
@@ -93,7 +92,7 @@ function FindPeople() {
 
   return (
     <div className="container">
-      <h1>Find Job Seekers For Your Roles</h1>
+      {/* <h4>Find Job Seekers For Your Roles</h4> */}
       <br />
       <div className="container form-container">
         <form onSubmit={handleSearch} id="search-form">
@@ -104,24 +103,18 @@ function FindPeople() {
               size="small"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
-              variant="outlined"
+              variant="filled"
               color="secondary"
               className="col-3"
               autoFocus
             />
             <div className="col-1"></div>
             <FormControl className="col-2">
-              <InputLabel
-                id="demo-simple-select-helper-label"
-                color="secondary"
-              >
-                Skill
-              </InputLabel>
+              <InputLabel color="secondary">Skill</InputLabel>
               <Select
-                labelId="demo-simple-select-helper-label"
-                id="demo-simple-select-helper"
                 value={skill}
                 label="Type"
+                variant="filled"
                 color="secondary"
                 size="small"
                 onChange={(e) => setSkill(e.target.value)}
@@ -140,17 +133,11 @@ function FindPeople() {
             </FormControl>
             <div className="col-1"></div>
             <FormControl className="col-2">
-              <InputLabel
-                id="demo-simple-select-helper-label"
-                color="secondary"
-              >
-                Field
-              </InputLabel>
+              <InputLabel color="secondary">Field</InputLabel>
               <Select
-                labelId="demo-simple-select-helper-label"
-                id="demo-simple-select-helper"
                 value={field}
                 label="Type"
+                variant="filled"
                 color="secondary"
                 size="small"
                 onChange={(e) => setField(e.target.value)}
@@ -177,20 +164,20 @@ function FindPeople() {
         </form>
       </div>
       <div className="container">
-        <div className="container" style={{marginTop: "2em", color: "red"}}>
-          {error && <h3>{error}</h3>}
-        </div>        
+        <div className="container" style={{ marginTop: "2em", color: "red" }}>
+          {error && <div>{error}</div>}
+        </div>
         <br /> <br />
-          <Grid
-            container
-            spacing={2}
-            sx={{
-              flexGrow: 1,
-              flexDirection: "row",
-            }}
-          >
-            {card}
-          </Grid>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            flexGrow: 1,
+            flexDirection: "row",
+          }}
+        >
+          {card}
+        </Grid>
       </div>
     </div>
   );

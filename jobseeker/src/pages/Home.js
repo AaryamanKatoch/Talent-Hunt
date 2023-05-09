@@ -48,8 +48,14 @@ const Home = () => {
     return <MuiAlert elevation={10} ref={ref} variant="filled" {...props} />;
   });
 
-  const clickEvent = () => {
+  const clickEventNext = () => {
     setBDisable(true);
+    navigate(`/page/${Number(page_player) + 1}`);
+  };
+
+  const clickEventPrev = () => {
+    setBDisable(true);
+    navigate(`/page/${Number(page_player) - 1}`);
   };
 
   useEffect(() => {
@@ -139,33 +145,28 @@ const Home = () => {
               alt="Live from space album cover"
             />
           )}
-          <CardActionArea>
-            <Link className="Link-for-eventcard" to={`/jobDetails/${job._id}`}>
-              <CardContent>
-                <Typography
-                  sx={{
-                    fontWeight: "bold",
-                    height: "40px",
-                  }}
-                  component="p"
-                >
-                  {job.name}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontWeight: "bold",
-                    height: "40px",
-                  }}
-                  component="p"
-                >
-                  {job.description
-                    .replace(regex, "")
-                    .substring(0, 35)
-                    .toString()}
-                </Typography>
-              </CardContent>
-            </Link>
-          </CardActionArea>
+          <Link className="Link-for-eventcard" to={`/jobDetails/${job._id}`}>
+            <CardContent>
+              <Typography
+                sx={{
+                  fontWeight: "bold",
+                  height: "40px",
+                }}
+                component="p"
+              >
+                {job.name}
+              </Typography>
+              <Typography
+                sx={{
+                  fontWeight: "bold",
+                  height: "40px",
+                }}
+                component="p"
+              >
+                {job.description.replace(regex, "").substring(0, 35).toString()}
+              </Typography>
+            </CardContent>
+          </Link>
         </Card>
       </Grid>
     );
@@ -225,15 +226,8 @@ const Home = () => {
               />
               <div className="col-1"></div>
               <FormControl className="col-2">
-                <InputLabel
-                  id="demo-simple-select-helper-label"
-                  color="secondary"
-                >
-                  Visa Requirements
-                </InputLabel>
+                <InputLabel color="secondary">Visa Requirements</InputLabel>
                 <Select
-                  labelId="demo-simple-select-helper-label"
-                  id="demo-simple-select-helper"
                   value={visaReq}
                   label={
                     <span
@@ -260,15 +254,8 @@ const Home = () => {
               </FormControl>
               <div className="col-1"></div>
               <FormControl className="col-2">
-                <InputLabel
-                  id="demo-simple-select-helper-label"
-                  color="secondary"
-                >
-                  Minimum Qualification
-                </InputLabel>
+                <InputLabel color="secondary">Minimum Qualification</InputLabel>
                 <Select
-                  labelId="demo-simple-select-helper-label"
-                  id="demo-simple-select-helper"
                   value={minQual}
                   label={
                     <span
@@ -314,33 +301,29 @@ const Home = () => {
           <div>
             <div className="page-div makeCenter">
               {page_player > 1 && (
-                <Link to={`/page/${Number(page_player) - 1}`}>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    type="submit"
-                    className="page_button"
-                    disabled={b_disabled}
-                    onClick={clickEvent}
-                  >
-                    previous
-                  </Button>
-                </Link>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  type="submit"
+                  className="page_button"
+                  disabled={b_disabled}
+                  onClick={clickEventPrev}
+                >
+                  Previous
+                </Button>
               )}
               <div className="page_indicator">{page_player}</div>
               {jobsData.moreJobsExist && (
-                <Link to={`/page/${Number(page_player) + 1}`}>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    type="submit"
-                    className="page_button"
-                    disabled={b_disabled}
-                    onClick={clickEvent}
-                  >
-                    next
-                  </Button>
-                </Link>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  type="submit"
+                  className="page_button"
+                  disabled={b_disabled}
+                  onClick={clickEventNext}
+                >
+                  Next
+                </Button>
               )}
               <br></br>
               <br></br>
