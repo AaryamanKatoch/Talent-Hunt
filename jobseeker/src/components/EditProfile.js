@@ -60,7 +60,12 @@ function EditProfile(props) {
       data.profile_picture = helper.common.isValidWebImage(
         data.profile_picture
       );
-      data.skills = helper.common.checkIsProperArrayOfStrings(data.skills);
+      console.log(data.skills);
+      data.skills = helper.common.checkIsProperArrayOfStrings(
+        data.skills,
+        "Skills"
+      );
+      console.log("here");
       data.address = helper.common.checkIsProperString(data.address);
       data.years_of_experience = helper.common.isValidInteger(
         data.years_of_experience
@@ -98,7 +103,7 @@ function EditProfile(props) {
             label="Name"
             value={data.name || ""}
             onChange={(e) => setData({ ...data, name: e.target.value })}
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -112,7 +117,7 @@ function EditProfile(props) {
             onChange={(e) =>
               setData({ ...data, profile_picture: e.target.value })
             }
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="url"
             fullWidth
@@ -123,7 +128,7 @@ function EditProfile(props) {
             value={data.address || ""}
             onChange={(e) => setData({ ...data, address: e.target.value })}
             required
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -134,7 +139,7 @@ function EditProfile(props) {
             value={data.education || ""}
             onChange={(e) => setData({ ...data, education: e.target.value })}
             required
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -147,7 +152,7 @@ function EditProfile(props) {
               setData({ ...data, years_of_experience: e.target.value })
             }
             required
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -161,11 +166,11 @@ function EditProfile(props) {
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
               label="Field Of Employment"
+              variant="filled"
               value={data.field_of_employment || ""}
               onChange={(e) =>
                 setData({ ...data, field_of_employment: e.target.value })
               }
-              required
             >
               <MenuItem value="">
                 <em>None</em>
@@ -188,7 +193,7 @@ function EditProfile(props) {
               <TextField
                 {...params}
                 label="Select skills"
-                variant="outlined"
+                variant="filled"
                 InputProps={{
                   ...params.InputProps,
                   startAdornment: selectedSkill.map((option) => (

@@ -76,7 +76,13 @@ router.route("/postJob").post(async (req, res) => {
 router.route("/postJobByEmail").post(async (req, res) => {
   try {
     let data = req.body;
-    for (let i in data) data[i] = xss(data[i]);
+    for (let i in data) {
+      if (Array.isArray(data[i])) {
+        data[i] = data[i].map((item) => xss(item));
+      } else {
+        data[i] = xss(data[i]);
+      }
+    }
     let companyEmail = data.email;
     companyEmail = helper.common.isValidEmail(companyEmail);
     data = helper.job.isValidJobData(data);
@@ -128,7 +134,13 @@ router
       const jobId = helper.common.isValidId(req.params.jobId);
       const job = await jobsData.getJobById(jobId);
       let data = req.body;
-      for (let i in data) data[i] = xss(data[i]);
+      for (let i in data) {
+        if (Array.isArray(data[i])) {
+          data[i] = data[i].map((item) => xss(item));
+        } else {
+          data[i] = xss(data[i]);
+        }
+      }
       let companyEmail = data.email;
       companyEmail = helper.common.isValidEmail(companyEmail);
       data = helper.job.isValidJobData(data);

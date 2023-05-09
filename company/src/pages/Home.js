@@ -55,35 +55,33 @@ const Home = () => {
               "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
           }}
         >
-          <div className="eventcard" to={`/editJob/${job._id}`}>
-            <CardContent>
-              <Typography variant="h5" component="h2" gutterBottom>
-                Role: {job.name}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Visa Requirements: {job.visaRequirements}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Minimum Qualification: {job.minimumQualification}
-              </Typography>
-            </CardContent>
-            <Button
-              component={Link}
-              to={`/editJob/${job._id}`}
-              variant="contained"
-              color="primary"
-            >
-              Edit Job
-            </Button>
-            <Button
-              component={Link}
-              to={`/applicants/${job._id}`}
-              variant="contained"
-              color="primary"
-            >
-              View Applications
-            </Button>
-          </div>
+          <CardContent>
+            <Typography variant="h5" component="h2" gutterBottom>
+              Role: {job.name}
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              Visa Requirements: {job.visaRequirements}
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              Minimum Qualification: {job.minimumQualification}
+            </Typography>
+          </CardContent>
+          <Button
+            component={Link}
+            to={`/editJob/${job._id}`}
+            variant="contained"
+            color="primary"
+          >
+            Edit Job
+          </Button>
+          <Button
+            component={Link}
+            to={`/applicants/${job._id}`}
+            variant="contained"
+            color="primary"
+          >
+            View Applications
+          </Button>
         </Card>
       </Grid>
     );

@@ -29,6 +29,8 @@ function Login() {
   //   }
   // }, []);
 
+  const customColor = '#767676';
+
   const validateLogin = async (e) => {
     e.preventDefault();
     try {
@@ -93,17 +95,17 @@ function Login() {
         {error ? <Alert severity="error" onClose={() => {console.log('here'); setError(null);}}><h5>{error.message}</h5></Alert> : ""}
         {success ? <Alert onClose={() => {console.log('here in'); setSuccess(null);}}><h5>{success.message}</h5></Alert> : ""}
         <div className="card-body">
-          <h5 className="card-title">Login</h5>
+          <h1 className="card-title">Login</h1>
           <br />
           <form onSubmit={validateLogin} id="register-form">
             <TextField
               label="Email"
               onChange={(e) => setData({ ...data, email: e.target.value })}
               required
-              variant="outlined"
-              color="secondary"
+              variant="filled"
+              color="primary"
               type="email"
-              sx={{ mb: 3 }}
+              sx={{  mb: 3 }}
               fullWidth
               value={data.email}
             />
@@ -111,8 +113,8 @@ function Login() {
               label="Password"
               onChange={(e) => setData({ ...data, password: e.target.value })}
               required
-              variant="outlined"
-              color="secondary"
+              variant="filled"
+              color="primary"
               type="password"
               value={data.password}
               fullWidth

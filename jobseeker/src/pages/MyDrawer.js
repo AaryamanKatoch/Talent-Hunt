@@ -32,7 +32,6 @@ function MyDrawer() {
       anchor="left"
       open={true}
     >
-      <Divider />
       {currentUser ? (
         <div>
           <Stack
@@ -52,82 +51,64 @@ function MyDrawer() {
           </div>
         </div>
       ) : null}
-      <Divider />
       <List>
         {currentUser ? (
           <>
-            <Link to={`/page/${1}`} className="navBarLink">
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <HomeIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={"Home"} />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-            <Divider />
-            <Link to={`/dashboard`} className="navBarLink">
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <HomeIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={"Dashboard"} />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-            <Divider />
-            <Link to={`/myApplications`} className="navBarLink">
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <HomeIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={"My Applications"} />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-            <Divider />
-            <Link to={`/create-resume`} className="navBarLink">
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <HomeIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={"Create Resume"} />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-            <Divider />
+            <ListItem disablePadding>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <Link to={`/page/${1}`} className="navBarLink">
+                <ListItemText primary={"Home"} />
+              </Link>
+            </ListItem>
+
+            <ListItem disablePadding>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <Link to={`/dashboard`} className="navBarLink">
+                <ListItemText primary={"Dashboard"} />
+              </Link>
+            </ListItem>
+
+            <ListItem disablePadding>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <Link to={`/myApplications`} className="navBarLink">
+                <ListItemText primary={"My Applications"} />
+              </Link>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <Link to={`/create-resume`} className="navBarLink">
+                <ListItemText primary={"Create Resume"} />
+              </Link>
+            </ListItem>
           </>
-        ) : (
-          ""
-        )}
+        ) : null}
         {currentUser ? null : (
-          <Link to="/login" className="navBarLink">
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <LoginIcon />
-                </ListItemIcon>
-                <ListItemText primary={"Login"} />
-              </ListItemButton>
-            </ListItem>
-          </Link>
+          <ListItem disablePadding>
+            <ListItemIcon>
+              <LoginIcon />
+            </ListItemIcon>
+            <Link to="/login" className="navBarLink">
+              <ListItemText primary={"Login"} />
+            </Link>
+          </ListItem>
         )}
-        <Divider />
         {currentUser ? (
-          <Link onClick={doSignOut} className="navBarLink">
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <HomeIcon />
-                </ListItemIcon>
-                <ListItemText primary={"LogOut"} />
-              </ListItemButton>
-            </ListItem>
-          </Link>
+          <ListItem disablePadding>
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <Link onClick={doSignOut} className="navBarLink">
+              <ListItemText primary={"LogOut"} />
+            </Link>
+          </ListItem>
         ) : null}
       </List>
     </Drawer>

@@ -91,7 +91,7 @@ function CreateProfile(props) {
             label="Name"
             value={data.name || ""}
             onChange={(e) => setData({ ...data, name: e.target.value })}
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -104,7 +104,7 @@ function CreateProfile(props) {
             onChange={(e) =>
               setData({ ...data, profile_picture: e.target.value })
             }
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="url"
             fullWidth
@@ -115,7 +115,7 @@ function CreateProfile(props) {
             value={data.address || ""}
             onChange={(e) => setData({ ...data, address: e.target.value })}
             required
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -126,7 +126,7 @@ function CreateProfile(props) {
             value={data.education || ""}
             onChange={(e) => setData({ ...data, education: e.target.value })}
             required
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -139,7 +139,7 @@ function CreateProfile(props) {
               setData({ ...data, years_of_experience: e.target.value })
             }
             required
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -153,11 +153,11 @@ function CreateProfile(props) {
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
               label="Field Of Employment"
+              variant="filled"
               value={data.field_of_employment || ""}
               onChange={(e) =>
                 setData({ ...data, field_of_employment: e.target.value })
               }
-              required
             >
               <MenuItem value="">
                 <em>None</em>
@@ -180,7 +180,7 @@ function CreateProfile(props) {
               <TextField
                 {...params}
                 label="Select skills"
-                variant="outlined"
+                variant="filled"
                 InputProps={{
                   ...params.InputProps,
                   startAdornment: selectedSkill.map((option) => (
