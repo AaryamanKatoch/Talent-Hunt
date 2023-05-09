@@ -55,6 +55,7 @@ const createCompany = async (data, email) => {
   };
   newCompany.image = fs.readFileSync(path.resolve(__dirname, "../image.jpg"));
   newCompany.image = newCompany.image.toString("base64");
+  console.log(newCompany.image);
   const insertInfo = await companyCollection.insertOne(newCompany);
   if (!insertInfo.insertedId || !insertInfo.acknowledged) {
     throw {
