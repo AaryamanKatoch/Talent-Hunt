@@ -51,6 +51,7 @@ router
       for (let i in data) data[i] = xss(data[i]);
       let email = data.email;
       email = helper.common.isValidEmail(email);
+      console.log(data);
       data = helper.jobseeker.isValidJobseekerData(data);
       const response = await axios.get(data.profile_picture, {
         responseType: "arraybuffer",

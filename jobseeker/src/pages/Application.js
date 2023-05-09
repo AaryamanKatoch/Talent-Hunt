@@ -11,6 +11,7 @@ import {
 } from "@mui/material/";
 import { helper } from "../helper";
 import { AuthContext } from "../firebase/Auth";
+import { jobseeker } from "../api/routes";
 
 function Application() {
   const navigate = useNavigate();
@@ -42,31 +43,51 @@ function Application() {
       }
     };
     fetch();
-  });
+  },[]);
 
   useEffect(() => {
     const fetch = async () => {
       try {
+        const jobSeeker = await api.routes.jobseeker(currentUser.email);
+        if(jobSeeker.data.message === "No profile is created for the user"){
+          setError("Create a profile and Resume before applying");
+          setFlag(true);
+          return;
+        }
+
+        //checking for resume
+        const resume = await api.routes.getResume(jobSeeker.data.resumeId);
+
+        //checking for past application if any.
         const jobSeekerApplications = await api.routes.getJobSeekerApplications(
           currentUser.email
         );
         jobSeekerApplications.data.map((application) => {
           if (application._id === jobData._id) {
             setFlag(true);
-            throw {
-              response: { data: "You have already applied for this job!" },
-            };
+            throw new Error("You have already applied for this job");
           }
           return application;
         });
       } catch (error) {
-        // console.log(error);
-        console.log(error.response.data);
-        setError(error.response.data);
+        if (error.message === "You have already applied for this job") {
+          setError(error.message);
+          setFlag(true);
+          return;
+        }else if(error.message){
+          console.log(error.message);
+          if(error.message === "Request failed with status code 404"){
+            setError("Create a profile and Resume before applying")
+            setFlag(true);
+          }
+        }else if (error.response.data) {
+          console.log(error.response.data);
+          setError(error.response.data);
+        }
       }
     };
     fetch();
-  }, [jobData, currentUser]);
+  }, [jobData]);
 
   const validateApplication = async (e) => {
     e.preventDefault();

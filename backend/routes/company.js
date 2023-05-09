@@ -9,6 +9,7 @@ const helper = require("../helper");
 const axios = require("axios");
 var im = require("imagemagick");
 const fs = require("fs");
+const path = require("path");
 const streamToBuffer = require("stream-to-buffer");
 const pdfCreateResume = require("../data/pdfCreateResume");
 

@@ -16,8 +16,10 @@ export const getSingleJobSeeker = (id) => {
     return axiosAuth.get(`/jobseeker/singleJobSeeker/${id}`);
 }
 
-export const jobseeker = () => {
-  return axiosNoAuth.get(`/dashboard`);
+export const jobseeker = (email) => {
+  return axiosNoAuth.get(`/dashboard`, {
+    params: {email: email},
+  });
 };
 
 export const jobseekerPost = (data) => {
@@ -34,4 +36,8 @@ export const postJobApplication = (data) => {
 
 export const getJobSeekerApplications = (e) => {
   return axiosAuth.get(`/jobseeker/HistoryOfApplications`, {params: {email: e}})
+}
+
+export const getResume = (id) => {
+  return axiosAuth.get(`/jobseeker/resumeData/${id}`)
 }
