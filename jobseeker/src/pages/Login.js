@@ -114,7 +114,7 @@ function Login() {
               setSuccess(null);
             }}
           >
-            <h5>{success.message}</h5>
+            <div>{success.message}</div>
           </Alert>
         ) : (
           ""
@@ -127,7 +127,7 @@ function Login() {
               label="Email"
               onChange={(e) => setData({ ...data, email: e.target.value })}
               required
-              variant="outlined"
+              variant="filled"
               color="secondary"
               type="email"
               sx={{ mb: 3 }}
@@ -138,7 +138,7 @@ function Login() {
               label="Password"
               onChange={(e) => setData({ ...data, password: e.target.value })}
               required
-              variant="outlined"
+              variant="filled"
               color="secondary"
               type="password"
               value={data.password}
