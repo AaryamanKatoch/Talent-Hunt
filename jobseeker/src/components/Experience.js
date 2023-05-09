@@ -106,7 +106,14 @@ console.log(experience);
                 {/* <InputLabel  htmlFor="bootstrap-input">
                   Company
                 </InputLabel> */}
-                <Textarea name='company' value={experience[index].company || ''} onChange={(e)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='company' placeholder='Company'></Textarea>
+                <label htmlFor="company">Company</label>
+                <Textarea 
+                 slotProps={{
+                  textarea: {
+                    id: 'company',
+                  }
+                }}
+                name='company' value={experience[index].company || ''} onChange={(e)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='company' placeholder='Company'></Textarea>
                       {/* <FormLabel htmlFor="name">Full Name</FormLabel> */}
                       {/* <BootstrapInput label='Company'/> */}
                   </FormControl>
@@ -114,7 +121,14 @@ console.log(experience);
                   {/* <InputLabel htmlFor="bootstrap-input">
                     Position
                   </InputLabel> */}
-                  <Textarea name='position' value={experience[index].position || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='Position' placeholder='Position'></Textarea>
+                  <label htmlFor="position">Position</label>
+                  <Textarea
+                   slotProps={{
+                    textarea: {
+                      id: 'position',
+                    }
+                  }}
+                  name='position' value={experience[index].position || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='Position' placeholder='Position'></Textarea>
                       {/* <FormLabel htmlFor="name">Email</FormLabel>  */}
                       {/* <BootstrapInput label='Position'/> */}
                   </FormControl>
@@ -166,7 +180,14 @@ console.log(experience);
                       {/* <InputLabel htmlFor="bootstrap-input">
                         Start Year
                       </InputLabel> */}
-                      <Textarea name='startYear' value={experience[index].startYear || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='Start Year' placeholder='Start Year'></Textarea>
+                      <label htmlFor="startYear">Start Year</label>
+                      <Textarea
+                       slotProps={{
+                        textarea: {
+                          id: 'startYear',
+                        }
+                      }}
+                       name='startYear' value={experience[index].startYear || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='Start Year' placeholder='Start Year'></Textarea>
                       {/* <FormLabel htmlFor="name">Address</FormLabel> */}
                       {/* <BootstrapInput label='Start Year'/> */}
                   </FormControl>
@@ -207,7 +228,14 @@ console.log(experience);
                         End Year
                       </InputLabel> */}
                       {/* <FormLabel htmlFor="name">Address</FormLabel> */}
-                      <Textarea name='endYear' value={experience[index].endYear || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='End Year' placeholder='End Year'></Textarea>
+                      <label htmlFor="endYear">End Year</label>
+                      <Textarea
+                       slotProps={{
+                        textarea: {
+                          id: 'endYear',
+                        }
+                      }}
+                       name='endYear' value={experience[index].endYear || ''} onChange={(e,i)=>{onExperienceChange(e,index)}}  variant='soft' size='md' label='End Year' placeholder='End Year'></Textarea>
                       {/* <BootstrapInput label='End Year'/> */}
                   </FormControl>
                 </Stack>
@@ -217,9 +245,17 @@ console.log(experience);
                         Address
                       </InputLabel> */}
                       {/* <FormLabel htmlFor="name">Contact</FormLabel> */}
-                      <Textarea name='address' value={experience[index].address || ''} onChange={(e,i)=>{onExperienceChange(e,index)}} variant='soft' size='md' label='Address' placeholder='Address'></Textarea>
+                      <label htmlFor="address">Address</label>
+                      <Textarea 
+                       slotProps={{
+                        textarea: {
+                          id: 'address',
+                        }
+                      }}
+                      name='address' value={experience[index].address || ''} onChange={(e,i)=>{onExperienceChange(e,index)}} variant='soft' size='md' label='Address' placeholder='Address'></Textarea>
                       {/* <BootstrapInput  label='Address'/> */}
                   </FormControl>
+
                 </Stack>
                 <Stack  spacing={{ xs: 1, sm: 2, md: 4 }}>
                   {/* <FormControl>
@@ -230,17 +266,25 @@ console.log(experience);
                 { experience[index].bulletPoints.map((bulletPoint,ind)=>(
                     <Stack key={ind}>
                       <Stack direction="row" spacing={2}>                      
-                       <Box flex={1}><Textarea flex={1} value={experience[index].bulletPoints[ind] || ''} onChange={(e,i)=>{bulletPointChange(e,index,ind)}} variant='soft' size='md' label='Bullet' placeholder='Bullet Point'></Textarea></Box> 
+                       <Box flex={1}>
+                       <label htmlFor={`bulletPoint${ind + 1}`}>{`Bullet Point ${ind + 1}`}</label>
+                        <Textarea
+                         slotProps={{
+                          textarea: {
+                            id: `bulletPoint${ind + 1}`,
+                          }
+                        }}
+                         name={`bulletPoint${ind + 1}`} flex={1} value={experience[index].bulletPoints[ind] || ''} onChange={(e,i)=>{bulletPointChange(e,index,ind)}} variant='soft' size='md' label='Bullet' placeholder='Bullet Point'></Textarea></Box> 
                         <Button flex="none" variant="contained" size="small" color='error' onClick={() => deleteBulletPoint(index,ind)}>Delete</Button>
                       </Stack>
                       
                     </Stack>
                 ))}
-                 <Box sx={{marginTop:2}}>
+                 {experience[index].bulletPoints.length < 10 && (<Box sx={{marginTop:2}}>
                     <Stack direction="row" spacing={2}>
                       <Button variant="contained" size="small" onClick={()=>addBulletPoint(index)}>Add Bullet</Button>
                     </Stack>
-                </Box>
+                </Box>)}
                 </Stack>
                 <Stack direction="row" spacing={2}>
                   <Button variant="contained" size="small" color='error' onClick={() => deleteExperience(index)}>Delete</Button>

@@ -54,11 +54,18 @@ console.log(skills);
                     
                         
                      
-                       <Textarea  name='skill'  value={inputValue} size='lg' label='Skills' onChange={handleInputChange} placeholder="Skill" variant="soft" />
+                    <label htmlFor="skill">Skills</label>
+                      <Textarea
+                       slotProps={{
+                        textarea: {
+                          id: 'skill',
+                        }
+                      }}
+                       name='skill'  value={inputValue} size='lg' label='Skills' onChange={handleInputChange} placeholder="Skill" variant="soft" />
                     {/* <BootstrapInput  name='skill' value={inputValue} label='Skills' onChange={handleInputChange}/> */}
                 </FormControl>
                 
-                    <Box paddingTop='13px'>
+                    <Box paddingTop='32px'>
                         <Stack direction="row" spacing={2}>
                             <Button variant="contained" size="small" onClick={addSkill}>Add Skill</Button>
                         </Stack>

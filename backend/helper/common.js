@@ -133,7 +133,7 @@ function isValidWebImage(url) {
 
 const isValidURL = (url) => {
   url = isValidString(url, "LinkedIn URL");
-  if(!url.match(/^(http(s)?:\/\/)?(www\.)?linkedin\.com\/in\/[a-z0-9]+\/?$/))
+  if(!url.match(/^(http(s)?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/))
     throw {status: '400', error : 'Invalid Linkedin URL'}
   return url;
 }
