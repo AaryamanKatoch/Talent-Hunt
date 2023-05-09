@@ -70,32 +70,30 @@ function Projects() {
     };
 
     try {
-      personalDetails.name = helper.common.isValidString2(
+      personalDetails.name =  helper.resumeHelper.checkifpropername(
         personalDetails.name,
-        "Name"
       );
 
-      personalDetails.address = helper.common.isValidString2(
+      personalDetails.address =  helper.resumeHelper.checkifproperaddress(
         personalDetails.address,
-        "Address"
       );
 
-      personalDetails.linkedin = helper.common.isValidLinkedinURL(
+      personalDetails.linkedin = helper.resumeHelper.isValidLinkedIn(
         personalDetails.linkedin
       );
 
-      personalDetails.email = helper.common.isValidEmail2(
+      personalDetails.email = helper.resumeHelper.isValidEmail(
         personalDetails.email
       );
-      console.log("Project : " + personalDetails.email);
+      // console.log("Project : " + personalDetails.email);
       // console.log("here");
-      personalDetails.contact = helper.common.isValidContact(
+      personalDetails.contact = helper.resumeHelper.isValidContact(
         personalDetails.contact
       );
       // console.log("here");
 
       for (let i = 0; i < skills.length; i++) {
-        skills[i] = helper.common.isValidString2(skills[i], "Skill");
+        skills[i] = helper.resumeHelper.checkifproperskills(skills[i]);
       }
       setErrorSnackbarOpen(false);
     } catch (e) {
@@ -107,26 +105,23 @@ function Projects() {
 
     try {
       for (let i = 0; i < education.length; i++) {
-        education[i].school = helper.common.isValidString2(
-          education[i].school,
-          "School"
+        education[i].school = helper.resumeHelper.checkifproperschool(
+          education[i].school
         );
-        education[i].address = helper.common.isValidString2(
-          education[i].address,
-          "Address"
+        education[i].address = helper.resumeHelper.checkifproperaddress(
+          education[i].address
         );
-        education[i].degree = helper.common.isValidString2(
-          education[i].degree,
-          "Degree"
+        education[i].degree = helper.resumeHelper.checkifproperdegree(
+          education[i].degree
         );
-        education[i].gpa = helper.common.isValidGpa(education[i].gpa);
-        education[i].startYear = helper.common.isValidYear(
+        education[i].gpa = helper.resumeHelper.isValidGpa(education[i].gpa);
+        education[i].startYear = helper.resumeHelper.isValidYear(
           education[i].startYear
         );
-        education[i].endYear = helper.common.isValidYear(education[i].endYear);
-        helper.common.isValidStartEndYear(
+        education[i].endYear = helper.resumeHelper.isValidYear(education[i].endYear);
+        helper.resumeHelper.isValidStartEndYear(
           education[i].startYear,
-          education[i].endYear
+          education[i].endYear,
         );
       }
       setErrorSnackbarOpen(false);
@@ -139,36 +134,36 @@ function Projects() {
 
     try {
       for (let i = 0; i < experience.length; i++) {
-        experience[i].company = helper.common.isValidString2(
-          experience[i].company,
-          "Company"
+        experience[i].company = helper.resumeHelper.checkifpropercompany(
+          experience[i].company
         );
-        experience[i].address = helper.common.isValidString2(
-          experience[i].address,
-          "Address"
+        experience[i].address = helper.resumeHelper.checkifproperaddress(
+          experience[i].address
         );
-        experience[i].position = helper.common.isValidString2(
-          experience[i].position,
-          "Position"
+        experience[i].position = helper.resumeHelper.checkifproperposition(
+          experience[i].position
         );
-        experience[i].startYear = helper.common.isValidYear(
+        experience[i].startYear = helper.resumeHelper.isValidYear(
           experience[i].startYear
         );
-        experience[i].endYear = helper.common.isValidYear(
+        experience[i].endYear = helper.resumeHelper.isValidYear(
           experience[i].endYear
         );
-        helper.common.isValidStartEndYear(
-          experience[i].startYear,
-          experience[i].endYear
-        );
-        experience[i].startMonth = helper.common.isValidMonth(
+       
+        experience[i].startMonth = helper.resumeHelper.isValidMonth(
           experience[i].startMonth
         );
-        experience[i].endMonth = helper.common.isValidMonth(
+        experience[i].endMonth = helper.resumeHelper.isValidMonth(
+          experience[i].endMonth
+        );
+        helper.resumeHelper.isValidStartEndYear(
+          experience[i].startYear,
+          experience[i].endYear,
+          experience[i].startMonth,
           experience[i].endMonth
         );
         for (let j = 0; j < experience[i].bulletPoints.length; j++) {
-          experience[i].bulletPoints[j] = helper.common.isValidString2(
+          experience[i].bulletPoints[j] = helper.resumeHelper.checkifproperbullet(
             experience[i].bulletPoints[j]
           );
         }
@@ -183,13 +178,11 @@ function Projects() {
 
     try {
       for (let i = 0; i < projects.length; i++) {
-        projects[i].name = helper.common.isValidString2(
-          projects[i].name,
-          "Project Name"
+        projects[i].name = helper.resumeHelper.checkifproperprojectname(
+          projects[i].name
         );
-        projects[i].description = helper.common.isValidString2(
-          projects[i].description,
-          "Project Description"
+        projects[i].description = helper.resumeHelper.checkifproperprojectdescription(
+          projects[i].description
         );
       }
       setErrorSnackbarOpen(false);

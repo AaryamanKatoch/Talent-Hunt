@@ -200,29 +200,29 @@ router
   .post(async (req, res) => {
     let resumeData = req.body;
     // console.log("before",resumeData);
+    
     let education = JSON.parse(resumeData.education);
     let experience = JSON.parse(resumeData.experience);
     let projects = JSON.parse(resumeData.projects);
     let skills = JSON.parse(resumeData.skills);
     // console.log("after", resumeData);
+   
     for (let i in resumeData) resumeData[i] = xss(resumeData[i]);
     try {
-      resumeData.name = helper.common.isValidString(
-        resumeData.name,
-        "Personal Name"
+      resumeData.name = helper.resumeHelper.checkifpropername(
+        resumeData.name
       );
-      resumeData.address = helper.common.isValidString(
-        resumeData.address,
-        "Address"
+      resumeData.address = helper.resumeHelper.checkifproperaddress(
+        resumeData.address
+       
       );
-      resumeData.linkedin = helper.common.isValidURL(resumeData.linkedin);
-      resumeData.email = helper.common.isValidEmail(resumeData.email);
-      resumeData.contact = helper.common.isValidContact(resumeData.contact);
-
+      resumeData.linkedin = helper.resumeHelper.isValidLinkedIn(resumeData.linkedin);
+      resumeData.email = helper.resumeHelper.isValidEmail(resumeData.email);
+      resumeData.contact = helper.resumeHelper.isValidContact(resumeData.contact);
+      console.log("here routes - ");
       for (let i = 0; i < resumeData.skills.length; i++) {
-        resumeData.skills[i] = helper.common.isValidString(
-          resumeData.skills[i],
-          "Skill"
+        resumeData.skills[i] = helper.resumeHelper.checkifproperskills(
+          resumeData.skills[i]
         );
       }
     } catch (e) {
@@ -236,28 +236,25 @@ router
     try {
       console.log(education);
       for (let i = 0; i < education.length; i++) {
-        education[i].school = helper.common.isValidString(
-          education[i].school,
-          "School"
+        education[i].school = helper.resumeHelper.checkifproperschool(
+          education[i].school
         );
-        education[i].address = helper.common.isValidString(
-          education[i].address,
-          "Address"
+        education[i].address = helper.resumeHelper.checkifproperaddress(
+          education[i].address
         );
-        education[i].degree = helper.common.isValidString(
-          education[i].degree,
-          "Degree"
+        education[i].degree = helper.resumeHelper.checkifproperdegree(
+          education[i].degree
         );
-        education[i].gpa = helper.common.isValidGpa(
+        education[i].gpa = helper.resumeHelper.isValidGpa(
           education[i].gpa
         );
-        education[i].startYear = helper.common.isValidYear(
+        education[i].startYear = helper.resumeHelper.isValidYear(
           education[i].startYear
         );
-        education[i].endYear = helper.common.isValidYear(
+        education[i].endYear = helper.resumeHelper.isValidYear(
           education[i].endYear
         );
-        helper.common.isValidStartEndYear(
+        helper.resumeHelper.isValidStartEndYear(
           education[i].startYear,
           education[i].endYear
         );
@@ -274,38 +271,38 @@ router
 
     try {
       for (let i = 0; i < experience.length; i++) {
-        experience[i].company = helper.common.isValidString(
-          experience[i].company,
-          "Company"
+        experience[i].company = helper.resumeHelper.checkifpropercompany(
+          experience[i].company
         );
-        experience[i].address = helper.common.isValidString(
-          experience[i].address,
-          "Address"
+        experience[i].address = helper.resumeHelper.checkifproperaddress(
+          experience[i].address
         );
-        experience[i].position = helper.common.isValidString(
-          experience[i].position,
-          "Position"
+        experience[i].position = helper.resumeHelper.checkifproperposition(
+          experience[i].position
         );
-        experience[i].startYear = helper.common.isValidYear(
+        experience[i].startYear = helper.resumeHelper.isValidYear(
           experience[i].startYear
         );
-        experience[i].endYear = helper.common.isValidYear(
+        experience[i].endYear = helper.resumeHelper.isValidYear(
           experience[i].endYear
         );
-        helper.common.isValidStartEndYear(
-          experience[i].startYear,
-          experience[i].endYear
-        );
-        experience[i].startMonth = helper.common.isValidMonth(
+        
+        experience[i].startMonth = helper.resumeHelper.isValidMonth(
           experience[i].startMonth
         );
-        experience[i].endMonth = helper.common.isValidMonth(
+        experience[i].endMonth = helper.resumeHelper.isValidMonth(
+          experience[i].endMonth
+        );
+        helper.resumeHelper.isValidStartEndYear(
+          experience[i].startYear,
+          experience[i].endYear,
+          experience[i].startMonth,
           experience[i].endMonth
         );
 
         for (let j = 0; j < experience[i].bulletPoints.length; j++) {
           experience[i].bulletPoints[j] =
-            helper.common.isValidString(
+            helper.resumeHelper.checkifproperbullet(
               experience[i].bulletPoints[j]
             );
         }
@@ -321,13 +318,11 @@ router
 
     try {
       for (let i = 0; i < projects.length; i++) {
-        projects[i].name = helper.common.isValidString(
-          projects[i].name,
-          "Project Name"
+        projects[i].name = helper.resumeHelper.checkifproperprojectname(
+          projects[i].name
         );
-        projects[i].description = helper.common.isValidString(
-          projects[i].description,
-          "Project Description"
+        projects[i].description = helper.resumeHelper.checkifproperprojectdescription(
+          projects[i].description
         );
       }
     } catch (e) {

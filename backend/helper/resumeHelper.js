@@ -15,7 +15,7 @@ const isValidString = (string, parameter) => {
   return string;
 };
 
-async function checkifpropername(vari){
+ function checkifpropername(vari){
     
     if(!vari)
     throw {status: '400', error : "No personal name provided"};
@@ -25,20 +25,20 @@ async function checkifpropername(vari){
     throw {status: '400', error : "Name cant be empty or all white spaces"};
 
     vari=vari.trim()
-    vari=vari.toLowerCase()
+    // vari=vari.toLowerCase()
     
     if(vari.length<2 || vari.length>80)
     throw {status: '400', error : 'Name must be atleast two characters long or less than 80 characters'};
 
 
 let regex1 = /^[a-z ']+$/i
-if(!regex1.test(vari))
+if(!regex1.test(vari.toLowerCase()))
 throw {status: '400', error : 'Name can only have alphabets and some some special characters'};
 return vari
 }
 
 
-async function isValidEmail(email){
+ function isValidEmail(email){
     email = isValidString(email, "Email");
     if (
       !email.match(
@@ -50,7 +50,7 @@ async function isValidEmail(email){
   };
 
   const isValidContact = (contact) => {
-    // (123) 456-7890
+  // (123) 456-7890
   // 123-456-7890
   // 123.456.7890
   // 1234567890
@@ -63,9 +63,9 @@ async function isValidEmail(email){
   return contact;
   }
 
-  // console.log(isValidContact('+1 551-246-8510'));
+  //  console.log(isValidContact('5512468510'));
 
-  async function checkifproperaddress(vari){ 
+   function checkifproperaddress(vari){ 
     //flight code is alphanumeric; first character has to be an aplhabet//min length 2; max length:6
    if(!vari)
    throw {status: '400', error : "Missing address"};
@@ -94,7 +94,7 @@ const isValidLinkedIn = (url) => {
   }
 
 
-  async function checkifproperschool(vari){ 
+   function checkifproperschool(vari){ 
     //flight code is alphanumeric; first character has to be an aplhabet//min length 2; max length:6
    if(!vari)
    throw {status: '400', error : "Missing School"};
@@ -117,15 +117,61 @@ const isValidLinkedIn = (url) => {
 
 }
 
-console.log(checkifproperschool('STEVENS'))
-async function checkifproperdegree(vari){ 
+ function checkifpropercompany(vari){ 
+  //flight code is alphanumeric; first character has to be an aplhabet//min length 2; max length:6
+ if(!vari)
+ throw {status: '400', error : "Missing Company Name"};
+ if(typeof(vari)!=="string")
+ throw {status: '400', error : "Company Name should be a string"};
+ if(vari.trim().length===0)
+ throw {status: '400', error : "Company Name cant be empty or all white spaces"};
+
+ vari=vari.trim()
+ 
+ if(vari.length<2)
+ throw {status: '400', error : "Minimum length of Company Name should be two"};
+
+ if(vari.length>100)
+ throw {status: '400', error : "Maximum character length of Company Name is 100 "};
+ let regex1 = /^[a-z ']+$/i
+ if(!regex1.test(vari))
+ throw {status: '400', error : 'Company Name can only have alphabets and some some special characters'};
+ return vari
+
+}
+
+ function checkifproperposition(vari){ 
+  //flight code is alphanumeric; first character has to be an aplhabet//min length 2; max length:6
+ if(!vari)
+ throw {status: '400', error : "Missing Company Position"};
+ if(typeof(vari)!=="string")
+ throw {status: '400', error : "Company Position should be a string"};
+ if(vari.trim().length===0)
+ throw {status: '400', error : "Company Position cant be empty or all white spaces"};
+
+ vari=vari.trim()
+ 
+ if(vari.length<2)
+ throw {status: '400', error : "Minimum length of Company Position should be two"};
+
+ if(vari.length>100)
+ throw {status: '400', error : "Maximum character length of Company Position is 100 "};
+ let regex1 = /^[a-z ']+$/i
+ if(!regex1.test(vari))
+ throw {status: '400', error : 'Company Position can only have alphabets and some some special characters'};
+ return vari
+
+}
+
+// console.log(checkifproperschool('STEVENS'))
+ function checkifproperdegree(vari){ 
     //flight code is alphanumeric; first character has to be an aplhabet//min length 2; max length:6
    if(!vari)
    throw {status: '400', error : "Missing Degree"};
    if(typeof(vari)!=="string")
    throw {status: '400', error : "Degree should be a string"};
    if(vari.trim().length===0)
-   throw {status: '400', error : "Degree cant be empty or all white spaces"};
+   throw {status: '400', error : "Degree can't be empty or all white spaces"};
 
    vari=vari.trim()
    
@@ -182,18 +228,20 @@ const isValidStartEndYear=(start_year, end_year,start_month,end_month)=>{
     end_year = isValidYear(end_year);
     start_year = Number(start_year);
     end_year = Number(end_year);
-    d={"January":1,"February":2,"March":3,"April":4,"May":5,"June":6,"July":7,"August":8,"September":9,"October":10,"November":11,"December":12}
+    let d={"January":1,"February":2,"March":3,"April":4,"May":5,"June":6,"July":7,"August":8,"September":9,"October":10,"November":11,"December":12}
     if(start_year>end_year){
       throw {status : "400" , error: "Start year should be less than end year"};
     }
+    if(start_month && end_month){
+       if(start_year==end_year && d[start_month]>d[end_month]){
+        throw {status : "400" , error: "Start Date should be less than end date"};
+    }
+    }
 
-else if(start_year==end_year && d[start_month]>d[end_month]){
-    throw {status : "400" , error: "Start Date should be less than end date"};
-}
   }
 
 
-  async function checkifproperbullet(vari){ 
+   function checkifproperbullet(vari){ 
     //flight code is alphanumeric; first character has to be an aplhabet//min length 2; max length:6
    if(!vari)
    throw {status: '400', error : "Missing bullets"};
@@ -214,7 +262,7 @@ else if(start_year==end_year && d[start_month]>d[end_month]){
    return vari
 }
 
-async function checkifproperskills(vari){ 
+ function checkifproperskills(vari){ 
     //flight code is alphanumeric; first character has to be an aplhabet//min length 2; max length:6
    if(!vari)
    throw {status: '400', error : "Missing skills"};
@@ -225,8 +273,8 @@ async function checkifproperskills(vari){
 
    vari=vari.trim()
    
-   if(vari.length<6)
-   throw {status: '400', error : "Minimum length of Skills should be six"};
+  //  if(vari.length<)
+  //  throw {status: '400', error : "Minimum length of Skills should be six"};
   
    if(vari.length>100)
    throw {status: '400', error : "Maximum length of skills is 100"};
@@ -236,7 +284,7 @@ async function checkifproperskills(vari){
 }
 
 
-async function checkifproperprojectname(vari){ 
+ function checkifproperprojectname(vari){ 
     //flight code is alphanumeric; first character has to be an aplhabet//min length 2; max length:6
    if(!vari)
    throw {status: '400', error : "Missing project name"};
@@ -257,7 +305,7 @@ async function checkifproperprojectname(vari){
    return vari
 }
 
-async function checkifproperprojectdescription(vari){ 
+ function checkifproperprojectdescription(vari){ 
     //flight code is alphanumeric; first character has to be an aplhabet//min length 2; max length:6
    if(!vari)
    throw {status: '400', error : "Missing project description"};
@@ -278,6 +326,32 @@ async function checkifproperprojectdescription(vari){
    return vari
 }
 
+const isValidMonth=(month)=>{
+  month = isValidString(month, "Month");
+  const special = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  if(special.test(month)) throw {status : "400", error : "Month is not valid!"}; 
+  let lowerCaseMonth = month.toLowerCase();
+  let checkJan = lowerCaseMonth === 'jan' || lowerCaseMonth === 'january';
+  let checkFeb = lowerCaseMonth === 'feb' || lowerCaseMonth === 'february';
+  let checkMar = lowerCaseMonth === 'mar' || lowerCaseMonth === 'march';
+  let checkApr = lowerCaseMonth === 'apr' || lowerCaseMonth === 'april';
+  let checkMay = lowerCaseMonth === 'may' || lowerCaseMonth === 'may';
+  let checkJun = lowerCaseMonth === 'jun' || lowerCaseMonth === 'june';
+  let checkJul = lowerCaseMonth === 'jul' || lowerCaseMonth === 'july';
+  let checkAug = lowerCaseMonth === 'aug' || lowerCaseMonth === 'august';
+  let checkSept = lowerCaseMonth === 'sept' || lowerCaseMonth === 'september';
+  let checkOct = lowerCaseMonth === 'oct' || lowerCaseMonth === 'october';
+  let checkNov = lowerCaseMonth === 'nov' || lowerCaseMonth === 'november';
+  let checkDec = lowerCaseMonth === 'dec' || lowerCaseMonth === 'december';
+  
+  if(checkJan || checkFeb || checkMar || checkApr || checkMay || checkJun || checkJul || checkAug || checkSept || checkOct || checkNov || checkDec){
+    return month;
+  }
+  else {
+    throw {status : "404", error: "Month should be in valid format! eg : Mar/March or Jan/January" };
+  }
+}
+
 
 module.exports = {
 checkifpropername,
@@ -292,9 +366,11 @@ isValidString,
 checkifproperdegree,
 checkifpropername,
 checkifproperbullet,
+checkifpropercompany,
+checkifproperposition,
 checkifproperprojectdescription,
 checkifproperprojectname,
 checkifproperschool,
-checkifproperskills
+checkifproperskills,
+isValidMonth
   };
-  
