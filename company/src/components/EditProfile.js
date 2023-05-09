@@ -54,14 +54,14 @@ function EditProfile(props) {
     >
       {error && <Alert severity="error">{error}</Alert>}
       <div className="card-body">
-        <h5 className="card-title">Edit Company Profile</h5>
+        <h2 className="card-title">Edit Company Profile</h2>
         <br />
         <form onSubmit={handleSubmit} id="profile-form">
           <TextField
             label="Name"
             value={data.name || ""}
             onChange={(e) => setData({ ...data, name: e.target.value })}
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -74,7 +74,7 @@ function EditProfile(props) {
             onChange={(e) =>
               setData({ ...data, profile_picture: e.target.value })
             }
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="url"
             fullWidth
@@ -85,7 +85,7 @@ function EditProfile(props) {
             value={data.description || ""}
             onChange={(e) => setData({ ...data, description: e.target.value })}
             required
-            variant="outlined"
+            variant="filled"
             color="secondary"
             type="text"
             fullWidth
@@ -97,6 +97,7 @@ function EditProfile(props) {
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
               label="Type"
+              variant="filled"
               value={data.type || ""}
               onChange={(e) => setData({ ...data, type: e.target.value })}
               required
