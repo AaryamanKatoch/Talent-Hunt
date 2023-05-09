@@ -43,13 +43,13 @@ function Application() {
       }
     };
     fetch();
-  },[]);
+  }, []);
 
   useEffect(() => {
     const fetch = async () => {
       try {
         const jobSeeker = await api.routes.jobseeker(currentUser.email);
-        if(jobSeeker.data.message === "No profile is created for the user"){
+        if (jobSeeker.data.message === "No profile is created for the user") {
           setError("Create a profile and Resume before applying");
           setFlag(true);
           return;
@@ -74,13 +74,13 @@ function Application() {
           setError(error.message);
           setFlag(true);
           return;
-        }else if(error.message){
+        } else if (error.message) {
           console.log(error.message);
-          if(error.message === "Request failed with status code 404"){
-            setError("Create a profile and Resume before applying")
+          if (error.message === "Request failed with status code 404") {
+            setError("Create a profile and Resume before applying");
             setFlag(true);
           }
-        }else if (error.response.data) {
+        } else if (error.response.data) {
           console.log(error.response.data);
           setError(error.response.data);
         }
@@ -180,15 +180,8 @@ function Application() {
                   sx={{ mb: 3 }}
                 />
                 <FormControl sx={{ m: 1, minWidth: 200 }}>
-                  <InputLabel
-                    id="demo-simple-select-helper-label"
-                    color="primary"
-                  >
-                    Visa Status
-                  </InputLabel>
+                  <InputLabel color="primary">Visa Status</InputLabel>
                   <Select
-                    labelId="demo-simple-select-helper-label"
-                    id="demo-simple-select-helper"
                     label="Visa Status"
                     variant="filled"
                     value={application.visaStatus || ""}
@@ -198,7 +191,6 @@ function Application() {
                         visaStatus: e.target.value,
                       })
                     }
-                    required
                     color="primary"
                   >
                     <MenuItem value="">
@@ -228,7 +220,6 @@ function Application() {
                     onChange={(e) =>
                       setApplication({ ...application, sex: e.target.value })
                     }
-                    required
                     color="primary"
                   >
                     <MenuItem value="">
