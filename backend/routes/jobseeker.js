@@ -48,9 +48,16 @@ router
   .post(async (req, res) => {
     try {
       let data = req.body;
-      for (let i in data) data[i] = xss(data[i]);
+      for (let i in data) {
+        if (Array.isArray(data[i])) {
+          data[i] = data[i].map((item) => xss(item));
+        } else {
+          data[i] = xss(data[i]);
+        }
+      }
       let email = data.email;
       email = helper.common.isValidEmail(email);
+      console.log(data);
       data = helper.jobseeker.isValidJobseekerData(data);
       const response = await axios.get(data.profile_picture, {
         responseType: "arraybuffer",
@@ -82,7 +89,13 @@ router
   .patch(async (req, res) => {
     try {
       let data = req.body;
-      for (let i in data) data[i] = xss(data[i]);
+      for (let i in data) {
+        if (Array.isArray(data[i])) {
+          data[i] = data[i].map((item) => xss(item));
+        } else {
+          data[i] = xss(data[i]);
+        }
+      }
       let email = data.email;
       email = helper.common.isValidEmail(email);
       data = helper.jobseeker.isValidJobseekerData(data);
@@ -139,7 +152,13 @@ router
   .patch(async (req, res) => {
     try {
       let data = req.body;
-      for (let i in data) data[i] = xss(data[i]);
+      for (let i in data) {
+        if (Array.isArray(data[i])) {
+          data[i] = data[i].map((item) => xss(item));
+        } else {
+          data[i] = xss(data[i]);
+        }
+      }
       let id = req.params.id;
       id = helper.common.checkIsProperId(id);
       data = helper.jobseeker.isValidJobseekerData(data);
@@ -165,10 +184,10 @@ router
       const search = req.query.search || "";
       const visaReq = req.query.visaReq || "";
       const minQual = req.query.minQual || "";
-      // console.log('0',pageNumber,"*****");
-      // console.log('1',search,"*****");
-      // console.log('2',visaReq,"*****");
-      // console.log('3',minQual,"*****");
+      // console.log('0',pageNumber,"***");
+      // console.log('1',search,"***");
+      // console.log('2',visaReq,"***");
+      // console.log('3',minQual,"***");
       const data = await jobSeekerData.getAllJobs(
         pageNumber,
         search,
@@ -227,25 +246,19 @@ router.get("/allJobSeekers", async (req, res) => {
 
 router.route("/create-resume").post(async (req, res) => {
   let resumeData = req.body;
-  //  console.log(resumeData.personalDetails);
   for (let i in resumeData) resumeData[i] = xss(resumeData[i]);
-  let personalDetails = resumeData.personalDetails;
-  let education = resumeData.education;
-  let experience = resumeData.experience;
-  let projects = resumeData.projects;
-  let skills = resumeData.skills;
+  let personalDetails = JSON.parse(resumeData.personalDetails);
+  let education = JSON.parse(resumeData.education);
+  let experience = JSON.parse(resumeData.experience);
+  let projects = JSON.parse(resumeData.projects);
+  let skills = JSON.parse(resumeData.skills);
   let userId;
   let createdResume;
   try {
-    // let id = "64406ecb4339df491dac4d4b";
-    // id = helper.common.checkIsProperId(id);
-    // const data = await jobSeekerData.getJobSeekerByID(id);
     let email = personalDetails.email;
-    console.log(email);
-
     email = helper.common.isValidEmail(email);
     const profileExists = await jobSeekerData.profileExists(email);
-    console.log(profileExists);
+    // console.log(profileExists);
     if (profileExists) {
       const data = await jobSeekerData.getJobSeekerByEmail(email);
       // console.log(data);
@@ -266,29 +279,28 @@ router.route("/create-resume").post(async (req, res) => {
   }
 
   try {
-    personalDetails.name = helper.common.isValidString(
-      personalDetails.name,
-      "Name"
+    personalDetails.name = await helper.resumeHelper.checkifpropername(
+      personalDetails.name
     );
 
-    personalDetails.address = helper.common.isValidString(
-      personalDetails.address,
-      "Address"
+    personalDetails.address = helper.resumeHelper.checkifproperaddress(
+      personalDetails.address
     );
 
-    personalDetails.linkedin = helper.common.isValidURL(
+    personalDetails.linkedin = helper.resumeHelper.isValidLinkedIn(
       personalDetails.linkedin
     );
-    console.log("Route - " + personalDetails.email);
-    personalDetails.email = helper.common.isValidEmail(personalDetails.email);
-    console.log("here");
-    personalDetails.contact = helper.common.isValidContact(
-      personalDetails.contact
+    // console.log("Route - " + personalDetails.email);
+    personalDetails.email = helper.resumeHelper.isValidEmail(
+      personalDetails.email
     );
     // console.log("here");
+    personalDetails.contact = helper.resumeHelper.isValidContact(
+      personalDetails.contact
+    );
 
     for (let i = 0; i < skills.length; i++) {
-      skills[i] = helper.common.isValidString(skills[i], "Skill");
+      skills[i] = helper.resumeHelper.checkifproperskills(skills[i]);
     }
   } catch (e) {
     if (typeof e !== "object" || !("status" in e)) {
@@ -321,24 +333,23 @@ router.route("/create-resume").post(async (req, res) => {
   // console.log(education);
   try {
     for (let i = 0; i < education.length; i++) {
-      education[i].school = helper.common.isValidString(
-        education[i].school,
-        "School"
+      education[i].school = helper.resumeHelper.checkifproperschool(
+        education[i].school
       );
-      education[i].address = helper.common.isValidString(
-        education[i].address,
-        "Address"
+      education[i].address = helper.resumeHelper.checkifproperaddress(
+        education[i].address
       );
-      education[i].degree = helper.common.isValidString(
-        education[i].degree,
-        "Degree"
+      education[i].degree = helper.resumeHelper.checkifproperdegree(
+        education[i].degree
       );
-      education[i].gpa = helper.common.isValidGpa(education[i].gpa);
-      education[i].startYear = helper.common.isValidYear(
+      education[i].gpa = helper.resumeHelper.isValidGpa(education[i].gpa);
+      education[i].startYear = helper.resumeHelper.isValidYear(
         education[i].startYear
       );
-      education[i].endYear = helper.common.isValidYear(education[i].endYear);
-      helper.common.isValidStartEndYear(
+      education[i].endYear = helper.resumeHelper.isValidYear(
+        education[i].endYear
+      );
+      helper.resumeHelper.isValidStartEndYear(
         education[i].startYear,
         education[i].endYear
       );
@@ -364,37 +375,40 @@ router.route("/create-resume").post(async (req, res) => {
 
   try {
     for (let i = 0; i < experience.length; i++) {
-      experience[i].company = helper.common.isValidString(
-        experience[i].company,
-        "Company"
+      experience[i].company = helper.resumeHelper.checkifpropercompany(
+        experience[i].company
       );
-      experience[i].address = helper.common.isValidString(
-        experience[i].address,
-        "Address"
+      experience[i].address = helper.resumeHelper.checkifproperaddress(
+        experience[i].address
       );
-      experience[i].position = helper.common.isValidString(
-        experience[i].position,
-        "Position"
+      experience[i].position = helper.resumeHelper.checkifproperposition(
+        experience[i].position
       );
-      experience[i].startYear = helper.common.isValidYear(
+      experience[i].startYear = helper.resumeHelper.isValidYear(
         experience[i].startYear
       );
-      experience[i].endYear = helper.common.isValidYear(experience[i].endYear);
-      helper.common.isValidStartEndYear(
-        experience[i].startYear,
+      experience[i].endYear = helper.resumeHelper.isValidYear(
         experience[i].endYear
       );
-      experience[i].startMonth = helper.common.isValidMonth(
+
+      experience[i].startMonth = helper.resumeHelper.isValidMonth(
         experience[i].startMonth
       );
-      experience[i].endMonth = helper.common.isValidMonth(
+      experience[i].endMonth = helper.resumeHelper.isValidMonth(
+        experience[i].endMonth
+      );
+      helper.resumeHelper.isValidStartEndYear(
+        experience[i].startYear,
+        experience[i].endYear,
+        experience[i].startMonth,
         experience[i].endMonth
       );
       // experience[i].description = helper.common.isValidString(
       //   experience[i].description
       // );
+      // console.log(experience, experience.bulletPoints);
       for (let j = 0; j < experience[i].bulletPoints.length; j++) {
-        experience[i].bulletPoints[j] = helper.common.isValidString(
+        experience[i].bulletPoints[j] = helper.resumeHelper.checkifproperbullet(
           experience[i].bulletPoints[j]
         );
       }
@@ -423,14 +437,13 @@ router.route("/create-resume").post(async (req, res) => {
 
   try {
     for (let i = 0; i < projects.length; i++) {
-      projects[i].name = helper.common.isValidString(
-        projects[i].name,
-        "Project Name"
+      projects[i].name = helper.resumeHelper.checkifproperprojectname(
+        projects[i].name
       );
-      projects[i].description = helper.common.isValidString(
-        projects[i].description,
-        "Project Description"
-      );
+      projects[i].description =
+        helper.resumeHelper.checkifproperprojectdescription(
+          projects[i].description
+        );
 
       let createdProject = await projectsData.createProject(
         createdResume._id,

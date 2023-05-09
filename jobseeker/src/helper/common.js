@@ -1,7 +1,9 @@
 import isUrl from "is-url";
 
 export const isValidString = (string, parameter) => {
-  if (!string) throw new Error(`You must provide a ${parameter}`);
+  if (!string) {
+    throw new Error(`You must provide a ${parameter}`);
+  }
   if (typeof string !== "string")
     throw new Error(`${parameter} must be a string`);
   string = string.trim();
@@ -134,7 +136,7 @@ export const isValidString2 = (string, parameter) => {
 };
 export const isValidLinkedinURL = (url) => {
   url = isValidString2(url, "LinkedIn URL");
-  if(!url.match(/^(http(s)?:\/\/)?(www\.)?linkedin\.com\/in\/[a-z0-9]+\/?$/))
+  if(!url.match(/^(http(s)?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/))
     throw new Error('Invalid Linkedin URL');
   return url;
 }

@@ -3,6 +3,7 @@ const companyHelpers = require("./company");
 const jobseekerHelpers = require("./jobseeker");
 const jobHelpers = require("./job");
 const jobHelpers2 = require("./jobHelpers");
+const resumeHelper = require("./resumeHelper");
 
 module.exports = {
   common: commonHelpers,
@@ -10,4 +11,5 @@ module.exports = {
   jobseeker: jobseekerHelpers,
   job: jobHelpers,
   jobhelper: jobHelpers2,
+  resumeHelper : resumeHelper
 };

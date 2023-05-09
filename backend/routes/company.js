@@ -9,6 +9,7 @@ const helper = require("../helper");
 const axios = require("axios");
 var im = require("imagemagick");
 const fs = require("fs");
+const path = require("path");
 const streamToBuffer = require("stream-to-buffer");
 const pdfCreateResume = require("../data/pdfCreateResume");
 
@@ -40,7 +41,13 @@ router
   .post(async (req, res) => {
     try {
       let data = req.body;
-      for (let i in data) data[i] = xss(data[i]);
+      for (let i in data) {
+        if (Array.isArray(data[i])) {
+          data[i] = data[i].map((item) => xss(item));
+        } else {
+          data[i] = xss(data[i]);
+        }
+      }
       let email = data.email;
       email = helper.common.isValidEmail(email);
       data = helper.company.isValidCompanyData(data);
@@ -74,7 +81,13 @@ router
   .patch(async (req, res) => {
     try {
       let data = req.body;
-      for (let i in data) data[i] = xss(data[i]);
+      for (let i in data) {
+        if (Array.isArray(data[i])) {
+          data[i] = data[i].map((item) => xss(item));
+        } else {
+          data[i] = xss(data[i]);
+        }
+      }
       let email = data.email;
       email = helper.common.isValidEmail(email);
       data = helper.company.isValidCompanyData(data);
@@ -144,7 +157,6 @@ router
   .patch(async (req, res) => {
     let data = req.body;
     // console.log(data);
-    for (let i in data) data[i] = xss(data[i]);
     try {
       for (let i in data) {
         if (typeof data[i] === "object") {
@@ -199,24 +211,44 @@ router
   })
   .post(async (req, res) => {
     let resumeData = req.body;
-    for (let i in resumeData) resumeData[i] = xss(resumeData[i]);
-    try {
-      resumeData.name = helper.common.isValidString(
-        resumeData.name,
-        "Personal Name"
-      );
-      resumeData.address = helper.common.isValidString(
-        resumeData.address,
-        "Address"
-      );
-      resumeData.linkedin = helper.common.isValidURL(resumeData.linkedin);
-      resumeData.email = helper.common.isValidEmail(resumeData.email);
-      resumeData.contact = helper.common.isValidContact(resumeData.contact);
+    // console.log("before",resumeData);
 
+    let education = JSON.parse(resumeData.education);
+    let experience = JSON.parse(resumeData.experience);
+    let projects = JSON.parse(resumeData.projects);
+    let skills = JSON.parse(resumeData.skills);
+    // console.log("after", resumeData);
+
+    for (let i in resumeData) {
+      if (Array.isArray(resumeData[i])) {
+        resumeData[i] = resumeData[i].map((item) => xss(item));
+      } else if (typeof resumeData[i] === "object") {
+        for (let j in resumeData[i])
+          if (Array.isArray(resumeData[i][j]))
+            resumeData[i][j] = resumeData[i][j].map((element) => {
+              return xss(element);
+            });
+          else resumeData[i][j] = xss(resumeData[i][j]);
+      } else {
+        resumeData[i] = xss(resumeData[i]);
+      }
+    }
+    try {
+      resumeData.name = helper.resumeHelper.checkifpropername(resumeData.name);
+      resumeData.address = helper.resumeHelper.checkifproperaddress(
+        resumeData.address
+      );
+      resumeData.linkedin = helper.resumeHelper.isValidLinkedIn(
+        resumeData.linkedin
+      );
+      resumeData.email = helper.resumeHelper.isValidEmail(resumeData.email);
+      resumeData.contact = helper.resumeHelper.isValidContact(
+        resumeData.contact
+      );
+      console.log("here routes - ");
       for (let i = 0; i < resumeData.skills.length; i++) {
-        resumeData.skills[i] = helper.common.isValidString(
-          resumeData.skills[i],
-          "Skill"
+        resumeData.skills[i] = helper.resumeHelper.checkifproperskills(
+          resumeData.skills[i]
         );
       }
     } catch (e) {
@@ -228,31 +260,27 @@ router
     }
 
     try {
-      for (let i = 0; i < resumeData.education.length; i++) {
-        resumeData.education[i].school = helper.common.isValidString(
-          resumeData.education[i].school,
-          "School"
+      console.log(education);
+      for (let i = 0; i < education.length; i++) {
+        education[i].school = helper.resumeHelper.checkifproperschool(
+          education[i].school
         );
-        resumeData.education[i].address = helper.common.isValidString(
-          resumeData.education[i].address,
-          "Address"
+        education[i].address = helper.resumeHelper.checkifproperaddress(
+          education[i].address
         );
-        resumeData.education[i].degree = helper.common.isValidString(
-          resumeData.education[i].degree,
-          "Degree"
+        education[i].degree = helper.resumeHelper.checkifproperdegree(
+          education[i].degree
         );
-        resumeData.education[i].gpa = helper.common.isValidGpa(
-          resumeData.education[i].gpa
+        education[i].gpa = helper.resumeHelper.isValidGpa(education[i].gpa);
+        education[i].startYear = helper.resumeHelper.isValidYear(
+          education[i].startYear
         );
-        resumeData.education[i].startYear = helper.common.isValidYear(
-          resumeData.education[i].startYear
+        education[i].endYear = helper.resumeHelper.isValidYear(
+          education[i].endYear
         );
-        resumeData.education[i].endYear = helper.common.isValidYear(
-          resumeData.education[i].endYear
-        );
-        helper.common.isValidStartEndYear(
-          resumeData.education[i].startYear,
-          resumeData.education[i].endYear
+        helper.resumeHelper.isValidStartEndYear(
+          education[i].startYear,
+          education[i].endYear
         );
         // let createdEducation = await educationData.createEducation(createdResume._id,education[i].school, education[i].address, education[i].degree, education[i].gpa, education[i].startYear, education[i].endYear);
         // console.log(createdEducation);
@@ -266,48 +294,45 @@ router
     }
 
     try {
-      for (let i = 0; i < resumeData.experience.length; i++) {
-        resumeData.experience[i].company = helper.common.isValidString(
-          resumeData.experience[i].company,
-          "Company"
+      for (let i = 0; i < experience.length; i++) {
+        experience[i].company = helper.resumeHelper.checkifpropercompany(
+          experience[i].company
         );
-        resumeData.experience[i].address = helper.common.isValidString(
-          resumeData.experience[i].address,
-          "Address"
+        experience[i].address = helper.resumeHelper.checkifproperaddress(
+          experience[i].address
         );
-        resumeData.experience[i].position = helper.common.isValidString(
-          resumeData.experience[i].position,
-          "Position"
+        experience[i].position = helper.resumeHelper.checkifproperposition(
+          experience[i].position
         );
-        resumeData.experience[i].startYear = helper.common.isValidYear(
-          resumeData.experience[i].startYear
+        experience[i].startYear = helper.resumeHelper.isValidYear(
+          experience[i].startYear
         );
-        resumeData.experience[i].endYear = helper.common.isValidYear(
-          resumeData.experience[i].endYear
+        experience[i].endYear = helper.resumeHelper.isValidYear(
+          experience[i].endYear
         );
-        helper.common.isValidStartEndYear(
-          resumeData.experience[i].startYear,
-          resumeData.experience[i].endYear
-        );
-        resumeData.experience[i].startMonth = helper.common.isValidMonth(
-          resumeData.experience[i].startMonth
-        );
-        resumeData.experience[i].endMonth = helper.common.isValidMonth(
-          resumeData.experience[i].endMonth
-        );
-        // experience[i].description = helper.common.isValidString(experience[i].description);
 
-        for (let j = 0; j < resumeData.experience[i].bulletPoints.length; j++) {
-          resumeData.experience[i].bulletPoints[j] =
-            helper.common.isValidString(
-              resumeData.experience[i].bulletPoints[j]
+        experience[i].startMonth = helper.resumeHelper.isValidMonth(
+          experience[i].startMonth
+        );
+        experience[i].endMonth = helper.resumeHelper.isValidMonth(
+          experience[i].endMonth
+        );
+        helper.resumeHelper.isValidStartEndYear(
+          experience[i].startYear,
+          experience[i].endYear,
+          experience[i].startMonth,
+          experience[i].endMonth
+        );
+
+        for (let j = 0; j < experience[i].bulletPoints.length; j++) {
+          experience[i].bulletPoints[j] =
+            helper.resumeHelper.checkifproperbullet(
+              experience[i].bulletPoints[j]
             );
         }
-
-        // let createdExperience = await experienceData.createExperience(createdResume._id,experience[i].company, experience[i].address, experience[i].position, experience[i].bulletPoints, experience[i].startYear, experience[i].endYear, experience[i].startMonth, experience[i].endMonth);
-        // console.log(createdExperience);
       }
     } catch (e) {
+      console.log(e);
       if (typeof e !== "object" || !("status" in e)) {
         return res.status(500).json({ error: "Internal server error" });
       } else {
@@ -316,21 +341,17 @@ router
     }
 
     try {
-      console.log(resumeData.projects.length);
-      for (let i = 0; i < resumeData.projects.length; i++) {
-        resumeData.projects[i].name = helper.common.isValidString(
-          resumeData.projects[i].name,
-          "Project Name"
+      for (let i = 0; i < projects.length; i++) {
+        projects[i].name = helper.resumeHelper.checkifproperprojectname(
+          projects[i].name
         );
-        resumeData.projects[i].description = helper.common.isValidString(
-          resumeData.projects[i].description,
-          "Project Description"
-        );
-
-        // let createdProject = await projectsData.createProject(createdResume._id,projects[i].name, projects[i].description);
-        // console.log(createdProject);
+        projects[i].description =
+          helper.resumeHelper.checkifproperprojectdescription(
+            projects[i].description
+          );
       }
     } catch (e) {
+      console.log(e);
       if (typeof e !== "object" || !("status" in e)) {
         return res.status(500).json({ error: "Internal server error" });
       } else {
@@ -346,11 +367,11 @@ router
     };
 
     let resumeObj = {
-      personalDetails: personalDetails,
-      education: resumeData.education,
-      experience: resumeData.experience,
-      projects: resumeData.projects,
-      skills: resumeData.skills,
+      personalDetails: JSON.stringify(personalDetails),
+      education: JSON.stringify(education),
+      experience: JSON.stringify(experience),
+      projects: JSON.stringify(projects),
+      skills: JSON.stringify(skills),
     };
 
     try {
@@ -366,6 +387,7 @@ router
         }
       });
     } catch (e) {
+      console.log(e);
       if (typeof e !== "object" || !("status" in e)) {
         return res.status(500).json({ error: "Internal server error" });
       } else {
