@@ -1,3 +1,20 @@
+const isValidString = (string, parameter) => {
+  if (!string)
+    throw {
+      status: "400",
+      error: `You must provide a ${parameter}`,
+    };
+  if (typeof string !== "string")
+    throw { status: "400", error: `${parameter} must be a string` };
+  string = string.trim();
+  if (string.length === 0)
+    throw {
+      status: "400",
+      error: `${parameter} cannot be an empty string or just spaces`,
+    };
+  return string;
+};
+
 async function checkifpropername(vari){
     
     if(!vari)
@@ -10,8 +27,8 @@ async function checkifpropername(vari){
     vari=vari.trim()
     vari=vari.toLowerCase()
     
-    if(vari.length<2 || vari.length>50)
-    throw {status: '400', error : 'Name must be atleast two characters long or less than 50 characters'};
+    if(vari.length<2 || vari.length>80)
+    throw {status: '400', error : 'Name must be atleast two characters long or less than 80 characters'};
 
 
 let regex1 = /^[a-z ']+$/i
@@ -46,6 +63,7 @@ async function isValidEmail(email){
   return contact;
   }
 
+  // console.log(isValidContact('+1 551-246-8510'));
 
   async function checkifproperaddress(vari){ 
     //flight code is alphanumeric; first character has to be an aplhabet//min length 2; max length:6
@@ -58,11 +76,11 @@ async function isValidEmail(email){
 
    vari=vari.trim()
    
-   if(vari.length<6)
-   throw {status: '400', error : "Minimum length of address should be six"};
+   if(vari.length<2)
+   throw {status: '400', error : "Minimum length of address should be two"};
   
-   if(vari.length>100)
-   throw {status: '400', error : "Maximum length of description is 100 "};
+   if(vari.length>200)
+   throw {status: '400', error : "Maximum length of description is 200 "};
    
 
    return vari
@@ -79,68 +97,53 @@ const isValidLinkedIn = (url) => {
   async function checkifproperschool(vari){ 
     //flight code is alphanumeric; first character has to be an aplhabet//min length 2; max length:6
    if(!vari)
-   throw {status: '400', error : "Missing school"};
+   throw {status: '400', error : "Missing School"};
    if(typeof(vari)!=="string")
-   throw {status: '400', error : "school should be a string"};
+   throw {status: '400', error : "School should be a string"};
    if(vari.trim().length===0)
-   throw {status: '400', error : "school cant be empty or all white spaces"};
+   throw {status: '400', error : "School cant be empty or all white spaces"};
 
    vari=vari.trim()
    
-   if(vari.length<6)
-   throw {status: '400', error : "Minimum length of school should be six"};
+   if(vari.length<2)
+   throw {status: '400', error : "Minimum length of school should be two"};
   
-   if(vari.length>30)
-   throw {status: '400', error : "Maximum length of school is 30 "};
+   if(vari.length>100)
+   throw {status: '400', error : "Maximum character length of school is 100 "};
    let regex1 = /^[a-z ']+$/i
    if(!regex1.test(vari))
-   throw {status: '400', error : 'Name can only have alphabets and some some special characters'};
+   throw {status: '400', error : 'School can only have alphabets and some some special characters'};
    return vari
 
 }
 
-
+console.log(checkifproperschool('STEVENS'))
 async function checkifproperdegree(vari){ 
     //flight code is alphanumeric; first character has to be an aplhabet//min length 2; max length:6
    if(!vari)
-   throw {status: '400', error : "Missing school"};
+   throw {status: '400', error : "Missing Degree"};
    if(typeof(vari)!=="string")
-   throw {status: '400', error : "school should be a string"};
+   throw {status: '400', error : "Degree should be a string"};
    if(vari.trim().length===0)
-   throw {status: '400', error : "school cant be empty or all white spaces"};
+   throw {status: '400', error : "Degree cant be empty or all white spaces"};
 
    vari=vari.trim()
    
-   if(vari.length<6)
-   throw {status: '400', error : "Minimum length of school should be six"};
+   if(vari.length<2)
+   throw {status: '400', error : "Minimum length of Degree should be two"};
   
-   if(vari.length>50)
-   throw {status: '400', error : "Maximum length of school is 50 "};
+   if(vari.length>100)
+   throw {status: '400', error : "Maximum length of Degree is 100 "};
    
    let regex1 = /^[a-z ']+$/i
   if(!regex1.test(vari))
-throw {status: '400', error : 'Name can only have alphabets and some some special characters'};
+throw {status: '400', error : 'Degree can only have alphabets and some special characters'};
 return vari
 
 }
 
 
-const isValidString = (string, parameter) => {
-    if (!string)
-      throw {
-        status: "400",
-        error: `You must provide a ${parameter}`,
-      };
-    if (typeof string !== "string")
-      throw { status: "400", error: `${parameter} must be a string` };
-    string = string.trim();
-    if (string.length === 0)
-      throw {
-        status: "400",
-        error: `${parameter} cannot be an empty string or just spaces`,
-      };
-    return string;
-  };
+
 
 
 const isValidGpa = (gpa)=>{
@@ -185,7 +188,7 @@ const isValidStartEndYear=(start_year, end_year,start_month,end_month)=>{
     }
 
 else if(start_year==end_year && d[start_month]>d[end_month]){
-    throw {status : "400" , error: "Start month should be less than end month"};
+    throw {status : "400" , error: "Start Date should be less than end date"};
 }
   }
 
@@ -201,8 +204,8 @@ else if(start_year==end_year && d[start_month]>d[end_month]){
 
    vari=vari.trim()
    
-   if(vari.length<6)
-   throw {status: '400', error : "Minimum length of bullet should be six"};
+   if(vari.length<2)
+   throw {status: '400', error : "Minimum length of bullet should be two"};
   
    if(vari.length>1000)
    throw {status: '400', error : "Maximum length of bullet is 1000 "};
@@ -244,11 +247,11 @@ async function checkifproperprojectname(vari){
 
    vari=vari.trim()
    
-   if(vari.length<6)
-   throw {status: '400', error : "Minimum length of project name should be six"};
+   if(vari.length<2)
+   throw {status: '400', error : "Minimum length of project name should be two"};
   
-   if(vari.length>100)
-   throw {status: '400', error : "Maximum length of project name is 100"};
+   if(vari.length>200)
+   throw {status: '400', error : "Maximum length of project name is 200"};
    
 
    return vari
@@ -265,8 +268,8 @@ async function checkifproperprojectdescription(vari){
 
    vari=vari.trim()
    
-   if(vari.length<6)
-   throw {status: '400', error : "Minimum length of project descriptiojn should be six"};
+   if(vari.length<2)
+   throw {status: '400', error : "Minimum length of project descriptiojn should be two"};
   
    if(vari.length>10000)
    throw {status: '400', error : "Maximum length of project description is 10000"};
@@ -288,6 +291,7 @@ isValidYear,
 isValidString,
 checkifproperdegree,
 checkifpropername,
+checkifproperbullet,
 checkifproperprojectdescription,
 checkifproperprojectname,
 checkifproperschool,
