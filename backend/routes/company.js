@@ -41,7 +41,13 @@ router
   .post(async (req, res) => {
     try {
       let data = req.body;
-      for (let i in data) data[i] = xss(data[i]);
+      for (let i in data) {
+        if (Array.isArray(data[i])) {
+          data[i] = data[i].map((item) => xss(item));
+        } else {
+          data[i] = xss(data[i]);
+        }
+      }
       let email = data.email;
       email = helper.common.isValidEmail(email);
       data = helper.company.isValidCompanyData(data);
@@ -75,7 +81,13 @@ router
   .patch(async (req, res) => {
     try {
       let data = req.body;
-      for (let i in data) data[i] = xss(data[i]);
+      for (let i in data) {
+        if (Array.isArray(data[i])) {
+          data[i] = data[i].map((item) => xss(item));
+        } else {
+          data[i] = xss(data[i]);
+        }
+      }
       let email = data.email;
       email = helper.common.isValidEmail(email);
       data = helper.company.isValidCompanyData(data);
@@ -145,7 +157,6 @@ router
   .patch(async (req, res) => {
     let data = req.body;
     // console.log(data);
-    for (let i in data) data[i] = xss(data[i]);
     try {
       for (let i in data) {
         if (typeof data[i] === "object") {
@@ -201,25 +212,39 @@ router
   .post(async (req, res) => {
     let resumeData = req.body;
     // console.log("before",resumeData);
-    
+
     let education = JSON.parse(resumeData.education);
     let experience = JSON.parse(resumeData.experience);
     let projects = JSON.parse(resumeData.projects);
     let skills = JSON.parse(resumeData.skills);
     // console.log("after", resumeData);
-   
-    for (let i in resumeData) resumeData[i] = xss(resumeData[i]);
+
+    for (let i in resumeData) {
+      if (Array.isArray(resumeData[i])) {
+        resumeData[i] = resumeData[i].map((item) => xss(item));
+      } else if (typeof resumeData[i] === "object") {
+        for (let j in resumeData[i])
+          if (Array.isArray(resumeData[i][j]))
+            resumeData[i][j] = resumeData[i][j].map((element) => {
+              return xss(element);
+            });
+          else resumeData[i][j] = xss(resumeData[i][j]);
+      } else {
+        resumeData[i] = xss(resumeData[i]);
+      }
+    }
     try {
-      resumeData.name = helper.resumeHelper.checkifpropername(
-        resumeData.name
-      );
+      resumeData.name = helper.resumeHelper.checkifpropername(resumeData.name);
       resumeData.address = helper.resumeHelper.checkifproperaddress(
         resumeData.address
-       
       );
-      resumeData.linkedin = helper.resumeHelper.isValidLinkedIn(resumeData.linkedin);
+      resumeData.linkedin = helper.resumeHelper.isValidLinkedIn(
+        resumeData.linkedin
+      );
       resumeData.email = helper.resumeHelper.isValidEmail(resumeData.email);
-      resumeData.contact = helper.resumeHelper.isValidContact(resumeData.contact);
+      resumeData.contact = helper.resumeHelper.isValidContact(
+        resumeData.contact
+      );
       console.log("here routes - ");
       for (let i = 0; i < resumeData.skills.length; i++) {
         resumeData.skills[i] = helper.resumeHelper.checkifproperskills(
@@ -246,9 +271,7 @@ router
         education[i].degree = helper.resumeHelper.checkifproperdegree(
           education[i].degree
         );
-        education[i].gpa = helper.resumeHelper.isValidGpa(
-          education[i].gpa
-        );
+        education[i].gpa = helper.resumeHelper.isValidGpa(education[i].gpa);
         education[i].startYear = helper.resumeHelper.isValidYear(
           education[i].startYear
         );
@@ -287,7 +310,7 @@ router
         experience[i].endYear = helper.resumeHelper.isValidYear(
           experience[i].endYear
         );
-        
+
         experience[i].startMonth = helper.resumeHelper.isValidMonth(
           experience[i].startMonth
         );
@@ -322,9 +345,10 @@ router
         projects[i].name = helper.resumeHelper.checkifproperprojectname(
           projects[i].name
         );
-        projects[i].description = helper.resumeHelper.checkifproperprojectdescription(
-          projects[i].description
-        );
+        projects[i].description =
+          helper.resumeHelper.checkifproperprojectdescription(
+            projects[i].description
+          );
       }
     } catch (e) {
       console.log(e);
