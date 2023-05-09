@@ -48,3 +48,60 @@ Redis
 - Mac OS/Ubuntu - Install Redis Stack from https://redis.io/download/ and follow the steps.
 - Windows - Install Redis for windows as show here https://redis.io/docs/getting-started/installation/install-redis-on-windows/
 
+
+
+# TalentHunt-Company-Frontend
+## Features
+- Post/Edit/Delete Jobs for the company
+- Find Job Seekers according to their needs
+- Manage Applications
+- View Applicants and their Resumes
+- Create/Edit Profiles
+
+## Tech
+
+- [ReactJS](https://reactjs.org/) - A JavaScript library for building user interfaces
+
+## Installation
+
+TalentHunt-Company-Frontend requires [ReactJS](https://reactjs.org/) to run.
+
+```sh
+git clone git@github.com:AaryamanKatoch/CS554WEB2.git
+cd CS554WEB2
+cd company
+git checkout master
+npm install
+npm start
+```
+
+# TalentHunt-JobSeeker-Frontend
+## Features
+- View/Apply Jobs
+- View Past Applications
+- Create Resume
+- Create/Edit Profiles
+
+## Tech
+
+- [ReactJS](https://reactjs.org/) - A JavaScript library for building user interfaces
+
+## Installation
+
+TalentHunt-JobSeeker-Frontend requires [ReactJS](https://reactjs.org/) to run.
+
+```sh
+git clone git@github.com:AaryamanKatoch/CS554WEB2.git
+cd CS554WEB2
+cd jobseeker
+git checkout master
+npm install
+npm start
+```
+
+## Credentials to access and view data in application
+
+TalentHunt-Company-Frontend Credentials
+
+
+TalentHunt-JobSeeker-Frontend Credentials
