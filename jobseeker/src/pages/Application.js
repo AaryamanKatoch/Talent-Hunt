@@ -160,7 +160,7 @@ function Application() {
                     })
                   }
                   required
-                  variant="outlined"
+                  variant="filled"
                   type="text"
                   sx={{ mb: 3 }}
                   fullWidth
@@ -172,8 +172,8 @@ function Application() {
                     setApplication({ ...application, lastName: e.target.value })
                   }
                   required
-                  variant="outlined"
-                  color="secondary"
+                  variant="filled"
+                  color="primary"
                   type="text"
                   value={application.lastName}
                   fullWidth
@@ -182,7 +182,7 @@ function Application() {
                 <FormControl sx={{ m: 1, minWidth: 200 }}>
                   <InputLabel
                     id="demo-simple-select-helper-label"
-                    color="secondary"
+                    color="primary"
                   >
                     Visa Status
                   </InputLabel>
@@ -190,6 +190,7 @@ function Application() {
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
                     label="Visa Status"
+                    variant="filled"
                     value={application.visaStatus || ""}
                     onChange={(e) =>
                       setApplication({
@@ -198,7 +199,7 @@ function Application() {
                       })
                     }
                     required
-                    color="secondary"
+                    color="primary"
                   >
                     <MenuItem value="">
                       <em>None</em>
@@ -214,7 +215,7 @@ function Application() {
                 <FormControl sx={{ m: 1, minWidth: 200 }}>
                   <InputLabel
                     id="demo-simple-select-helper-label"
-                    color="secondary"
+                    color="primary"
                   >
                     Sex
                   </InputLabel>
@@ -222,12 +223,13 @@ function Application() {
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
                     label="Sex"
+                    variant="filled"
                     value={application.sex || ""}
                     onChange={(e) =>
                       setApplication({ ...application, sex: e.target.value })
                     }
                     required
-                    color="secondary"
+                    color="primary"
                   >
                     <MenuItem value="">
                       <em>None</em>
@@ -243,7 +245,7 @@ function Application() {
                 <div className="text-center">
                   <Button
                     variant="outlined"
-                    color="secondary"
+                    color="primary"
                     type="submit"
                     disabled={flag}
                   >

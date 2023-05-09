@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import { AuthContext } from "../firebase/Auth";
 import { FormControl } from "@mui/material";
-
+import FormLabel from '@mui/joy/FormLabel';
 import Textarea from "@mui/joy/Textarea";
 // import { useState } from 'react';
 import { useResume } from "../ContextResume";
@@ -32,7 +32,14 @@ function PersonalDetails() {
             {/* <InputLabel  htmlFor="bootstrap-input">
               Full Name
             </InputLabel> */}
+           <label htmlFor="name">Full Name</label>
             <Textarea
+            slotProps={{
+              textarea: {
+                id: 'name',
+              }
+            }}
+            id="name"
               name="name"
               value={personalDetails.name || ''}
               variant="soft"
@@ -52,9 +59,15 @@ function PersonalDetails() {
             {/* <InputLabel htmlFor="bootstrap-input">
                 Email
               </InputLabel> */}
+              <label htmlFor="email">Email</label>
             <Textarea
+            slotProps={{
+              textarea: {
+                id: 'email',
+              }
+            }}
               name="email"
-              
+              id="email"
               variant="soft"
               size="md"
               label="Email"
@@ -74,8 +87,15 @@ function PersonalDetails() {
             {/* <InputLabel htmlFor="bootstrap-input">
                     Contact
                   </InputLabel> */}
+            <label htmlFor="contact">Contact</label>
             <Textarea
+            slotProps={{
+              textarea: {
+                id: 'contact',
+              }
+            }}
               name="contact"
+              id="contact"
               value={personalDetails.contact || ''} 
               color="neutral"
               variant="soft"
@@ -93,8 +113,15 @@ function PersonalDetails() {
             {/* <InputLabel htmlFor="bootstrap-input">
                     Address
                   </InputLabel> */}
+            <label htmlFor="address">Address</label>
             <Textarea
+            slotProps={{
+              textarea: {
+                id: 'address',
+              }
+            }}
               name="address"
+              id="address"
               value={personalDetails.address || ''}
               variant="soft"
               size="md"
@@ -112,8 +139,15 @@ function PersonalDetails() {
           {/* <InputLabel htmlFor="bootstrap-input">
                     LinkedIn
                   </InputLabel> */}
+          <label htmlFor="linkedin">Linkedin</label>
           <Textarea
+          slotProps={{
+            textarea: {
+              id: 'linkedin',
+            }
+          }}
             name="linkedin"
+            id="linkedin"
             value={personalDetails.linkedin || ''} 
             variant="soft"
             size="md"

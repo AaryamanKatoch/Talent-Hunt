@@ -46,27 +46,25 @@ function SinglePerson() {
     }
 
     try {
-      resumeData.name = helper.common.isValidString2(resumeData.name, "Name");
+      resumeData.name = helper.resumeHelper.checkifpropername(resumeData.name);
 
-      resumeData.address = helper.common.isValidString2(
-        resumeData.address,
-        "Address"
+      resumeData.address = helper.resumeHelper.checkifproperaddress(
+        resumeData.address
       );
 
-      resumeData.linkedin = helper.common.isValidLinkedinURL(
+      resumeData.linkedin = helper.resumeHelper.isValidLinkedIn(
         resumeData.linkedin
       );
 
-      resumeData.email = helper.common.isValidEmail2(resumeData.email);
+      resumeData.email = helper.resumeHelper.isValidEmail(resumeData.email);
       // console.log("Project : " + personalDetails.email)
       // console.log("here");
-      resumeData.contact = helper.common.isValidContact(resumeData.contact);
+      resumeData.contact = helper.resumeHelper.isValidContact(resumeData.contact);
       // console.log("here");
 
       for (let i = 0; i < resumeData.skills.length; i++) {
-        resumeData.skills[i] = helper.common.isValidString2(
-          resumeData.skills[i],
-          "Skill"
+        resumeData.skills[i] = helper.resumeHelper.checkifproperskills(
+          resumeData.skills[i]
         );
       }
       setErrorSnackbarOpen(false);
@@ -79,28 +77,25 @@ function SinglePerson() {
 
     try {
       for (let i = 0; i < resumeData.education.length; i++) {
-        resumeData.education[i].school = helper.common.isValidString2(
-          resumeData.education[i].school,
-          "School"
+        resumeData.education[i].school = helper.resumeHelper.checkifproperschool(
+          resumeData.education[i].school
         );
-        resumeData.education[i].address = helper.common.isValidString2(
-          resumeData.education[i].address,
-          "Address"
+        resumeData.education[i].address = helper.resumeHelper.checkifproperaddress(
+          resumeData.education[i].address
         );
-        resumeData.education[i].degree = helper.common.isValidString2(
-          resumeData.education[i].degree,
-          "Degree"
+        resumeData.education[i].degree = helper.resumeHelper.checkifproperdegree(
+          resumeData.education[i].degree
         );
-        resumeData.education[i].gpa = helper.common.isValidGpa(
+        resumeData.education[i].gpa = helper.resumeHelper.isValidGpa(
           resumeData.education[i].gpa
         );
-        resumeData.education[i].startYear = helper.common.isValidYear(
+        resumeData.education[i].startYear = helper.resumeHelper.isValidYear(
           resumeData.education[i].startYear
         );
-        resumeData.education[i].endYear = helper.common.isValidYear(
+        resumeData.education[i].endYear = helper.resumeHelper.isValidYear(
           resumeData.education[i].endYear
         );
-        helper.common.isValidStartEndYear(
+        helper.resumeHelper.isValidStartEndYear(
           resumeData.education[i].startYear,
           resumeData.education[i].endYear
         );
@@ -115,37 +110,37 @@ function SinglePerson() {
 
     try {
       for (let i = 0; i < resumeData.experience.length; i++) {
-        resumeData.experience[i].company = helper.common.isValidString2(
-          resumeData.experience[i].company,
-          "Company"
+        resumeData.experience[i].company = helper.resumeHelper.checkifpropercompany(
+          resumeData.experience[i].company
         );
-        resumeData.experience[i].address = helper.common.isValidString2(
-          resumeData.experience[i].address,
-          "Address"
+        resumeData.experience[i].address = helper.resumeHelper.checkifproperaddress(
+          resumeData.experience[i].address
         );
-        resumeData.experience[i].position = helper.common.isValidString2(
-          resumeData.experience[i].position,
-          "Position"
+        resumeData.experience[i].position = helper.resumeHelper.checkifproperposition(
+          resumeData.experience[i].position
         );
-        resumeData.experience[i].startYear = helper.common.isValidYear(
+        resumeData.experience[i].startYear = helper.resumeHelper.isValidYear(
           resumeData.experience[i].startYear
         );
-        resumeData.experience[i].endYear = helper.common.isValidYear(
+        resumeData.experience[i].endYear = helper.resumeHelper.isValidYear(
           resumeData.experience[i].endYear
         );
-        helper.common.isValidStartEndYear(
-          resumeData.experience[i].startYear,
-          resumeData.experience[i].endYear
-        );
-        resumeData.experience[i].startMonth = helper.common.isValidMonth(
+        
+        resumeData.experience[i].startMonth = helper.resumeHelper.isValidMonth(
           resumeData.experience[i].startMonth
         );
-        resumeData.experience[i].endMonth = helper.common.isValidMonth(
+        resumeData.experience[i].endMonth = helper.resumeHelper.isValidMonth(
+          resumeData.experience[i].endMonth
+        );
+        helper.resumeHelper.isValidStartEndYear(
+          resumeData.experience[i].startYear,
+          resumeData.experience[i].endYear,
+          resumeData.experience[i].startMonth,
           resumeData.experience[i].endMonth
         );
         for (let j = 0; j < resumeData.experience[i].bulletPoints.length; j++) {
           resumeData.experience[i].bulletPoints[j] =
-            helper.common.isValidString2(
+            helper.resumeHelper.checkifproperbullet(
               resumeData.experience[i].bulletPoints[j]
             );
         }
@@ -160,13 +155,11 @@ function SinglePerson() {
 
     try {
       for (let i = 0; i < resumeData.projects.length; i++) {
-        resumeData.projects[i].name = helper.common.isValidString2(
-          resumeData.projects[i].name,
-          "Project Name"
+        resumeData.projects[i].name = helper.resumeHelper.checkifproperprojectname(
+          resumeData.projects[i].name
         );
-        resumeData.projects[i].description = helper.common.isValidString2(
-          resumeData.projects[i].description,
-          "Project Description"
+        resumeData.projects[i].description = helper.resumeHelper.checkifproperprojectdescription(
+          resumeData.projects[i].description
         );
       }
       setErrorSnackbarOpen(false);
