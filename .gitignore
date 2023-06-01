@@ -5,3 +5,6 @@
 /company/package-lock.json
 /jobseeker/package-lock.json
 /backend/package-lock.json
+
+/company/.env
+/jobseeker/.env
